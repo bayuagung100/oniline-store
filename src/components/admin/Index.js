@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './index.css';
 import { Redirect, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars,faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
@@ -36,7 +37,6 @@ class Index extends Component {
     }
 
     active(){
-
         this.setState((state, props) => {
             return {
                 path: this.props.history.location.pathname,
@@ -60,7 +60,7 @@ class Index extends Component {
             //         <button onClick={this.logout}> logout </button>
             //     </div>
             // </BrowserRouter>
-            <div className="hold-transition sidebar-mini layout-fixed">
+            <div className="sidebar-mini layout-fixed">
                 <div className="wrapper">
                     {/* Navbar */}
                     <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -98,7 +98,7 @@ class Index extends Component {
                                         MenuSide.map((value, index) => {
                                             return(
                                                 <li key={index} className="nav-item">
-                                                    <Link to={value.url} onClick={this.active} className="nav-link">
+                                                    <Link to={value.url} onClick={this.active} className={"nav-link "+(this.state.path===value.url ? 'active':'')}>
                                                         {value.fa}
                                                         <p>
                                                             {value.title}

@@ -479,7 +479,7 @@
             TOGGLE_BUTTON: '[data-widget="pushmenu"]',
             SIDEBAR_MINI: '.sidebar-mini',
             SIDEBAR_COLLAPSED: '.sidebar-collapse',
-            BODY: 'body',
+            BODY: 'div',
             OVERLAY: '#sidebar-overlay',
             WRAPPER: '.wrapper'
         };
