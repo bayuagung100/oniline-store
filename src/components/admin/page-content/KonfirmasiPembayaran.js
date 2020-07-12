@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Tbl from "../../lib/Datatables";
 
 class KonfirmasiPembayaran extends Component {
     // constructor(props) {
@@ -7,6 +8,22 @@ class KonfirmasiPembayaran extends Component {
     //         path: props.location.path
     //     }
     // }
+    dataSet = [
+        // [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
+    ];
+
+    dataColums = [
+        {title:"No"},
+        {title:"ID Pesanan"},
+        {title:"Tanggal Transfer"},
+        {title:"Nama Pengirim"},
+        {title:"Bank Pengirim"},
+        {title:"Bank Tujuan"},
+        {title:"Catatan"},
+        {title:"Status"},
+        {title:"Aksi"},
+    ];
+
     render() {
         // console.log(this.state.path)
         return (
@@ -28,7 +45,7 @@ class KonfirmasiPembayaran extends Component {
                                 <h3 className="card-title">Daftar Data Konfirmasi Pembayaran</h3>
                             </div>
                             <div className="card-body">
-
+                                <Tbl data={this.dataSet} columns={this.dataColums}></Tbl>
                             </div>
                         </div>
                     </div>

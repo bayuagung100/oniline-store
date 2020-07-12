@@ -60,7 +60,7 @@ class Index extends Component {
             //         <button onClick={this.logout}> logout </button>
             //     </div>
             // </BrowserRouter>
-            <div className="sidebar-mini layout-fixed">
+            <div className="sidebar-mini layout-fixed layout-navbar-fixed">
                 <div className="wrapper">
                     {/* Navbar */}
                     <nav className="main-header navbar navbar-expand navbar-white navbar-light">

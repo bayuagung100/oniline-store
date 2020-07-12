@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Tbl from "../../lib/Datatables";
 
 class Pesanan extends Component {
     // constructor(props) {
@@ -7,6 +8,22 @@ class Pesanan extends Component {
     //         path: props.location.path
     //     }
     // }
+
+    dataSet = [
+        // [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
+    ];
+
+    dataColums = [
+        {title:"No"},
+        {title:"ID Pesanan"},
+        {title:"Tanggal"},
+        {title:"Nama"},
+        {title:"Email"},
+        {title:"No Hp"},
+        {title:"Status"},
+        {title:"Aksi"},
+    ];
+
     render() {
         // console.log(this.state.path)
         return (
@@ -28,7 +45,7 @@ class Pesanan extends Component {
                                 <h3 className="card-title">Daftar Data Pesanan</h3>
                             </div>
                             <div className="card-body">
-
+                                <Tbl data={this.dataSet} columns={this.dataColums}></Tbl>
                             </div>
                         </div>
                     </div>

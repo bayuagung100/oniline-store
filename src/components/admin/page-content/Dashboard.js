@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCameraRetro, faShoppingCart, faThumbsUp, faComment, faUsers, } from '@fortawesome/free-solid-svg-icons';
+import Tbl from "../../lib/Datatables";
 
 class Dashboard extends Component {
     // constructor(props) {
@@ -10,6 +11,21 @@ class Dashboard extends Component {
     //         path: props.location.path
     //     }
     // }
+    dataSet = [
+        // [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
+    ];
+
+    dataColums = [
+        {title:"No"},
+        {title:"ID Pesanan"},
+        {title:"Tanggal"},
+        {title:"Nama"},
+        {title:"Email"},
+        {title:"No Hp"},
+        {title:"Status"},
+        {title:"Aksi"},
+    ];
+  
     render() {
         return (
             <div>
@@ -114,7 +130,7 @@ class Dashboard extends Component {
                                 <h3 className="card-title">Daftar Data Pesanan</h3>
                             </div>
                             <div className="card-body">
-
+                                <Tbl data={this.dataSet} columns={this.dataColums}></Tbl>
                             </div>
                         </div>
                     </div>
