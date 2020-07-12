@@ -7,12 +7,39 @@ import Select from "../../lib/Select2";
 
 
 class Setting extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         path: props.location.path
-    //     }
-    // }
+    constructor(props) {
+        super(props);
+        this.state = {
+            judul: '',
+            sosmed: {
+                email: '',
+                wa: '',
+                ig: '',
+            },
+            info: {
+                judul: '',
+                kode_pos: '',
+            }
+        }
+        this.infoChange = this.infoChange.bind(this);
+        this.sosmedChange = this.sosmedChange.bind(this);
+    }
+    infoChange(e) {
+        let newinfo = { ...this.state.info };
+        newinfo[e.target.name] = e.target.value;
+        this.setState({
+            info: newinfo
+        }, () => console.log(this.state.info));
+    }
+    sosmedChange(e) {
+        let newsosmed = { ...this.state.sosmed };
+        newsosmed[e.target.name] = e.target.value;
+        this.setState({
+            sosmed: newsosmed
+        }, () => console.log(this.state.sosmed));
+    }
+
+
     dataSet = [
         // [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
     ];
@@ -82,11 +109,11 @@ class Setting extends Component {
                                         <form method="post" action="#" className="form-horizontal" encType="multipart/form-data" style={{padding:"10px"}}>
                                             <div className="form-group">
                                                 <label>Judul Website </label>
-                                                <input type="text" className="form-control" name="title" value="" placeholder="Enter judul website"/>
+                                                <input type="text" className="form-control" name="judul" value={this.state.info.judul} onChange={this.infoChange} placeholder="Enter judul website"/>
                                             </div>
                                             <div className="form-group">
                                                 <label>Deskripsi Website (*Jangan pakai enter)</label>
-                                                <textarea name="description" className="form-control" placeholder="Enter deskripsi website"></textarea>
+                                                <textarea name="deskripsi" className="form-control" placeholder="Enter deskripsi website"></textarea>
                                             </div>
                                             <div className="form-group">
                                                 <label>Alamat (*Jangan pakai enter)</label>
@@ -106,7 +133,7 @@ class Setting extends Component {
                                             </div>
                                             <div className="form-group">
                                                 <label>Kode Pos </label>
-                                                <input type="text" className="form-control" name="kode_pos" value="" placeholder="Enter kode pos"/>
+                                                <input type="text" className="form-control" name="kode_pos" value={this.state.info.kode_pos} onChange={this.infoChange} placeholder="Enter kode pos"/>
                                             </div>
                                             <div className="form-group">
                                                 <div className="col-sm-offset-2 col-sm-10">
@@ -133,15 +160,15 @@ class Setting extends Component {
                                         <form method="post" action="#" className="form-horizontal" encType="multipart/form-data" style={{padding:"10px"}}>
                                             <div className="form-group">
                                                 <label>Email </label>
-                                                <input type="email" className="form-control" name="email" value="" placeholder="Enter email"/>
+                                                <input type="email" className="form-control" name="email" value={this.state.sosmed.email}  onChange={this.sosmedChange} placeholder="Enter email"/>
                                             </div>
                                             <div className="form-group">
                                                 <label>Whatsapp (*Jangan pakai +)</label>
-                                                <input type="tel" className="form-control" name="wa" value="" placeholder="628xxxxxxxxxx"/>
+                                                <input type="tel" className="form-control" name="wa" value={this.state.sosmed.wa} onChange={this.sosmedChange} placeholder="628xxxxxxxxxx"/>
                                             </div>
                                             <div className="form-group">
                                                 <label>Instagram</label>
-                                                <input type="text" className="form-control" name="ig" value="" placeholder="https://www.instagram.com/nama_ig/"/>
+                                                <input type="text" className="form-control" name="ig" value={this.state.sosmed.ig} onChange={this.sosmedChange} placeholder="https://www.instagram.com/nama_ig/"/>
                                             </div>
                                             <div className="form-group">
                                                 <div className="col-sm-offset-2 col-sm-10">
