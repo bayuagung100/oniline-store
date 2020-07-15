@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route} from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTachometerAlt, faCartArrowDown, faShoppingCart, faClipboardList, faComment, faUsers, faCog, faCircleNotch} from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faCartArrowDown, faShoppingCart, faClipboardList, faComment, faUsers, faCog} from '@fortawesome/free-solid-svg-icons';
 import Admin from '../admin/Index';
 import Pesanan from '../admin/page-content/Pesanan';
 

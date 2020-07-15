@@ -3,14 +3,17 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faCreditCard, faExclamationTriangle, faSave } from "@fortawesome/free-solid-svg-icons";
 import Tbl from "../../lib/Datatables";
-import Select from "../../lib/Select2";
+// import Select from "../../lib/Select2";
+// import Select from 'react-select';
+import $ from 'jquery';
+import 'select2';
+
 
 
 class Setting extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            judul: '',
             sosmed: {
                 email: '',
                 wa: '',
@@ -18,11 +21,18 @@ class Setting extends Component {
             },
             info: {
                 judul: '',
+                deskripsi: '',
+                alamat: '',
+                provinsi: '',
+                kabupaten: '',
+                kecamatan: '',
                 kode_pos: '',
             }
         }
         this.infoChange = this.infoChange.bind(this);
+        this.infoSubmit = this.infoSubmit.bind(this);
         this.sosmedChange = this.sosmedChange.bind(this);
+        this.sosmedSubmit = this.sosmedSubmit.bind(this);
     }
     infoChange(e) {
         let newinfo = { ...this.state.info };
@@ -31,6 +41,40 @@ class Setting extends Component {
             info: newinfo
         }, () => console.log(this.state.info));
     }
+    
+    // provinsiChange = provinsi => {
+    //     this.setState(prevState => ({
+    //             info: {                   // object that we want to update
+    //                 ...prevState.info,    // keep all other key-value pairs
+    //                 provinsi: provinsi.value       // update the value of specific key
+    //             }
+    //         }),() => console.log(`provinsi selected:`, this.state.info)
+    //     );
+    // };
+    // kabupatenChange = kabupaten => {
+    //     this.setState(prevState => ({
+    //             info: {                   // object that we want to update
+    //                 ...prevState.info,    // keep all other key-value pairs
+    //                 kabupaten: kabupaten.value       // update the value of specific key
+    //             }
+    //         }),() => console.log(`kabupaten selected:`, this.state.info)
+    //     );
+    // };
+    // kecamatanChange = kecamatan => {
+    //     this.setState(prevState => ({
+    //             info: {                   // object that we want to update
+    //                 ...prevState.info,    // keep all other key-value pairs
+    //                 kecamatan: kecamatan.value       // update the value of specific key
+    //             }
+    //         }),() => console.log(`kecamatan selected:`, this.state.info)
+    //     );
+    // };
+    
+    infoSubmit(e) {
+        e.preventDefault();
+        console.log(this.state.info);
+    }
+
     sosmedChange(e) {
         let newsosmed = { ...this.state.sosmed };
         newsosmed[e.target.name] = e.target.value;
@@ -38,6 +82,12 @@ class Setting extends Component {
             sosmed: newsosmed
         }, () => console.log(this.state.sosmed));
     }
+    sosmedSubmit(e) {
+        e.preventDefault();
+        console.log(this.state.sosmed);
+    }
+    
+
 
 
     dataSet = [
@@ -57,8 +107,13 @@ class Setting extends Component {
         { value: 'strawberry', label: 'Strawberry' },
         { value: 'vanilla', label: 'Vanilla' }
     ]
+
+    componentDidMount(){
+        $('.select2').select2();
+        $('.select2').on("change", this.infoChange);
+    }
     render() {
-        // console.log(this.state.path)
+        // const { provinsi, kabupaten, kecamatan } = this.state;
         return (
             <div>
                 <div className="content-header">
@@ -106,34 +161,54 @@ class Setting extends Component {
                                         </div>
                                     </div>
                                     <div className="card-body">
-                                        <form method="post" action="#" className="form-horizontal" encType="multipart/form-data" style={{padding:"10px"}}>
+                                        <form onSubmit={e => this.infoSubmit(e)} className="form-horizontal" style={{padding:"10px"}}>
                                             <div className="form-group">
                                                 <label>Judul Website </label>
-                                                <input type="text" className="form-control" name="judul" value={this.state.info.judul} onChange={this.infoChange} placeholder="Enter judul website"/>
+                                                <input type="text" className="form-control" name="judul" value={this.state.info.judul} onChange={this.infoChange} placeholder="Enter judul website" required />
                                             </div>
                                             <div className="form-group">
                                                 <label>Deskripsi Website (*Jangan pakai enter)</label>
-                                                <textarea name="deskripsi" className="form-control" placeholder="Enter deskripsi website"></textarea>
+                                                <textarea name="deskripsi"  className="form-control" value={this.state.info.deskripsi} onChange={this.infoChange} placeholder="Enter deskripsi website" required />
                                             </div>
                                             <div className="form-group">
                                                 <label>Alamat (*Jangan pakai enter)</label>
-                                                <textarea name="alamat" className="form-control" placeholder="Nama jalan dan nomor toko"></textarea>
+                                                <textarea name="alamat" className="form-control" value={this.state.info.alamat} onChange={this.infoChange} placeholder="Nama jalan dan nomor toko" required />
                                             </div>
                                             <div className="form-group">
                                                 <label>Provinsi</label>
-                                                <Select options={this.options} name="provinsi" placeholder="Pilih provinsi"/>
+                                                <select className="form-control select2" name="provinsi" value={this.state.info.provinsi} onChange={this.infoChange} required>
+                                                    <option value="">Pilih provinsi</option>
+                                                    <option value="grapefruit">Grapefruit</option>
+                                                    <option value="lime">Lime</option>
+                                                    <option value="coconut">Coconut</option>
+                                                    <option value="mango">Mango</option>
+                                                </select>
                                             </div>
                                             <div className="form-group">
                                                 <label>Kota / Kabupaten</label>
-                                                <Select options={this.options} name="kabupaten" placeholder="Pilih kota/kabupaten"/>
+                                                <select className="form-control select2" name="kabupaten" value={this.state.info.kabupaten} onChange={this.infoChange} required>
+                                                    <option value="">Pilih kota/kabupaten</option>
+                                                    <option value="grapefruit">Grapefruit</option>
+                                                    <option value="lime">Lime</option>
+                                                    <option value="coconut">Coconut</option>
+                                                    <option value="mango">Mango</option>
+                                                </select>
+                                                
                                             </div>
                                             <div className="form-group">
                                                 <label>Kecamatan</label>
-                                                <Select options={this.options} name="kecamatan" placeholder="Pilih kecamatan"/>
+                                                <select className="form-control select2" name="kecamatan" value={this.state.info.kecamatan} onChange={this.infoChange} required>
+                                                    <option value="">Pilih kecamatan</option>
+                                                    <option value="grapefruit">Grapefruit</option>
+                                                    <option value="lime">Lime</option>
+                                                    <option value="coconut">Coconut</option>
+                                                    <option value="mango">Mango</option>
+                                                </select>
+                                                
                                             </div>
                                             <div className="form-group">
                                                 <label>Kode Pos </label>
-                                                <input type="text" className="form-control" name="kode_pos" value={this.state.info.kode_pos} onChange={this.infoChange} placeholder="Enter kode pos"/>
+                                                <input type="text" className="form-control" name="kode_pos" value={this.state.info.kode_pos} onChange={this.infoChange} placeholder="Enter kode pos" required />
                                             </div>
                                             <div className="form-group">
                                                 <div className="col-sm-offset-2 col-sm-10">
@@ -157,18 +232,18 @@ class Setting extends Component {
                                         </div>
                                     </div>
                                     <div className="card-body">
-                                        <form method="post" action="#" className="form-horizontal" encType="multipart/form-data" style={{padding:"10px"}}>
+                                        <form onSubmit={e => this.sosmedSubmit(e)} className="form-horizontal" style={{padding:"10px"}}>
                                             <div className="form-group">
                                                 <label>Email </label>
-                                                <input type="email" className="form-control" name="email" value={this.state.sosmed.email}  onChange={this.sosmedChange} placeholder="Enter email"/>
+                                                <input type="email" className="form-control" name="email" value={this.state.sosmed.email}  onChange={this.sosmedChange} placeholder="Enter email" required/>
                                             </div>
                                             <div className="form-group">
                                                 <label>Whatsapp (*Jangan pakai +)</label>
-                                                <input type="tel" className="form-control" name="wa" value={this.state.sosmed.wa} onChange={this.sosmedChange} placeholder="628xxxxxxxxxx"/>
+                                                <input type="tel" className="form-control" name="wa" value={this.state.sosmed.wa} onChange={this.sosmedChange} placeholder="628xxxxxxxxxx" required/>
                                             </div>
                                             <div className="form-group">
                                                 <label>Instagram</label>
-                                                <input type="text" className="form-control" name="ig" value={this.state.sosmed.ig} onChange={this.sosmedChange} placeholder="https://www.instagram.com/nama_ig/"/>
+                                                <input type="text" className="form-control" name="ig" value={this.state.sosmed.ig} onChange={this.sosmedChange} placeholder="https://www.instagram.com/nama_ig/" required/>
                                             </div>
                                             <div className="form-group">
                                                 <div className="col-sm-offset-2 col-sm-10">
