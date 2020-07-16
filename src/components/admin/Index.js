@@ -41,11 +41,10 @@ class Index extends Component {
             return {
                 path: this.props.history.location.pathname,
             };
-        },()=>console.log(this.state.path));
+        });
     }
 
     componentDidMount(){
-        console.log(this.state.path);
     }
 
     render() {

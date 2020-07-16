@@ -1,11 +1,11 @@
 import React, { Component } from "react";
+
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faCreditCard, faExclamationTriangle, faSave } from "@fortawesome/free-solid-svg-icons";
 import Tbl from "../../lib/Datatables";
-// import Select from "../../lib/Select2";
-// import Select from 'react-select';
 import $ from 'jquery';
+import './select2.css';
 import 'select2';
 
 
@@ -42,34 +42,6 @@ class Setting extends Component {
         }, () => console.log(this.state.info));
     }
     
-    // provinsiChange = provinsi => {
-    //     this.setState(prevState => ({
-    //             info: {                   // object that we want to update
-    //                 ...prevState.info,    // keep all other key-value pairs
-    //                 provinsi: provinsi.value       // update the value of specific key
-    //             }
-    //         }),() => console.log(`provinsi selected:`, this.state.info)
-    //     );
-    // };
-    // kabupatenChange = kabupaten => {
-    //     this.setState(prevState => ({
-    //             info: {                   // object that we want to update
-    //                 ...prevState.info,    // keep all other key-value pairs
-    //                 kabupaten: kabupaten.value       // update the value of specific key
-    //             }
-    //         }),() => console.log(`kabupaten selected:`, this.state.info)
-    //     );
-    // };
-    // kecamatanChange = kecamatan => {
-    //     this.setState(prevState => ({
-    //             info: {                   // object that we want to update
-    //                 ...prevState.info,    // keep all other key-value pairs
-    //                 kecamatan: kecamatan.value       // update the value of specific key
-    //             }
-    //         }),() => console.log(`kecamatan selected:`, this.state.info)
-    //     );
-    // };
-    
     infoSubmit(e) {
         e.preventDefault();
         console.log(this.state.info);
@@ -86,8 +58,6 @@ class Setting extends Component {
         e.preventDefault();
         console.log(this.state.sosmed);
     }
-    
-
 
 
     dataSet = [
@@ -113,7 +83,6 @@ class Setting extends Component {
         $('.select2').on("change", this.infoChange);
     }
     render() {
-        // const { provinsi, kabupaten, kecamatan } = this.state;
         return (
             <div>
                 <div className="content-header">
