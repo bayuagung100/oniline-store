@@ -7,6 +7,7 @@ import Tbl from "../../lib/Datatables";
 import $ from 'jquery';
 import './select2.css';
 import 'select2';
+import axios from "axios";
 
 
 
@@ -33,6 +34,9 @@ class Setting extends Component {
         this.infoSubmit = this.infoSubmit.bind(this);
         this.sosmedChange = this.sosmedChange.bind(this);
         this.sosmedSubmit = this.sosmedSubmit.bind(this);
+        this.getApiCity = this.getApiCity.bind(this);
+        this.getApiProvince = this.getApiProvince.bind(this);
+        this.getApiSubdistrict = this.getApiSubdistrict.bind(this);
     }
     infoChange(e) {
         let newinfo = { ...this.state.info };
@@ -41,6 +45,7 @@ class Setting extends Component {
             info: newinfo
         }, () => console.log(this.state.info));
     }
+
     
     infoSubmit(e) {
         e.preventDefault();
@@ -59,6 +64,124 @@ class Setting extends Component {
         console.log(this.state.sosmed);
     }
 
+    getApiProvince(e){
+        // pakai fetch
+        // fetch('http://localhost:8080/api/v1/province')
+        // .then(response => {
+        //     return response.json();
+        // })
+        // .then(jsonData => {
+        //     this.setState({
+        //         province: jsonData.results
+        //     });
+        // });
+
+        // pakai axios
+        axios.get('http://localhost:8080/api/v1/province')
+        .then(response => 
+            response.data.results.map(province => ({
+                province_id: `${province.province_id}`,
+                province_name: `${province.province_name}`,
+            }))
+        )
+        .then(province => {
+            this.setState({
+                province
+            });
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        });
+    }
+    getApiCity(e){
+        // pakai fetch
+        // fetch('http://localhost:8080/api/v1/city')
+        // .then(response => {
+        //     return response.json();
+        // })
+        // .then(jsonData => {
+        //     this.setState({
+        //         city: jsonData.results
+        //     });
+        // });
+
+        // pakai axios
+        axios.get('http://localhost:8080/api/v1/city')
+        .then(response => 
+            response.data.results.map(city => ({
+                city_id: `${city.city_id}`,
+                city_name: `${city.city_name}`,
+                type: `${city.type}`,
+                postal_code: `${city.postal_code}`,
+            }))
+        )
+        .then(city => {
+            this.setState({
+                city
+            });
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        });
+    }
+    getApiSubdistrict(e){
+        // pakai fetch
+        // fetch('http://localhost:8080/api/v1/subdistrict')
+        // .then(response => {
+        //     return response.json();
+        // })
+        // .then(jsonData => {
+        //     this.setState({
+        //         subdistrict: jsonData.results
+        //     });
+        // });
+
+        // pakai axios
+        axios.get('http://localhost:8080/api/v1/subdistrict')
+        .then(response => 
+            response.data.results.map(subdistrict => ({
+                subdistrict_id: `${subdistrict.subdistrict_id}`,
+                subdistrict_name: `${subdistrict.subdistrict_name}`,
+            }))
+        )
+        .then(subdistrict => {
+            this.setState({
+                subdistrict
+            });
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        });
+    }
+        // axios.get('http://localhost:8080/api/v1/city')
+        // .then(response => {
+        //     // console.log(response.data);
+        //     return response.data;
+        // })
+        // .then(jsonData => {
+        //     console.log(jsonData.data);
+        //     // this.setState({
+        //     //     loading: false,
+        //     //     meals: jsonData.meals
+        //     // });
+        // });
+        // .then(function (response) {
+        //     // handle success
+        //     var status = response.data.status;
+        //     var results = response.data.results;
+        //     // console.log(results);
+        //     this.setState({
+        //         resultsCity: results
+        //     });
+        //     // return results;
+        // })
+        // .catch(function (error) {
+        //     // handle error
+        //     console.log(error);
+        // });
 
     dataSet = [
         // [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
@@ -81,6 +204,11 @@ class Setting extends Component {
     componentDidMount(){
         $('.select2').select2();
         $('.select2').on("change", this.infoChange);
+
+        this.getApiProvince();
+        this.getApiCity();
+        this.getApiSubdistrict();
+        
     }
     render() {
         return (
@@ -145,35 +273,66 @@ class Setting extends Component {
                                             </div>
                                             <div className="form-group">
                                                 <label>Provinsi</label>
-                                                <select className="form-control select2" name="provinsi" value={this.state.info.provinsi} onChange={this.infoChange} required>
-                                                    <option value="">Pilih provinsi</option>
-                                                    <option value="grapefruit">Grapefruit</option>
-                                                    <option value="lime">Lime</option>
-                                                    <option value="coconut">Coconut</option>
-                                                    <option value="mango">Mango</option>
-                                                </select>
+                                                    {
+                                                        this.state.province ? (
+                                                            <select className="form-control select2" name="provinsi" value={this.state.info.provinsi} onChange={this.infoChange} required>
+                                                                <option value="">Pilih provinsi</option>
+                                                                {
+                                                                    this.state.province.map((value, index) => {
+                                                                        return(
+                                                                        <option key={index} value={value.province_name}>{value.province_name}</option>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </select>
+                                                        ):(
+                                                            <select className="form-control select2" name="provinsi" value={this.state.info.provinsi} onChange={this.infoChange} required>
+                                                                <option value="">Pilih provinsi</option>
+                                                            </select>
+                                                        )
+                                                    }
                                             </div>
                                             <div className="form-group">
                                                 <label>Kota / Kabupaten</label>
-                                                <select className="form-control select2" name="kabupaten" value={this.state.info.kabupaten} onChange={this.infoChange} required>
-                                                    <option value="">Pilih kota/kabupaten</option>
-                                                    <option value="grapefruit">Grapefruit</option>
-                                                    <option value="lime">Lime</option>
-                                                    <option value="coconut">Coconut</option>
-                                                    <option value="mango">Mango</option>
-                                                </select>
-                                                
+                                                {
+                                                    this.state.city ? (
+                                                        <select className="form-control select2" name="kabupaten" value={this.state.info.kabupaten} onChange={this.infoChange} required>
+                                                            <option value="">Pilih kota/kabupaten</option>
+                                                            {
+                                                                this.state.city.map((value, index) => {
+                                                                    return(
+                                                                    <option key={index} value={value.city_name+"-"+value.type}>{value.city_name} - ({value.type})</option>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </select>
+                                                    ):(
+                                                        <select className="form-control select2" name="provinsi" value={this.state.info.kabupaten} onChange={this.infoChange} required>
+                                                            <option value="">Pilih kota/kabupaten</option>
+                                                        </select>
+                                                    )
+                                                }
                                             </div>
                                             <div className="form-group">
                                                 <label>Kecamatan</label>
-                                                <select className="form-control select2" name="kecamatan" value={this.state.info.kecamatan} onChange={this.infoChange} required>
-                                                    <option value="">Pilih kecamatan</option>
-                                                    <option value="grapefruit">Grapefruit</option>
-                                                    <option value="lime">Lime</option>
-                                                    <option value="coconut">Coconut</option>
-                                                    <option value="mango">Mango</option>
-                                                </select>
-                                                
+                                                {
+                                                    this.state.subdistrict ? (
+                                                        <select className="form-control select2" name="kecamatan" value={this.state.info.kecamatan} onChange={this.infoChange} required>
+                                                            <option value="">Pilih kecamatan</option>
+                                                            {
+                                                                this.state.subdistrict.map((value, index) => {
+                                                                    return(
+                                                                    <option key={index} value={value.subdistrict_name}>{value.subdistrict_name}</option>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </select>
+                                                    ):(
+                                                        <select className="form-control select2" name="kecamatan" value={this.state.info.kecamatan} onChange={this.infoChange} required>
+                                                            <option value="">Pilih kecamatan</option>
+                                                        </select>
+                                                    )
+                                                }
                                             </div>
                                             <div className="form-group">
                                                 <label>Kode Pos </label>
