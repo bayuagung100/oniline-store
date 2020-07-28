@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './index.css';
-import { Redirect, Link } from "react-router-dom";
+import { Route, Redirect, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars,faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 import MenuSide from '../lib/MenuSide';
@@ -10,7 +10,8 @@ import Pesanan from './page-content/Pesanan';
 import KonfirmasiPembayaran from './page-content/KonfirmasiPembayaran';
 import Message from './page-content/Message';
 import Member from './page-content/Member';
-import Setting from './page-content/Setting';
+import Setting from './page-content/setting/Setting';
+import AddBank from './page-content/setting/AddBank';
 
 class Index extends Component {
     constructor(props) {
@@ -23,6 +24,12 @@ class Index extends Component {
         this.state = {
             login,
             path: this.props.history.location.pathname,
+            // show: {
+            //     // show1: true,
+            //     // show2: false,
+            //     showSetting: false,
+            //     showAddBank: false,
+            // }
         }
 
         this.logout = this.logout.bind(this);
@@ -41,10 +48,39 @@ class Index extends Component {
             return {
                 path: this.props.history.location.pathname,
             };
-        });
+        }
+        // ,()=> {
+        //     console.log(this.state.show)
+        //     if (this.state.path === '/admin/setting') {
+        //         console.log('harus showSetting: true');
+        //         console.log('harus showAddBank: false');
+        //         this.setState(prevState => ({
+        //             show: {                   // object that we want to update
+        //                 ...prevState.show,    // keep all other key-value pairs
+
+        //                 // update the value of specific key
+        //                 showSetting: true,
+        //                 showAddBank: false,
+        //             }
+        //         }),()=>console.log(this.state.show))
+                
+        //         // this.setState((state, props) => {
+        //         //     return {
+        //         //         show:{
+        //         //             newShow,
+        //         //             showSetting: true,
+        //         //             showAddBank: false
+        //         //         }
+        //         //     };
+        //         // },()=>console.log(this.state.show))
+        //     }
+        // }
+        );
+        
     }
 
     componentDidMount(){
+        
     }
 
     render() {
@@ -84,7 +120,7 @@ class Index extends Component {
 
                     {/* Main Sidebar Container */}
                     <aside className="main-sidebar sidebar-dark-primary elevation-4">
-                        <Link className="brand-link" to="/admin">
+                        <Link className="brand-link" to="/admin" onClick={this.active}>
                             <span className="brand-text font-weight-light">Administrator</span>
                         </Link>
 
@@ -209,7 +245,7 @@ class Index extends Component {
                                 isi main content
                             </div>
                         </section> */}
-                        {
+                        {/* {
                             this.state.path === "/admin" ? (
                                 <Dashboard/>
                             ) : (
@@ -229,11 +265,15 @@ class Index extends Component {
                                                 <Member/>
                                                 ) : (
                                                     this.state.path === "/admin/setting" ? (
-                                                    <Setting/>
+                                                    <Setting showSetting={this.state.show.showSetting}/>
                                                     ) : (
-                                                        <div>
-                                                            page not found
-                                                        </div>
+                                                        this.state.path === "/admin/setting/add-bank" ? (
+                                                        <AddBank showAddBank={this.state.show.showAddBank}/>
+                                                        ) : (
+                                                            <div>
+                                                                page not found
+                                                            </div>
+                                                        )
                                                     )
                                                 )
                                             )
@@ -241,7 +281,40 @@ class Index extends Component {
                                     )
                                 )
                             )
+                        } */}
+
+                        {
+                            this.state.path === "/admin" ? (
+                                // <Dashboard/>
+                                <Route path="/admin" component={Dashboard} />
+                            ) : (
+                                <div>
+                                    <Route path="/admin/online-store" component={OnlineStore} />
+                                    <Route path="/admin/pesanan" component={Pesanan} />
+                                    <Route path="/admin/konfirmasi-pembayaran" component={KonfirmasiPembayaran} />
+                                    <Route path="/admin/message" component={Message} />
+                                    <Route path="/admin/member" component={Member} />
+                                    <Route path="/admin/setting" component={Setting} />
+                                    <Route path="/admin/setting/add-bank" component={AddBank} />
+                                </div>
+                            )
                         }
+                        {/* {
+                            this.state.path === "/admin/setting" ? (
+                                <Setting/>
+                            ) : (
+                                <div>
+                                    <Route path="/admin" component={Dashboard} />
+                                    <Route path="/admin/online-store" component={OnlineStore} />
+                                    <Route path="/admin/pesanan" component={Pesanan} />
+                                    <Route path="/admin/konfirmasi-pembayaran" component={KonfirmasiPembayaran} />
+                                    <Route path="/admin/message" component={Message} />
+                                    <Route path="/admin/member" component={Member} />
+                                    
+                                    
+                                </div>
+                            )
+                        } */}
                     </div>
 
                     {/* Content footer */}

@@ -4,6 +4,7 @@ import App from './App';
 import Admin from './components/admin/Index';
 import Login from './components/admin/Login';
 import MenuSide from './components/lib/MenuSide';
+// import MenuForm from './components/lib/MenuForm';
 
 
 function Router() {
@@ -13,7 +14,7 @@ function Router() {
                 <Route path="/" exact component={App} />
                 <Route path="/admin" component={Admin} />
                 <Route path="/auth" component={Login} />
-
+                {/* <Route path="/admin/setting/add-bank" component={Admin} /> */}
                 {
                     MenuSide.map((value, index) => {
                         return(
@@ -23,6 +24,16 @@ function Router() {
                         );
                     })
                 }
+
+                {/* {
+                    MenuForm.map((value, index) => {
+                        return(
+                            <div key={index}>
+                                {value.route}   
+                            </div>                         
+                        );
+                    })
+                } */}
                 
             </div>
         </BrowserRouter>

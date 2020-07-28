@@ -3,7 +3,8 @@ import {Route} from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTachometerAlt, faCartArrowDown, faShoppingCart, faClipboardList, faComment, faUsers, faCog} from '@fortawesome/free-solid-svg-icons';
 import Admin from '../admin/Index';
-import Pesanan from '../admin/page-content/Pesanan';
+// import Dashboard from '../admin/page-content/Dashboard';
+// import Pesanan from '../admin/page-content/Pesanan';
 
 
 const MenuSide= [
@@ -30,7 +31,7 @@ const MenuSide= [
     {
         title: "Pesanan",
         fa: <FontAwesomeIcon icon={faShoppingCart} style={{ marginRight:"6px"}}/> ,
-        route: <Route path="/admin/pesanan" component={Pesanan} />,
+        route: <Route path="/admin/pesanan" component={Admin} />,
         url: "/admin/pesanan"
     },
     {
