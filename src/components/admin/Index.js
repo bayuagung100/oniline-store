@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import './index.css';
-import { Route, Redirect, Link } from "react-router-dom";
+// import { Switch, Route, Redirect, Link, useRouteMatch, useParams } from "react-router-dom";
+import {
+    Switch,
+    Route,
+    Redirect,
+    Link,
+    withRouter
+} from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars,faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 import MenuSide from '../lib/MenuSide';
 import Dashboard from './page-content/Dashboard';
-import OnlineStore from './page-content/OnlineStore';
-import Pesanan from './page-content/Pesanan';
-import KonfirmasiPembayaran from './page-content/KonfirmasiPembayaran';
-import Message from './page-content/Message';
-import Member from './page-content/Member';
-import Setting from './page-content/setting/Setting';
-import AddBank from './page-content/setting/AddBank';
+import PageContent from './PageContent';
 
 class Index extends Component {
     constructor(props) {
@@ -24,16 +25,12 @@ class Index extends Component {
         this.state = {
             login,
             path: this.props.history.location.pathname,
-            // show: {
-            //     // show1: true,
-            //     // show2: false,
-            //     showSetting: false,
-            //     showAddBank: false,
-            // }
+
         }
 
         this.logout = this.logout.bind(this);
         this.active = this.active.bind(this);
+
     }
 
     logout(){
@@ -48,53 +45,21 @@ class Index extends Component {
             return {
                 path: this.props.history.location.pathname,
             };
-        }
-        // ,()=> {
-        //     console.log(this.state.show)
-        //     if (this.state.path === '/admin/setting') {
-        //         console.log('harus showSetting: true');
-        //         console.log('harus showAddBank: false');
-        //         this.setState(prevState => ({
-        //             show: {                   // object that we want to update
-        //                 ...prevState.show,    // keep all other key-value pairs
-
-        //                 // update the value of specific key
-        //                 showSetting: true,
-        //                 showAddBank: false,
-        //             }
-        //         }),()=>console.log(this.state.show))
-                
-        //         // this.setState((state, props) => {
-        //         //     return {
-        //         //         show:{
-        //         //             newShow,
-        //         //             showSetting: true,
-        //         //             showAddBank: false
-        //         //         }
-        //         //     };
-        //         // },()=>console.log(this.state.show))
-        //     }
-        // }
-        );
-        
+        })
     }
 
+
+    
+
     componentDidMount(){
-        
     }
 
     render() {
         if (this.state.login === false) {
             return (<Redirect to="/auth" />)
         }
-        
+        const match = this.props.match.path;
         return (
-            // <BrowserRouter>
-            //     <div>
-            //         admin
-            //         <button onClick={this.logout}> logout </button>
-            //     </div>
-            // </BrowserRouter>
             <div className="sidebar-mini layout-fixed layout-navbar-fixed">
                 <div className="wrapper">
                     {/* Navbar */}
@@ -133,7 +98,7 @@ class Index extends Component {
                                         MenuSide.map((value, index) => {
                                             return(
                                                 <li key={index} className="nav-item">
-                                                    <Link to={value.url} onClick={this.active} className={"nav-link "+(this.state.path===value.url ? 'active':'')}>
+                                                    <Link to={`${this.props.match.path}`+value.url} onClick={this.active} className={"nav-link "+(this.state.path===value.active ? 'active':'')}>
                                                         {value.fa}
                                                         <p>
                                                             {value.title}
@@ -143,77 +108,7 @@ class Index extends Component {
                                             );
                                         })
                                     }
-                                    {/* <li className="nav-item">
-                                        <Link to="#" className="nav-link">
-                                            <FontAwesomeIcon icon={faTachometerAlt} style={{ marginRight:"6px"}}/>
-                                            <p>
-                                                Dashboard
-                                            </p>
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item has-treeview">
-                                        <Link to="#" className="nav-link">
-                                            <FontAwesomeIcon icon={faCartArrowDown} style={{ marginRight:"6px"}}/>
-                                            <p>
-                                                Online Store
-                                                <FontAwesomeIcon icon={faAngleDown} className="right"/>
-                                            </p>
-                                        </Link>
-                                        <ul className="nav nav-treeview">
-                                            <li className="nav-item">
-                                                <a href="pages/layout/top-nav.html" className="nav-link">
-                                                <FontAwesomeIcon icon={faCircleNotch} className="nav-icon"/>
-                                                <p>Daftar Product</p>
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a href="pages/layout/top-nav.html" className="nav-link">
-                                                <FontAwesomeIcon icon={faCircleNotch} className="nav-icon"/>
-                                                <p>Daftar Product</p>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link to="#" className="nav-link">
-                                            <FontAwesomeIcon icon={faShoppingCart} style={{ marginRight:"6px"}}/>
-                                            <p>
-                                                Pesanan
-                                            </p>
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link to="#" className="nav-link">
-                                            <FontAwesomeIcon icon={faClipboardList} style={{ marginRight:"6px"}}/>
-                                            <p>
-                                                Konfirmasi Pembayaran
-                                            </p>
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link to="#" className="nav-link">
-                                            <FontAwesomeIcon icon={faComment} style={{ marginRight:"6px"}}/>
-                                            <p>
-                                                Message
-                                            </p>
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link to="#" className="nav-link">
-                                            <FontAwesomeIcon icon={faUsers} style={{ marginRight:"6px"}}/>
-                                            <p>
-                                                Member
-                                            </p>
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link to="#" className="nav-link">
-                                            <FontAwesomeIcon icon={faCog} style={{ marginRight:"6px"}}/>
-                                            <p>
-                                                Setting
-                                            </p>
-                                        </Link>
-                                    </li> */}
+                                    
                                 </ul>
                             </nav>
                         </div>
@@ -265,15 +160,14 @@ class Index extends Component {
                                                 <Member/>
                                                 ) : (
                                                     this.state.path === "/admin/setting" ? (
-                                                    <Setting showSetting={this.state.show.showSetting}/>
+                                                    // <Setting/>
+                                                    <Route path="/admin/setting" component={Setting} />
                                                     ) : (
-                                                        this.state.path === "/admin/setting/add-bank" ? (
-                                                        <AddBank showAddBank={this.state.show.showAddBank}/>
-                                                        ) : (
+                                                        
                                                             <div>
                                                                 page not found
                                                             </div>
-                                                        )
+                                                        
                                                     )
                                                 )
                                             )
@@ -283,22 +177,55 @@ class Index extends Component {
                             )
                         } */}
 
-                        {
+                        {/* { this.state.path  === "/admin" && <Dashboard /> }
+                        { this.state.path  === "/admin/online-store" && <OnlineStore /> }
+                        { this.state.path  === "/admin/pesanan" && <Pesanan /> }
+                        { this.state.path  === "/admin/konfirmasi-pembayaran" && <KonfirmasiPembayaran /> }
+                        { this.state.path  === "/admin/message" && <Message /> }
+                        { this.state.path  === "/admin/member" && <Member /> }
+                        { this.state.path  === "/admin/setting" && <Setting /> } */}
+                        {/* { this.state.path  === "/admin/setting/add-bank" && <AddBank /> } */}
+
+                        {/* {
                             this.state.path === "/admin" ? (
-                                // <Dashboard/>
-                                <Route path="/admin" component={Dashboard} />
+                                <Dashboard/>
                             ) : (
-                                <div>
-                                    <Route path="/admin/online-store" component={OnlineStore} />
-                                    <Route path="/admin/pesanan" component={Pesanan} />
-                                    <Route path="/admin/konfirmasi-pembayaran" component={KonfirmasiPembayaran} />
-                                    <Route path="/admin/message" component={Message} />
-                                    <Route path="/admin/member" component={Member} />
-                                    <Route path="/admin/setting" component={Setting} />
-                                    <Route path="/admin/setting/add-bank" component={AddBank} />
-                                </div>
+                                this.state.path === "/admin/online-store" ? (
+                                <OnlineStore/>
+                                ) : (
+                                    this.state.path === "/admin/pesanan" ? (
+                                    <Pesanan/>
+                                    ) : (
+                                        this.state.path === "/admin/konfirmasi-pembayaran" ? (
+                                        <KonfirmasiPembayaran/>
+                                        ) : (
+                                            this.state.path === "/admin/message" ? (
+                                            <Message/>
+                                            ) : (
+                                                this.state.path === "/admin/member" ? (
+                                                <Member/>
+                                                ) : (
+                                                    this.state.path === "/admin/setting" ? (
+                                                    // <Setting/>
+                                                    <Route path="/admin/setting" component={Setting} />
+                                                    ) : (
+                                                        
+                                                            <div>
+                                                                page not found
+                                                            </div>
+                                                        
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
                             )
-                        }
+                        } */}
+
+                        
+                        
+                        
                         {/* {
                             this.state.path === "/admin/setting" ? (
                                 <Setting/>
@@ -315,6 +242,16 @@ class Index extends Component {
                                 </div>
                             )
                         } */}
+
+                        <Switch>
+                            <Route path={`${match}/:pageContent`}>
+                                <PageContent/>
+                            </Route>
+                            <Route path={match}>
+                                <Dashboard/>
+                            </Route>
+                        </Switch>
+
                     </div>
 
                     {/* Content footer */}
@@ -331,4 +268,5 @@ class Index extends Component {
     }
 }
 
-export default Index;
+export default withRouter(Index);
+

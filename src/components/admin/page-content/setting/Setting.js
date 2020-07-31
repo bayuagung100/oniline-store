@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faCreditCard, faExclamationTriangle, faSave } from "@fortawesome/free-solid-svg-icons";
 import Tbl from "../../../lib/Datatables";
@@ -8,19 +8,19 @@ import $ from 'jquery';
 import '../../../lib/select2.css';
 import 'select2';
 import axios from "axios";
-import AddBank from './AddBank';
+// import AddBank from './AddBank';
 
 
 class Setting extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show: {
-                // show1: this.props.show1,
-                // show2: this.props.show2,
-                showSetting: true,
-                showAddBank: false,
-            },
+            // show: {
+            //     // show1: this.props.show1,
+            //     // show2: this.props.show2,
+            //     showSetting: true,
+            //     showAddBank: false,
+            // },
             
             sosmed: {
                 id: '',
@@ -48,7 +48,8 @@ class Setting extends Component {
         this.getApiSubdistrict = this.getApiSubdistrict.bind(this);
         this.getApiSosmed = this.getApiSosmed.bind(this);
         this.getApiInfoWeb = this.getApiInfoWeb.bind(this);
-        this.hideComponent = this.hideComponent.bind(this);
+        // this.hideComponent = this.hideComponent.bind(this);
+        this.active = this.active.bind(this);
     }
     infoChange(e) {
         let newinfo = { ...this.state.infoweb };
@@ -264,21 +265,21 @@ class Setting extends Component {
         });
     }
 
-    hideComponent() {
-        // this.setState({
-        //     showSetting: !this.state.show.showSetting,
-        //     showAddBank: !this.state.show.showAddBank
-        // });
-        this.setState(prevState => ({
-            show: {                   // object that we want to update
-                ...prevState.show,    // keep all other key-value pairs
+    // hideComponent() {
+    //     // this.setState({
+    //     //     showSetting: !this.state.show.showSetting,
+    //     //     showAddBank: !this.state.show.showAddBank
+    //     // });
+    //     this.setState(prevState => ({
+    //         show: {                   // object that we want to update
+    //             ...prevState.show,    // keep all other key-value pairs
 
-                // update the value of specific key
-                showSetting: !this.state.show.showSetting,
-                showAddBank: !this.state.show.showAddBank,
-            }
-        }))
-    }
+    //             // update the value of specific key
+    //             showSetting: !this.state.show.showSetting,
+    //             showAddBank: !this.state.show.showAddBank,
+    //         }
+    //     }))
+    // }
 
     dataSet = [
         // [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
@@ -298,6 +299,14 @@ class Setting extends Component {
         { value: 'vanilla', label: 'Vanilla' }
     ]
 
+    active(){
+        console.log(this.props)
+        // this.setState((state, props) => {
+        //     return {
+        //         path: this.props.history.location.pathname,
+        //     };
+        // })
+    }
     
 
     componentDidMount(){
@@ -310,16 +319,19 @@ class Setting extends Component {
         this.getApiCity();
         this.getApiSubdistrict();
         
+        // console.log(this.state.show)
         
     }
+
+    // try = () => {
+    //     this.props.history.push('/admin/setting/add-bank');
+    // }
+  
     render() {
         // const {showSetting, showAddBank} = this.state;
         return (
             
             <div>
-                {
-                    this.state.show.showSetting === true ? (
-                        <div>
                         <div className="content-header">
                             <div className="container-fluid">
                                 <div className="row mb-2">
@@ -342,7 +354,11 @@ class Setting extends Component {
                                                         <FontAwesomeIcon icon={faMinus}/>
                                                     </button>
                                                 </div>
-                                                <Link to="/admin/setting/add-bank" onClick={this.hideComponent} className="btn btn-primary btn-icon-split" style={{ float:"right", marginRight:"4px"}}>
+                                                {/* <Link  to="/admin" onClick={this.active}>
+                            <span className="brand-text font-weight-light">Administrator</span>
+                        </Link> */}
+                                                {/* <Route path="/admin/setting/add-bank" component={AddBank} /> */}
+                                                <Link to="/admin/setting/add-bank" className="btn btn-primary btn-icon-split" style={{ float:"right", marginRight:"4px"}}>
                                                     <span className="icon text-white-50">
                                                         <FontAwesomeIcon icon={faPlus}/>
                                                     </span>
@@ -494,13 +510,7 @@ class Setting extends Component {
                                 </div>
                             </div>
                         </section>
-                        </div>
-                    ) : (
-                        <div>
-                            <Route path="/admin/setting/add-bank" component={AddBank} />
-                        </div>
-                    )
-                } 
+                        
                 
                 {/* {
                     this.state.show.showAddBank === true ? (

@@ -12,13 +12,15 @@ const MenuSide= [
         title: "Dashboard",
         fa:  <FontAwesomeIcon icon={faTachometerAlt} style={{ marginRight:"6px"}}/> ,
         route: <Route path="/admin" component={Admin} />,
-        url: "/admin"
+        url: "",
+        active: "/admin",
     },
     {
         title: "Online Store",
         fa: <FontAwesomeIcon icon={faCartArrowDown} style={{ marginRight:"6px"}}/> ,
         route: <Route path="/admin/online-store" component={Admin} />,
-        url: "/admin/online-store",
+        url: "/online-store",
+        active: "/admin/online-store",
         // ch: [
         //     {
         //         title: "Daftar Product",
@@ -32,31 +34,36 @@ const MenuSide= [
         title: "Pesanan",
         fa: <FontAwesomeIcon icon={faShoppingCart} style={{ marginRight:"6px"}}/> ,
         route: <Route path="/admin/pesanan" component={Admin} />,
-        url: "/admin/pesanan"
+        url: "/pesanan",
+        active: "/admin/pesanan",
     },
     {
         title: "Konfirmasi Pembayaran",
         fa: <FontAwesomeIcon icon={faClipboardList} style={{ marginRight:"6px"}}/> ,
         route: <Route path="/admin/konfirmasi-pembayaran" component={Admin} />,
-        url: "/admin/konfirmasi-pembayaran"
+        url: "/konfirmasi-pembayaran",
+        active: "/admin/konfirmasi-pembayaran",
     },
     {
         title: "Message",
         fa: <FontAwesomeIcon icon={faComment} style={{ marginRight:"6px"}}/> ,
         route: <Route path="/admin/message" component={Admin} />,
-        url: "/admin/message"
+        url: "/message",
+        active: "/admin/message",
     },
     {
         title: "Member",
         fa: <FontAwesomeIcon icon={faUsers} style={{ marginRight:"6px"}}/> ,
         route: <Route path="/admin/member" component={Admin} />,
-        url: "/admin/member"
+        url: "/member",
+        active: "/admin/member",
     },
     {
         title: "Setting",
         fa: <FontAwesomeIcon icon={faCog} style={{ marginRight:"6px"}}/> ,
         route: <Route path="/admin/setting" component={Admin} />,
-        url: "/admin/setting"
+        url: "/setting",
+        active: "/admin/setting",
     },
 ];
 
