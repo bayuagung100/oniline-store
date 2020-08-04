@@ -10,6 +10,25 @@ module.exports = function (app) {
 
   app.route(apiV1+'subdistrict').get(url.subdistrict);
 
+  app.route(apiV1+'sosmed').get(url.sosmed);
+
+  app.route(apiV1+'sosmed').put(url.updatesosmed);
+
+  app.route(apiV1+'infoweb').get(url.infoweb);
+
+  app.route(apiV1+'infoweb').put(url.updateinfoweb);
+
+  app.route(apiV1+'banklist').get(url.banklist);
+
+  app.route(apiV1+'banklist').post(url.addbanklist);
+
+
+
+  app.route(apiV1+'banklist/delete/:id').delete(url.deletebanklist);
+  
+
+  app.route(apiV1+'dt/banklist').get(url.dtbanklist);
+
   // app.route(apiV1+'users/:id').get(url.userbyid);
 
   // app.route(apiV1+'auth').post(url.auth);

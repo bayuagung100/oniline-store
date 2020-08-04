@@ -48,6 +48,135 @@ exports.subdistrict = function (req, res) {
     });
 };
 
+exports.infoweb = function (req, res) {
+    koneksi.query("SELECT * FROM setting_infoweb ", function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok(rows, res);
+        }
+
+    });
+};
+
+
+//menggunakan x-www-form-urlencoded
+exports.updateinfoweb = function (req, res) {
+    var id = req.body.id;
+    var judul = req.body.judul;
+    var deskripsi = req.body.deskripsi;
+    var alamat = req.body.alamat;
+    var provinsi = req.body.provinsi;
+    var kabupaten = req.body.kabupaten;
+    var kecamatan = req.body.kecamatan;
+    var kode_pos = req.body.kode_pos;
+
+    koneksi.query("UPDATE setting_infoweb SET judul_website=?, deskripsi_website=?, alamat=? , province=?, city=?, subdistrict=?, postal_code=? WHERE id=?", [judul, deskripsi, alamat, provinsi, kabupaten, kecamatan, kode_pos, id], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok("Berhasil update", res);
+        }
+    });
+};
+
+exports.sosmed = function (req, res) {
+    koneksi.query("SELECT * FROM setting_sosmed ", function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok(rows, res);
+        }
+
+    });
+};
+
+//menggunakan x-www-form-urlencoded
+exports.updatesosmed = function (req, res) {
+    var id = req.body.id;
+    var email = req.body.email;
+    var whatsapp = req.body.whatsapp;
+    var instagram = req.body.instagram;
+
+    koneksi.query("UPDATE setting_sosmed SET email=?, whatsapp=?, instagram=? WHERE id=?", [email, whatsapp, instagram, id], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok("Berhasil update", res);
+        }
+    });
+};
+
+exports.banklist = function (req, res) {
+    koneksi.query("SELECT * FROM setting_bank ", function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok(rows, res);
+        }
+
+    });
+};
+
+exports.addbanklist = function (req, res) {
+    var nama_bank = req.body.nama_bank;
+    var no_rekening = req.body.no_rekening;
+    var nama_rekening = req.body.nama_rekening;
+
+    koneksi.query("INSERT INTO setting_bank (bank_name, bank_rekening, bank_name_rekening) VALUES (?, ?, ?)", [nama_bank, no_rekening, nama_rekening], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok(rows, res);
+        }
+    });
+};
+
+exports.deletebanklist = function (req, res) {
+        var id = req.params.id;
+        koneksi.query("DELETE FROM setting_bank WHERE id=?", [id], function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok("Berhasil delete bank", res);
+            }
+        });
+    };
+
+exports.dtbanklist = function (req, res) {
+    koneksi.query("SELECT * FROM setting_bank", function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            var Obj = [];
+            console.log(Object.values(rows))
+            var no = 1;
+            rows.forEach(function (element, index) { 
+                
+                var id = element.id
+                var bank_name = element.bank_name
+                var bank_rekening = element.bank_rekening
+                var bank_name_rekening = element.bank_name_rekening
+                // Obj.push(Object.values(element))
+                Obj.push([
+                    no=no,
+                    bank_name=bank_name,
+                    bank_rekening= bank_rekening,
+                    bank_name_rekening = bank_name_rekening,
+                    id=id,
+                ])
+                no++;
+            }); 
+            response.datatables(Obj, res);
+        }
+
+    });
+};
+
+
+
+
+
 exports.userbyid = function (req, res) {
     var id = req.params.id;
 
@@ -61,6 +190,7 @@ exports.userbyid = function (req, res) {
 
     });
 };
+
 
 // pakai x-www-form-urlencoded
 exports.auth = function (req, res) {
@@ -164,7 +294,7 @@ exports.createuser = function (req, res) {
 //     });
 // };
 
-//menggunakan x-www-form-urlencoded
+//menggunakan x-www-form-data
 exports.updateuser = function (req, res) {
     // membuat objek form dari formidable
     var form = new formidable.IncomingForm();
@@ -270,5 +400,6 @@ exports.types = function (req, res) {
 
 
 // end api v1
+
 
 

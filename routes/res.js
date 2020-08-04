@@ -25,3 +25,14 @@ exports.auth = function (session, values, res) {
     res.json(api);
     res.end();
 };
+
+
+exports.datatables = function (values, res) {
+
+    var data = {
+        'data': values
+    };
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json(data);
+    res.end();
+};
