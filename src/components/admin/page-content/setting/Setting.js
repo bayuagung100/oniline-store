@@ -10,6 +10,11 @@ import 'select2';
 import axios from "axios";
 // import AddBank from './AddBank';
 
+// ES6 Modules or TypeScript
+import Swal from 'sweetalert2'
+
+
+
 
 class Setting extends Component {
     constructor(props) {
@@ -21,7 +26,7 @@ class Setting extends Component {
             //     showSetting: true,
             //     showAddBank: false,
             // },
-            
+            // banklist: [],
             sosmed: {
                 id: '',
                 email: '',
@@ -60,23 +65,40 @@ class Setting extends Component {
     }
     infoSubmit(e) {
         e.preventDefault();
-        console.log(this.state.infoweb);
-        axios.put('http://localhost:8080/api/v1/infoweb',{
-            id: this.state.infoweb.id,
-            judul: this.state.infoweb.judul,
-            deskripsi: this.state.infoweb.deskripsi,
-            alamat: this.state.infoweb.alamat,
-            provinsi: this.state.infoweb.provinsi,
-            kabupaten: this.state.infoweb.kabupaten,
-            kecamatan: this.state.infoweb.kecamatan,
-            kode_pos: this.state.infoweb.kode_pos,
+        Swal.fire({
+            title: 'Are you sure?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.value) {
+                axios.put('http://localhost:8080/api/v1/infoweb',{
+                    id: this.state.infoweb.id,
+                    judul: this.state.infoweb.judul,
+                    deskripsi: this.state.infoweb.deskripsi,
+                    alamat: this.state.infoweb.alamat,
+                    provinsi: this.state.infoweb.provinsi,
+                    kabupaten: this.state.infoweb.kabupaten,
+                    kecamatan: this.state.infoweb.kecamatan,
+                    kode_pos: this.state.infoweb.kode_pos,
+                })
+                .then(function (response) {
+                    // console.log(response.data.results);
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Success update informasi website',
+                        icon: 'success',
+                        allowOutsideClick: false
+                    })
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
         })
-        .then(function (response) {
-            console.log(response.data.results);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
     }
 
     sosmedChange(e) {
@@ -88,18 +110,38 @@ class Setting extends Component {
     }
     sosmedSubmit(e) {
         e.preventDefault();
-        axios.put('http://localhost:8080/api/v1/sosmed',{
-            id: this.state.sosmed.id,
-            email: this.state.sosmed.email,
-            whatsapp: this.state.sosmed.whatsapp,
-            instagram: this.state.sosmed.instagram,
+        Swal.fire({
+            title: 'Are you sure?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.value) {
+                axios.put('http://localhost:8080/api/v1/sosmed',{
+                    id: this.state.sosmed.id,
+                    email: this.state.sosmed.email,
+                    whatsapp: this.state.sosmed.whatsapp,
+                    instagram: this.state.sosmed.instagram,
+                })
+                .then(function (response) {
+                    // console.log(response.data.results);
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Success update social media',
+                        icon: 'success',
+                        allowOutsideClick: false
+                    })
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
         })
-        .then(function (response) {
-            console.log(response.data.results);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+          
+        
 
     }
 
@@ -281,18 +323,6 @@ class Setting extends Component {
     //     }))
     // }
 
-    dataSet = [
-        // [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
-    ];
-
-    dataColums = [
-        {title:"No"},
-        {title:"Nama Bank"},
-        {title:"No Rekening"},
-        {title:"Nama Rekening"},
-        {title:"Aksi"},
-    ];
-
     options = [
         { value: 'chocolate', label: 'Chocolate' },
         { value: 'strawberry', label: 'Strawberry' },
@@ -318,7 +348,6 @@ class Setting extends Component {
         this.getApiProvince();
         this.getApiCity();
         this.getApiSubdistrict();
-        
         // console.log(this.state.show)
         
     }
@@ -327,6 +356,7 @@ class Setting extends Component {
     //     this.props.history.push('/admin/setting/add-bank');
     // }
   
+    
     render() {
         // const {showSetting, showAddBank} = this.state;
         return (
@@ -366,7 +396,7 @@ class Setting extends Component {
                                                 </Link>
                                             </div>
                                             <div className="card-body">
-                                                <Tbl data={this.dataSet} columns={this.dataColums}></Tbl>
+                                                <Tbl id="banklist"></Tbl>
                                             </div>
                                         </div>
                                     </div>
