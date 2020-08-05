@@ -132,16 +132,42 @@ exports.addbanklist = function (req, res) {
     });
 };
 
+exports.banklistbyid = function (req, res) {
+    var id = req.params.id;
+    koneksi.query("SELECT * FROM setting_bank WHERE id=?", [id], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok(rows, res);
+        }
+    });
+};
+
+exports.updatebanklist = function (req, res) {
+    var id = req.body.id;
+    var bank_name = req.body.bank_name;
+    var bank_rekening = req.body.bank_rekening;
+    var bank_name_rekening = req.body.bank_name_rekening;
+
+    koneksi.query("UPDATE setting_bank SET bank_name=?, bank_rekening=?, bank_name_rekening=? WHERE id=?", [bank_name, bank_rekening, bank_name_rekening, id], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok("Berhasil update", res);
+        }
+    });
+};
+
 exports.deletebanklist = function (req, res) {
-        var id = req.params.id;
-        koneksi.query("DELETE FROM setting_bank WHERE id=?", [id], function (error, rows, fields) {
-            if (error) {
-                console.log(error);
-            } else {
-                response.ok("Berhasil delete bank", res);
-            }
-        });
-    };
+    var id = req.params.id;
+    koneksi.query("DELETE FROM setting_bank WHERE id=?", [id], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok("Berhasil delete bank", res);
+        }
+    });
+};
 
 exports.dtbanklist = function (req, res) {
     koneksi.query("SELECT * FROM setting_bank", function (error, rows, fields) {
@@ -149,7 +175,7 @@ exports.dtbanklist = function (req, res) {
             console.log(error);
         } else {
             var Obj = [];
-            console.log(Object.values(rows))
+            // console.log(Object.values(rows))
             var no = 1;
             rows.forEach(function (element, index) { 
                 
@@ -342,7 +368,7 @@ exports.deleteuser = function (req, res) {
                 console.log(error);
             } else {
                 response.ok("Berhasil menghapus user", res);
-                console.log(res);
+                // console.log(res);
             }
         });
     });

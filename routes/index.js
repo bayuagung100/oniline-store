@@ -22,9 +22,11 @@ module.exports = function (app) {
 
   app.route(apiV1+'banklist').post(url.addbanklist);
 
+  app.route(apiV1+'banklist/:id').get(url.banklistbyid);
 
+  app.route(apiV1+'banklist').put(url.updatebanklist);
 
-  app.route(apiV1+'banklist/delete/:id').delete(url.deletebanklist);
+  app.route(apiV1+'banklist/:id').delete(url.deletebanklist);
   
 
   app.route(apiV1+'dt/banklist').get(url.dtbanklist);
