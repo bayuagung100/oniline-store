@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./datatables.min.css";
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2'
@@ -12,12 +12,52 @@ const $ = require('jquery');
 $.Datatable = require('datatables.net-bs4');
 
 
+class DtTable extends React.Component {
+    render() {
+        const id = this.props.id;
+        return (
+        <div className="table-responsive">
+            <table id={id} className="table table-striped table-bordered" width="100%" >
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Bank</th>
+                    <th>No Rekening</th>
+                    <th>Nama Rekening</th>
+                    <th>Aksi</th>
+                </tr>
+                </thead>
+                
+                <tfoot>
+                <tr>
+                <th>No</th>
+                    <th>Nama Bank</th>
+                    <th>No Rekening</th>
+                    <th>Nama Rekening</th>
+                    <th>Aksi</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        )
+    }
+}
+
 class Datatables extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            redirect: '',
         }
+        this.editBank = this.editBank.bind(this);
         this.deleteBank = this.deleteBank.bind(this);
+    }
+
+    editBank(id){
+        this.setState({ 
+            redirect: '/admin/setting/edit-bank',
+            url: '/admin/setting/edit-bank/'+id
+        })
     }
 
     deleteBank(id, name){
@@ -33,18 +73,15 @@ class Datatables extends Component {
             allowOutsideClick: false
         }).then((result) => {
             if (result.value) {
-                axios.delete('http://localhost:8080/api/v1/banklist/delete/'+id)
-                .then(function (response) {
-                    Swal.fire({
+                axios.delete('http://localhost:8080/api/v1/banklist/'+id)
+                .then(
+                    () =>  Swal.fire({
                         title: 'Success!',
                         text: 'Success delete!',
                         icon: 'success',
                         allowOutsideClick: false,
-                        onAfterClose: () => {
-                            window.location = "/admin/setting"
-                        }
-                    })
-                })
+                    }).then(() => this.setState({ redirect: '/admin/setting' }))
+                )
                 .catch(function (error) {
                     console.log(error);
                 });
@@ -113,52 +150,30 @@ class Datatables extends Component {
                 // "defaultContent": '<a href="/admin/setting/edit-bank/" class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i> Edit</a> <a href="/admin/setting/delete-bank/" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Hapus</a>',
                 createdCell: (td, cellData, rowData, row, col) =>
                     ReactDOM.render(
-                        <Router>
+                            <BrowserRouter>
                             {/* {console.log('cellData: '+cellData)}
                             {console.log('rowData: '+rowData)}
                             {console.log('row: '+row)}
                             {console.log('col: '+col)} */}
-                            <Link to={"/admin/setting/edit-bank/"+rowData[4]}  className="btn btn-primary btn-sm">
-                                <FontAwesomeIcon icon={faEdit}/> Edit
-                            </Link> <button type="button"  className="btn btn-danger btn-sm" onClick={() => this.deleteBank(rowData[4], rowData[1]+'-'+rowData[2]+' a.n '+rowData[3])}> <FontAwesomeIcon icon={faTrash}/> Delete</button>
-                        </Router>, td),
+                            <button type="button"  className="btn btn-primary btn-sm" onClick={() => this.editBank(rowData[4])}> <FontAwesomeIcon icon={faEdit}/> Edit</button> <button type="button"  className="btn btn-danger btn-sm" onClick={() => this.deleteBank(rowData[4], rowData[1]+'-'+rowData[2]+' a.n '+rowData[3])}> <FontAwesomeIcon icon={faTrash}/> Delete</button>
+                            </BrowserRouter>, td),
             } ]
         } );
      
     }
 
     render() {
+        if (this.state.redirect === '/admin/setting') {
+            return (
+                <Route path='/admin/setting'>
+                    <Datatables id='banklist'/>
+                </Route>
+            )
+        } else if (this.state.redirect === '/admin/setting/edit-bank'){
+            return (<Redirect to={this.state.url}/>)
+        }
         return (
-        <div className="table-responsive">
-            {
-                this.props.id === "banklist" ? (
-                    <table id={this.props.id} className="table table-striped table-bordered" width="100%" >
-                    <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Bank</th>
-                        <th>No Rekening</th>
-                        <th>Nama Rekening</th>
-                        <th>Aksi</th>
-                    </tr>
-                    </thead>
-                    
-                    <tfoot>
-                    <tr>
-                    <th>No</th>
-                        <th>Nama Bank</th>
-                        <th>No Rekening</th>
-                        <th>Nama Rekening</th>
-                        <th>Aksi</th>
-                    </tr>
-                    </tfoot>
-                </table>
-                ):(
-                    <div></div>
-                )
-            }
-            
-        </div>
+            <DtTable id={this.props.id}/>
         )
     }
 

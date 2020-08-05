@@ -27,6 +27,8 @@ class Setting extends Component {
             //     showAddBank: false,
             // },
             // banklist: [],
+            
+            tbl: this.props.tbl,
             sosmed: {
                 id: '',
                 email: '',
@@ -348,8 +350,6 @@ class Setting extends Component {
         this.getApiProvince();
         this.getApiCity();
         this.getApiSubdistrict();
-        // console.log(this.state.show)
-        
     }
 
     // try = () => {
@@ -396,7 +396,7 @@ class Setting extends Component {
                                                 </Link>
                                             </div>
                                             <div className="card-body">
-                                                <Tbl id="banklist"></Tbl>
+                                                <Tbl id={this.state.tbl}></Tbl>
                                             </div>
                                         </div>
                                     </div>

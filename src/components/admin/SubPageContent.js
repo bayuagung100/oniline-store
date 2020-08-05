@@ -1,57 +1,90 @@
 import React from 'react';
 import './index.css';
 import {
-    // useRouteMatch,
+    Switch,
+    Route,
+    withRouter,
+    useRouteMatch,
     useParams
   } from "react-router-dom";
 import AddBank from './page-content/setting/AddBank';
+import IdSubPageContent from './IdSubPageContent';
 
 function SubPageContent() {
-    // let match = useRouteMatch();
+    let match = useRouteMatch();
     let { pageContent } = useParams();
-    let { formId } = useParams();
+    let { form } = useParams();
     
     if (pageContent === 'online-store') {
-        if(formId === 'asd'){
+        if(form === 'asd'){
             return <h3>asd</h3>;
         } else {
             return <h3>Not Found</h3>;
         }
     } else if(pageContent === 'pesanan'){
-        if(formId === 'asd'){
+        if(form === 'asd'){
             return <h3>asd</h3>;
         } else {
             return <h3>Not Found</h3>;
         }
     } else if(pageContent === 'konfirmasi-pembayaran'){
-        if(formId === 'asd'){
+        if(form === 'asd'){
             return <h3>asd</h3>;
         } else {
             return <h3>Not Found</h3>;
         }
     } else if(pageContent === 'message'){
-        if(formId === 'asd'){
+        if(form === 'asd'){
             return <h3>asd</h3>;
         } else {
             return <h3>Not Found</h3>;
         }
     } else if(pageContent === 'member'){
-        if(formId === 'asd'){
+        if(form === 'asd'){
             return <h3>asd</h3>;
         } else {
             return <h3>Not Found</h3>;
         }
     } else if(pageContent === 'setting'){
-        if (formId === 'add-bank') {
-            return <AddBank/>
-        } else if(formId === 'edit-bank'){
-            return <h3>edit-bank</h3>;
+        if (form === 'add-bank') {
+            return <AddBank/>;
+        } else if(form === 'edit-bank'){
+            return (
+                <Switch>
+                    <Route path={`${match.path}/:formId`}>
+                        <IdSubPageContent />
+                    </Route>
+                    <Route path={match.path}>
+                        <h3>Not Found</h3>
+                    </Route>
+                </Switch>
+            );
         } else{
             return <h3>Not Found</h3>;
         }
+   
+        // return (
+        //     <Switch>
+        //         <Route path={`${match.path}/:formId`}>
+        //             <IdSubPageContent />
+        //         </Route>
+        //         <Route path={match.path}>
+        //             {
+        //                 form === 'add-bank' ? (<AddBank/>) : (<h3>Not Found</h3>)
+        //             }
+        //         </Route>
+        //     </Switch>
+        // );
+        // if (form === 'add-bank') {
+        //     return <AddBank/>
+        // } else if(form === 'edit-bank'){
+        //     return <h3>Not Found</h3>;
+        // } else{
+        //     return <h3>Not Found</h3>;
+        // }
     } else {
         return <h3>Not Found</h3>;
     }
 }
 
-export default SubPageContent;
+export default withRouter(SubPageContent);

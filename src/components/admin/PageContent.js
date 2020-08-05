@@ -3,6 +3,7 @@ import './index.css';
 import {
     Switch,
     Route,
+    withRouter,
     useRouteMatch,
     useParams
   } from "react-router-dom";
@@ -28,7 +29,7 @@ function PageContent() {
     } else if(pageContent === 'member'){
         return (
             <Switch>
-                <Route path={`${match.path}/:formId`}>
+                <Route path={`${match.path}/:form`}>
                     <SubPageContent />
                 </Route>
                 <Route path={match.path}>
@@ -39,11 +40,11 @@ function PageContent() {
     } else if(pageContent === 'setting'){
         return (
             <Switch>
-                <Route path={`${match.path}/:formId`}>
+                <Route path={`${match.path}/:form`}>
                     <SubPageContent />
                 </Route>
                 <Route path={match.path}>
-                    <Setting/>
+                    <Setting tbl='banklist'/>
                 </Route>
             </Switch>
         );
@@ -52,4 +53,4 @@ function PageContent() {
     }
 }
 
-export default PageContent;
+export default withRouter(PageContent);
