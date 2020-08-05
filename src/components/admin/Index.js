@@ -14,6 +14,9 @@ import MenuSide from '../lib/MenuSide';
 import Dashboard from './page-content/Dashboard';
 import PageContent from './PageContent';
 
+// ES6 Modules or TypeScript
+import Swal from 'sweetalert2'
+
 class Index extends Component {
     constructor(props) {
         super(props);
@@ -34,10 +37,43 @@ class Index extends Component {
     }
 
     logout(){
-        localStorage.removeItem("token");
-        this.setState({
-            login: false
-        })
+        Swal.fire({
+            title: 'Are you sure?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.value) {
+                // axios.put('http://localhost:8080/api/v1/banklist',{
+                //     id: this.state.dataBank.id,
+                //     bank_name: this.state.dataBank.bank_name,
+                //     bank_rekening: this.state.dataBank.bank_rekening,
+                //     bank_name_rekening: this.state.dataBank.bank_name_rekening,
+                // })
+                // .then(
+                //     () => Swal.fire({
+                //         title: 'Success!',
+                //         text: 'Success edit rekening bank',
+                //         icon: 'success',
+                //         allowOutsideClick: false,
+                //     }).then(() => this.setState({ redirect: true }))
+                // )
+                // .catch(function (error) {
+                //     console.log(error);
+                // });
+                localStorage.removeItem("token");
+                this.setState({
+                    login: false
+                })
+                    }
+                })
+        // localStorage.removeItem("token");
+        // this.setState({
+        //     login: false
+        // })
     }
 
     active(){
