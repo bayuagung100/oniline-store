@@ -8,6 +8,7 @@ import {
     useParams
   } from "react-router-dom";
 import AddBank from './page-content/setting/AddBank';
+import AddProduct from './page-content/online-store/AddProduct';
 import IdSubPageContent from './IdSubPageContent';
 
 function SubPageContent() {
@@ -16,14 +17,23 @@ function SubPageContent() {
     let { form } = useParams();
     
     if (pageContent === 'online-store') {
-        if(form === 'asd'){
-            return <h3>asd</h3>;
+        if(form === 'add-product'){
+            return <AddProduct/>;
         } else {
             return <h3>Not Found</h3>;
         }
     } else if(pageContent === 'pesanan'){
-        if(form === 'asd'){
-            return <h3>asd</h3>;
+        if(form === 'detail'){
+            return (
+                <Switch>
+                    <Route path={`${match.path}/:formId`}>
+                        <IdSubPageContent />
+                    </Route>
+                    <Route path={match.path}>
+                        <h3>Not Found pesanan</h3>
+                    </Route>
+                </Switch>
+            );
         } else {
             return <h3>Not Found</h3>;
         }
@@ -34,14 +44,32 @@ function SubPageContent() {
             return <h3>Not Found</h3>;
         }
     } else if(pageContent === 'message'){
-        if(form === 'asd'){
-            return <h3>asd</h3>;
+        if(form === 'detail'){
+            return (
+                <Switch>
+                    <Route path={`${match.path}/:formId`}>
+                        <IdSubPageContent />
+                    </Route>
+                    <Route path={match.path}>
+                        <h3>Not Found message</h3>
+                    </Route>
+                </Switch>
+            );
         } else {
             return <h3>Not Found</h3>;
         }
     } else if(pageContent === 'member'){
-        if(form === 'asd'){
-            return <h3>asd</h3>;
+        if(form === 'detail'){
+            return (
+                <Switch>
+                    <Route path={`${match.path}/:formId`}>
+                        <IdSubPageContent />
+                    </Route>
+                    <Route path={match.path}>
+                        <h3>Not Found member</h3>
+                    </Route>
+                </Switch>
+            );
         } else {
             return <h3>Not Found</h3>;
         }

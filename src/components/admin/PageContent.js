@@ -7,11 +7,11 @@ import {
     useRouteMatch,
     useParams
   } from "react-router-dom";
-import OnlineStore from './page-content/OnlineStore';
+import OnlineStore from './page-content/online-store/OnlineStore';
 import Pesanan from './page-content/Pesanan';
 import KonfirmasiPembayaran from './page-content/KonfirmasiPembayaran';
-import Message from './page-content/Message';
-import Member from './page-content/Member';
+import Message from './page-content/message/Message';
+import Member from './page-content/member/Member';
 import Setting from './page-content/setting/Setting';
 import SubPageContent from './SubPageContent';
 
@@ -19,13 +19,40 @@ function PageContent() {
     let match = useRouteMatch();
     let { pageContent } = useParams();
     if (pageContent === 'online-store') {
-        return <OnlineStore/>
+        return (
+            <Switch>
+                <Route path={`${match.path}/:form`}>
+                    <SubPageContent />
+                </Route>
+                <Route path={match.path}>
+                    <OnlineStore tbl='onlinestorelist'/>
+                </Route>
+            </Switch>
+        );
     } else if(pageContent === 'pesanan'){
-        return <Pesanan/>
+        return (
+            <Switch>
+                <Route path={`${match.path}/:form`}>
+                    <SubPageContent />
+                </Route>
+                <Route path={match.path}>
+                    <Pesanan tbl='pesananlist'/>
+                </Route>
+            </Switch>
+        );
     } else if(pageContent === 'konfirmasi-pembayaran'){
         return <KonfirmasiPembayaran/>
     } else if(pageContent === 'message'){
-        return <Message/>
+        return (
+            <Switch>
+                <Route path={`${match.path}/:form`}>
+                    <SubPageContent />
+                </Route>
+                <Route path={match.path}>
+                    <Message tbl='messagelist'/>
+                </Route>
+            </Switch>
+        );
     } else if(pageContent === 'member'){
         return (
             <Switch>
@@ -33,7 +60,7 @@ function PageContent() {
                     <SubPageContent />
                 </Route>
                 <Route path={match.path}>
-                    <Member/>
+                    <Member tbl='memberlist'/>
                 </Route>
             </Switch>
         );

@@ -3,7 +3,7 @@ import "./datatables.min.css";
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash, faEye} from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2'
 import axios from "axios";
 
@@ -18,7 +18,7 @@ class DtTable extends React.Component {
         return (
         <div className="table-responsive">
             <table id={id} className="table table-striped table-bordered" width="100%" >
-                <thead>
+                {/* <thead>
                 <tr>
                     <th>No</th>
                     <th>Nama Bank</th>
@@ -36,7 +36,7 @@ class DtTable extends React.Component {
                     <th>Nama Rekening</th>
                     <th>Aksi</th>
                 </tr>
-                </tfoot>
+                </tfoot> */}
             </table>
         </div>
         )
@@ -51,12 +51,28 @@ class Datatables extends Component {
         }
         this.editBank = this.editBank.bind(this);
         this.deleteBank = this.deleteBank.bind(this);
+        this.detailMember = this.detailMember.bind(this);
+        this.detailMessage = this.detailMessage.bind(this);
     }
 
     editBank(id){
         this.setState({ 
             redirect: '/admin/setting/edit-bank',
             url: '/admin/setting/edit-bank/'+id
+        })
+    }
+
+    detailMember(id){
+        this.setState({ 
+            redirect: '/admin/member/detail',
+            url: '/admin/member/detail/'+id
+        })
+    }
+
+    detailMessage(id){
+        this.setState({ 
+            redirect: '/admin/message/detail',
+            url: '/admin/message/detail/'+id
         })
     }
 
@@ -142,21 +158,68 @@ class Datatables extends Component {
         $('#banklist').DataTable( {
             order: [[ 0, "desc" ]],
             ajax: "http://localhost:8080/api/v1/dt/banklist",
+            columns: [
+                {title:"No"},
+                {title:"Nama Bank"},
+                {title:"No Rekening"},
+                {title:"Nama Rekening"},
+                {title:"Aksi"},
+            ],
             columnDefs: [ {
-                targets: -1,
-                // "data": null,
-                // "defaultContent": '<div id="edit"></div>',
-                
-                // "defaultContent": '<a href="/admin/setting/edit-bank/" class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i> Edit</a> <a href="/admin/setting/delete-bank/" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Hapus</a>',
-                createdCell: (td, cellData, rowData, row, col) =>
+                targets: -1,createdCell: (td, cellData, rowData, row, col) =>
                     ReactDOM.render(
-                            <BrowserRouter>
-                            {/* {console.log('cellData: '+cellData)}
-                            {console.log('rowData: '+rowData)}
-                            {console.log('row: '+row)}
-                            {console.log('col: '+col)} */}
-                            <button type="button"  className="btn btn-primary btn-sm" onClick={() => this.editBank(rowData[4])}> <FontAwesomeIcon icon={faEdit}/> Edit</button> <button type="button"  className="btn btn-danger btn-sm" onClick={() => this.deleteBank(rowData[4], rowData[1]+'-'+rowData[2]+' a.n '+rowData[3])}> <FontAwesomeIcon icon={faTrash}/> Delete</button>
-                            </BrowserRouter>, td),
+                        <BrowserRouter>
+                        {/* {console.log('cellData: '+cellData)}
+                        {console.log('rowData: '+rowData)}
+                        {console.log('row: '+row)}
+                        {console.log('col: '+col)} */}
+                        <button type="button"  className="btn btn-primary btn-sm" onClick={() => this.editBank(rowData[4])}> <FontAwesomeIcon icon={faEdit}/> Edit</button> <button type="button"  className="btn btn-danger btn-sm" onClick={() => this.deleteBank(rowData[4], rowData[1]+'-'+rowData[2]+' a.n '+rowData[3])}> <FontAwesomeIcon icon={faTrash}/> Delete</button>
+                        </BrowserRouter>, td),
+        } ]
+        } );
+
+        $('#memberlist').DataTable( {
+            order: [[ 0, "desc" ]],
+            ajax: "http://localhost:8080/api/v1/dt/memberlist",
+            columns: [
+                {title:"No"},
+                {title:"Nama Lengkap"},
+                {title:"Email"},
+                {title:"No Hp"},
+                {title:"Aksi"},
+            ],
+            columnDefs: [ {
+                targets: -1,createdCell: (td, cellData, rowData, row, col) =>
+                    ReactDOM.render(
+                        <BrowserRouter>
+                        {/* {console.log('cellData: '+cellData)}
+                        {console.log('rowData: '+rowData)}
+                        {console.log('row: '+row)}
+                        {console.log('col: '+col)} */}
+                        <button type="button"  className="btn btn-success btn-sm" onClick={() => this.detailMember(rowData[4])}> <FontAwesomeIcon icon={faEye}/> Detail</button>
+                        </BrowserRouter>, td),
+            } ]
+        } );
+
+        $('#messagelist').DataTable( {
+            order: [[ 0, "desc" ]],
+            ajax: "http://localhost:8080/api/v1/dt/messagelist",
+            columns: [
+                {title:"No"},
+                {title:"Nama Lengkap"},
+                {title:"Email"},
+                {title:"Aksi"},
+            ],
+            columnDefs: [ {
+                targets: -1,createdCell: (td, cellData, rowData, row, col) =>
+                    ReactDOM.render(
+                        <BrowserRouter>
+                        {/* {console.log('cellData: '+cellData)}
+                        {console.log('rowData: '+rowData)}
+                        {console.log('row: '+row)}
+                        {console.log('col: '+col)} */}
+                        <button type="button"  className="btn btn-success btn-sm" onClick={() => this.detailMessage(rowData[4])}> <FontAwesomeIcon icon={faEye}/> Detail</button>
+                        </BrowserRouter>, td),
             } ]
         } );
      
@@ -170,6 +233,10 @@ class Datatables extends Component {
                 </Route>
             )
         } else if (this.state.redirect === '/admin/setting/edit-bank'){
+            return (<Redirect to={this.state.url}/>)
+        } else if (this.state.redirect === '/admin/member/detail'){
+            return (<Redirect to={this.state.url}/>)
+        } else if (this.state.redirect === '/admin/message/detail'){
             return (<Redirect to={this.state.url}/>)
         }
         return (

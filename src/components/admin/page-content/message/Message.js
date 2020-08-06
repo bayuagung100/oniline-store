@@ -1,23 +1,24 @@
 import React, { Component } from "react";
-import Tbl from "../../lib/Datatables";
+import Tbl from "../../../lib/Datatables";
 
 class Message extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         path: props.location.path
-    //     }
-    // }
-    dataSet = [
-        // [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
-    ];
+    constructor(props) {
+        super(props);
+        this.state = {
+            tbl: this.props.tbl,
+        }
+    }
 
-    dataColums = [
-        {title:"No"},
-        {title:"Nama Lengkap"},
-        {title:"Email"},
-        {title:"Aksi"},
-    ];
+    // dataSet = [
+    //     // [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
+    // ];
+
+    // dataColums = [
+    //     {title:"No"},
+    //     {title:"Nama Lengkap"},
+    //     {title:"Email"},
+    //     {title:"Aksi"},
+    // ];
     render() {
         // console.log(this.state.path)
         return (
@@ -39,7 +40,8 @@ class Message extends Component {
                                 <h3 className="card-title">Daftar Data Message</h3>
                             </div>
                             <div className="card-body">
-                                <Tbl data={this.dataSet} columns={this.dataColums}></Tbl>
+                                {/* <Tbl data={this.dataSet} columns={this.dataColums}></Tbl> */}
+                                <Tbl id={this.state.tbl}></Tbl>
                             </div>
                         </div>
                     </div>

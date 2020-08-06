@@ -5,26 +5,25 @@ import {
     useParams
   } from "react-router-dom";
 import EditBank from './page-content/setting/EditBank';
+import DetailMember from './page-content/member/DetailMember';
+import DetailMessage from './page-content/message/DetailMessage';
 
 function IdSubPageContent(state, props) {
     
-
-    // let match = useRouteMatch();
-    // let { pageContent } = useParams();
+    let { pageContent } = useParams();
     let { form } = useParams();
     let { formId } = useParams();
     
-    if (form === 'edit-bank'){
+    if (pageContent === 'setting' && form === 'edit-bank'){
         return <EditBank id={formId}/>
-        // return (
-        //     <div>
-        //       {/* <p>Anda menekan sebanyak {id} kali</p>
-        //       <button onClick={() => setID(600)}>
-        //         Klik saya
-        //       </button> */}
-        //     </div>
-        //   );
-    } else {
+    } else if (pageContent === 'member' && form === 'detail'){
+        return <DetailMember id={formId}/>
+    } else if (pageContent === 'pesanan' && form === 'detail'){
+        return <h3>pesanan detail</h3>
+    } else if (pageContent === 'message' && form === 'detail'){
+        return <DetailMessage id={formId}/>
+    }
+    else {
         return <h3>Not Found</h3>
     }
 }

@@ -1,0 +1,1341 @@
+import React, { Component } from "react";
+import { Redirect, useHistory } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave, faArrowLeft, faPlusCircle, faPlus, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import $ from 'jquery';
+import '../../../lib/select2.css';
+import 'select2';
+
+// ES6 Modules or TypeScript
+import Swal from 'sweetalert2'
+
+
+function BtnBack() {
+    let history = useHistory();
+    return (
+        <button type="button"  className="btn btn-warning" onClick={() => history.goBack()}>
+            <FontAwesomeIcon icon={faArrowLeft}/> Batal
+        </button>
+    );
+}
+
+class AddProduct extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            redirect : false,
+            addProduk: {
+                nama_produk: '',
+                deskripsi_produk: '',
+                kategori: [],
+                warna: [],
+                ukuran: [],
+                harga: '',
+                stok: 0,
+                foto_utama: {
+                    icon: true,
+                    preview: '',
+                    raw: '',
+                },
+                foto1: {icon: true,preview: '',raw: '',},
+                foto2: {icon: true,preview: '',raw: '',},
+                foto3: {icon: true,preview: '',raw: '',},
+                foto4: {icon: true,preview: '',raw: '',},
+                foto5: {icon: true,preview: '',raw: '',},
+                foto6: {icon: true,preview: '',raw: '',},
+                foto7: {icon: true,preview: '',raw: '',},
+                foto8: {icon: true,preview: '',raw: '',},
+                berat: '',
+                kondisi: 'new',
+            },
+        }
+        this.addProdukChange = this.addProdukChange.bind(this);
+        this.kategoriChange = this.kategoriChange.bind(this);
+        this.warnaChange = this.warnaChange.bind(this);
+        this.ukuranChange = this.ukuranChange.bind(this);
+        this.addProdukSubmit = this.addProdukSubmit.bind(this);
+
+        this.fotoUtamaReset = this.fotoUtamaReset.bind(this);
+        this.fotoUtamaChange = this.fotoUtamaChange.bind(this);
+        this.fotoUtamaAdd = this.fotoUtamaAdd.bind(this);
+        this.fotoUtamaShow = this.fotoUtamaShow.bind(this);
+        this.fotoUtamaDelete = this.fotoUtamaDelete.bind(this);
+
+        this.foto1Reset = this.foto1Reset.bind(this);
+        this.foto1Change = this.foto1Change.bind(this);
+        this.foto1Add = this.foto1Add.bind(this);
+        this.foto1Show = this.foto1Show.bind(this);
+        this.foto1Delete = this.foto1Delete.bind(this);
+
+        this.foto2Reset = this.foto2Reset.bind(this);
+        this.foto2Change = this.foto2Change.bind(this);
+        this.foto2Add = this.foto2Add.bind(this);
+        this.foto2Show = this.foto2Show.bind(this);
+        this.foto2Delete = this.foto2Delete.bind(this);
+
+        this.foto3Reset = this.foto3Reset.bind(this);
+        this.foto3Change = this.foto3Change.bind(this);
+        this.foto3Add = this.foto3Add.bind(this);
+        this.foto3Show = this.foto3Show.bind(this);
+        this.foto3Delete = this.foto3Delete.bind(this);
+
+        this.foto4Reset = this.foto4Reset.bind(this);
+        this.foto4Change = this.foto4Change.bind(this);
+        this.foto4Add = this.foto4Add.bind(this);
+        this.foto4Show = this.foto4Show.bind(this);
+        this.foto4Delete = this.foto4Delete.bind(this);
+
+        this.foto5Reset = this.foto5Reset.bind(this);
+        this.foto5Change = this.foto5Change.bind(this);
+        this.foto5Add = this.foto5Add.bind(this);
+        this.foto5Show = this.foto5Show.bind(this);
+        this.foto5Delete = this.foto5Delete.bind(this);
+
+        this.foto6Reset = this.foto6Reset.bind(this);
+        this.foto6Change = this.foto6Change.bind(this);
+        this.foto6Add = this.foto6Add.bind(this);
+        this.foto6Show = this.foto6Show.bind(this);
+        this.foto6Delete = this.foto6Delete.bind(this);
+
+        this.foto7Reset = this.foto7Reset.bind(this);
+        this.foto7Change = this.foto7Change.bind(this);
+        this.foto7Add = this.foto7Add.bind(this);
+        this.foto7Show = this.foto7Show.bind(this);
+        this.foto7Delete = this.foto7Delete.bind(this);
+
+        this.foto8Reset = this.foto8Reset.bind(this);
+        this.foto8Change = this.foto8Change.bind(this);
+        this.foto8Add = this.foto8Add.bind(this);
+        this.foto8Show = this.foto8Show.bind(this);
+        this.foto8Delete = this.foto8Delete.bind(this);
+
+
+        this.nama_produkInput = React.createRef();
+        this.fotoUtamaInput = React.createRef();
+        this.foto1Input = React.createRef();
+        this.foto2Input = React.createRef();
+        this.foto3Input = React.createRef();
+        this.foto4Input = React.createRef();
+        this.foto5Input = React.createRef();
+        this.foto6Input = React.createRef();
+        this.foto7Input = React.createRef();
+        this.foto8Input = React.createRef();
+
+
+    }
+
+    addProdukChange(e) {
+        let newaddProduk = { ...this.state.addProduk };
+        newaddProduk[e.target.name] = e.target.value;
+        this.setState({
+            addProduk: newaddProduk
+        });
+    }
+    kategoriChange(e){
+        let options = { ...this.state.addProduk.kategori };
+        options = e.target.options;
+        var value = [];
+        for (var i = 0, l = options.length; i < l; i++) {
+            if (options[i].selected) {
+            value.push(options[i].value);
+            }
+        }
+        // console.log(value)
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                kategori: value
+            }
+        });
+    }
+
+    warnaChange(e){
+        let options = { ...this.state.addProduk.warna };
+        options = e.target.options;
+        var value = [];
+        for (var i = 0, l = options.length; i < l; i++) {
+            if (options[i].selected) {
+            value.push(options[i].value);
+            }
+        }
+        // console.log(value)
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                warna: value
+            }
+        });
+    }
+
+    ukuranChange(e){
+        let options = { ...this.state.addProduk.ukuran };
+        options = e.target.options;
+        var value = [];
+        for (var i = 0, l = options.length; i < l; i++) {
+            if (options[i].selected) {
+            value.push(options[i].value);
+            }
+        }
+        // console.log(value)
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                ukuran: value
+            }
+        });
+    }
+
+    fotoUtamaReset(e){
+        e.target.value=''
+    }
+    fotoUtamaChange(e){
+        if (e.target.files && e.target.files[0]) {
+          let img = e.target.files[0];
+          this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto_utama: {
+                    icon: false,
+                    //show imagenya
+                    preview: URL.createObjectURL(img),
+
+                    //show data imagenya
+                    raw: img,
+                }
+                
+            }
+          },()=>console.log(this.state.addProduk));
+        }
+    };
+    fotoUtamaAdd(e){
+        this.fotoUtamaInput.current.click();
+    }
+    fotoUtamaShow(e){
+        alert('show')
+    }
+    fotoUtamaDelete(e){
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto_utama: {
+                    icon: true,
+                    preview: '',
+                    raw: '',
+                }
+                
+            }
+        },()=>console.log(this.state.addProduk));
+    }
+
+    foto1Reset(e){
+        e.target.value=''
+    }
+    foto1Change(e){
+        if (e.target.files && e.target.files[0]) {
+          let img = e.target.files[0];
+          this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto1: {
+                    icon: false,
+                    //show imagenya
+                    preview: URL.createObjectURL(img),
+
+                    //show data imagenya
+                    raw: img,
+                }
+                
+            }
+          },()=>console.log(this.state.addProduk));
+        }
+    };
+    foto1Add(e){
+        this.foto1Input.current.click();
+    }
+    foto1Show(e){
+        alert('show')
+    }
+    foto1Delete(e){
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto1: {
+                    icon: true,
+                    preview: '',
+                    raw: '',
+                }
+                
+            }
+        },()=>console.log(this.state.addProduk));
+    }
+
+    foto2Reset(e){
+        e.target.value=''
+    }
+    foto2Change(e){
+        if (e.target.files && e.target.files[0]) {
+          let img = e.target.files[0];
+          this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto2: {
+                    icon: false,
+                    //show imagenya
+                    preview: URL.createObjectURL(img),
+
+                    //show data imagenya
+                    raw: img,
+                }
+                
+            }
+          },()=>console.log(this.state.addProduk));
+        }
+    };
+    foto2Add(e){
+        this.foto2Input.current.click();
+    }
+    foto2Show(e){
+        alert('show')
+    }
+    foto2Delete(e){
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto2: {
+                    icon: true,
+                    preview: '',
+                    raw: '',
+                }
+                
+            }
+        },()=>console.log(this.state.addProduk));
+    }
+
+    foto3Reset(e){
+        e.target.value=''
+    }
+    foto3Change(e){
+        if (e.target.files && e.target.files[0]) {
+          let img = e.target.files[0];
+          this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto3: {
+                    icon: false,
+                    //show imagenya
+                    preview: URL.createObjectURL(img),
+
+                    //show data imagenya
+                    raw: img,
+                }
+                
+            }
+          },()=>console.log(this.state.addProduk));
+        }
+    };
+    foto3Add(e){
+        this.foto3Input.current.click();
+    }
+    foto3Show(e){
+        alert('show')
+    }
+    foto3Delete(e){
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto3: {
+                    icon: true,
+                    preview: '',
+                    raw: '',
+                }
+                
+            }
+        },()=>console.log(this.state.addProduk));
+    }
+
+    foto4Reset(e){
+        e.target.value=''
+    }
+    foto4Change(e){
+        if (e.target.files && e.target.files[0]) {
+          let img = e.target.files[0];
+          this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto4: {
+                    icon: false,
+                    //show imagenya
+                    preview: URL.createObjectURL(img),
+
+                    //show data imagenya
+                    raw: img,
+                }
+                
+            }
+          },()=>console.log(this.state.addProduk));
+        }
+    };
+    foto4Add(e){
+        this.foto4Input.current.click();
+    }
+    foto4Show(e){
+        alert('show')
+    }
+    foto4Delete(e){
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto4: {
+                    icon: true,
+                    preview: '',
+                    raw: '',
+                }
+                
+            }
+        },()=>console.log(this.state.addProduk));
+    }
+
+    foto5Reset(e){
+        e.target.value=''
+    }
+    foto5Change(e){
+        if (e.target.files && e.target.files[0]) {
+          let img = e.target.files[0];
+          this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto5: {
+                    icon: false,
+                    //show imagenya
+                    preview: URL.createObjectURL(img),
+
+                    //show data imagenya
+                    raw: img,
+                }
+                
+            }
+          },()=>console.log(this.state.addProduk));
+        }
+    };
+    foto5Add(e){
+        this.foto5Input.current.click();
+    }
+    foto5Show(e){
+        alert('show')
+    }
+    foto5Delete(e){
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto5: {
+                    icon: true,
+                    preview: '',
+                    raw: '',
+                }
+                
+            }
+        },()=>console.log(this.state.addProduk));
+    }
+
+    foto6Reset(e){
+        e.target.value=''
+    }
+    foto6Change(e){
+        if (e.target.files && e.target.files[0]) {
+          let img = e.target.files[0];
+          this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto6: {
+                    icon: false,
+                    //show imagenya
+                    preview: URL.createObjectURL(img),
+
+                    //show data imagenya
+                    raw: img,
+                }
+                
+            }
+          },()=>console.log(this.state.addProduk));
+        }
+    };
+    foto6Add(e){
+        this.foto6Input.current.click();
+    }
+    foto6Show(e){
+        alert('show')
+    }
+    foto6Delete(e){
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto6: {
+                    icon: true,
+                    preview: '',
+                    raw: '',
+                }
+                
+            }
+        },()=>console.log(this.state.addProduk));
+    }
+
+    foto7Reset(e){
+        e.target.value=''
+    }
+    foto7Change(e){
+        if (e.target.files && e.target.files[0]) {
+          let img = e.target.files[0];
+          this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto7: {
+                    icon: false,
+                    //show imagenya
+                    preview: URL.createObjectURL(img),
+
+                    //show data imagenya
+                    raw: img,
+                }
+                
+            }
+          },()=>console.log(this.state.addProduk));
+        }
+    };
+    foto7Add(e){
+        this.foto7Input.current.click();
+    }
+    foto7Show(e){
+        alert('show')
+    }
+    foto7Delete(e){
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto7: {
+                    icon: true,
+                    preview: '',
+                    raw: '',
+                }
+                
+            }
+        },()=>console.log(this.state.addProduk));
+    }
+
+    foto8Reset(e){
+        e.target.value=''
+    }
+    foto8Change(e){
+        if (e.target.files && e.target.files[0]) {
+          let img = e.target.files[0];
+          this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto8: {
+                    icon: false,
+                    //show imagenya
+                    preview: URL.createObjectURL(img),
+
+                    //show data imagenya
+                    raw: img,
+                }
+                
+            }
+          },()=>console.log(this.state.addProduk));
+        }
+    };
+    foto8Add(e){
+        this.foto8Input.current.click();
+    }
+    foto8Show(e){
+        alert('show')
+    }
+    foto8Delete(e){
+        this.setState({
+            addProduk:{
+                ...this.state.addProduk,
+                foto8: {
+                    icon: true,
+                    preview: '',
+                    raw: '',
+                }
+                
+            }
+        },()=>console.log(this.state.addProduk));
+    }
+
+
+
+    // onImageChange(e){
+    //     if (e.target.files && e.target.files[0]) {
+    //       let img = e.target.files[0];
+    //       this.setState({
+    //         addProduk:{
+    //             ...this.state.addProduk,
+    //             foto_utama: {
+    //                 icon: false,
+    //                 //show imagenya
+    //                 preview: URL.createObjectURL(img),
+
+    //                 //show data imagenya
+    //                 raw: img,
+    //             }
+                
+    //         }
+    //       },()=>console.log(this.state.addProduk));
+    //     }
+    // };
+
+    // onImageClick(e){
+    //     // alert('click')
+    //     // this.refs.fileUploader.click();
+    //     this.fotoUtamaInput.current.click();
+    // }
+
+    addProdukSubmit(e){
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.value) {
+                if (this.state.addProduk.foto_utama.icon === true) {
+                    Swal.fire({
+                        title: 'Oops!',
+                        text: 'Foto Produk Utama Tidak Ada!',
+                        icon: 'error',
+                        allowOutsideClick: false
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Success Tambah Produk',
+                        icon: 'success',
+                        allowOutsideClick: false
+                    })
+                }
+            }
+        })
+        
+        console.log(this.state.addProduk);
+        
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Yes!',
+        //     allowOutsideClick: false
+        // }).then((result) => {
+        //     if (result.value) {
+        //         axios.put('http://localhost:8080/api/v1/banklist',{
+        //             id: this.state.dataBank.id,
+        //             bank_name: this.state.dataBank.bank_name,
+        //             bank_rekening: this.state.dataBank.bank_rekening,
+        //             bank_name_rekening: this.state.dataBank.bank_name_rekening,
+        //         })
+        //         .then(
+        //             () => Swal.fire({
+        //                 title: 'Success!',
+        //                 text: 'Success edit rekening bank',
+        //                 icon: 'success',
+        //                 allowOutsideClick: false,
+        //             }).then(() => this.setState({ redirect: true }))
+        //         )
+        //         .catch(function (error) {
+        //             console.log(error);
+        //         });
+        //     }
+        // })
+    }
+
+    componentDidMount(){
+        $('.select2').select2();
+        $('.select2[name="kategori"]').on("change", this.kategoriChange);
+        $('.select2[name="warna"]').on("change", this.warnaChange);
+        $('.select2[name="ukuran"]').on("change", this.ukuranChange);
+        $('.select2[name="kondisi"]').on("change", this.addProdukChange);
+    }
+    render() {
+        if (this.state.redirect) {
+            return (<Redirect to="/admin/online-store" />)
+        }
+        return (
+            <div>
+                <section className="content" style={{paddingTop:"20px"}}>
+                    <div className="container-fluid">
+                        <div className="card">
+                            <div className="card-header">
+                                <h3 className="card-title">Tambah Produk</h3>
+                            </div>
+                            <div className="card-body">
+                                <form onSubmit={e => this.addProdukSubmit(e)} className="form-horizontal" style={{padding:"10px"}}>
+                                    <h4 style={{ paddingBottom:'15px'}}>Informasi Produk</h4>
+                                    <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Nama Produk</label>
+                                        <div className="col-sm-10">
+                                            <input type="text" ref={this.nama_produkInput} className="form-control" name="nama_produk" value={this.state.addProduk.nama_produk} onChange={this.addProdukChange} required/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Deskripsi Produk</label>
+                                        <div className="col-sm-10">
+                                            <textarea name="deskripsi_produk" className="form-control" value={this.state.addProduk.deskripsi_produk} onChange={this.addProdukChange} rows='9' required />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Kategori</label>
+                                        <div className="col-sm-4">
+                                            {/* <input type="text" className="form-control" name="kategori" value='' placeholder="Buat Kategori" required/> */}
+                                            <select className="select2" multiple={true} data-placeholder="Buat Kategori" name="kategori" value={this.state.addProduk.kategori} onChange={this.kategoriChange} style={{ width:'100%'}} required>
+                                                <option value='Alabama'>Alabama</option>
+                                                <option value='Alaska'>Alaska</option>
+                                                <option value='California'>California</option>
+                                                <option value='Delaware'>Delaware</option>
+                                                <option value='Tennessee'>Tennessee</option>
+                                                <option value='Texas'>Texas</option>
+                                                <option value='Washington'>Washington</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Warna</label>
+                                        <div className="col-sm-4">
+                                            {/* <input type="text" className="form-control" name="warna" value='' placeholder="Buat Warna" required/> */}
+                                            <select className="select2" multiple={true} data-placeholder="Buat Warna" name="warna" value={this.state.addProduk.warna} onChange={this.warnaChange} style={{ width:'100%'}} required>
+                                                <option value='Alabama'>Alabama</option>
+                                                <option value='Alaska'>Alaska</option>
+                                                <option value='California'>California</option>
+                                                <option value='Delaware'>Delaware</option>
+                                                <option value='Tennessee'>Tennessee</option>
+                                                <option value='Texas'>Texas</option>
+                                                <option value='Washington'>Washington</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Ukuran</label>
+                                        <div className="col-sm-4">
+                                            {/* <input type="text" className="form-control" name="ukuran" value='' placeholder="Buat Ukuran" required/> */}
+                                            <select className="select2" multiple={true} data-placeholder="Buat Ukuran" name="ukuran" value={this.state.addProduk.ukuran} onChange={this.ukuranChange} style={{ width:'100%'}} required>
+                                                <option value='Alabama'>Alabama</option>
+                                                <option value='Alaska'>Alaska</option>
+                                                <option value='California'>California</option>
+                                                <option value='Delaware'>Delaware</option>
+                                                <option value='Tennessee'>Tennessee</option>
+                                                <option value='Texas'>Texas</option>
+                                                <option value='Washington'>Washington</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <hr/>
+
+                                    <h4 style={{ paddingBottom:'15px'}}>Informasi Penjualan</h4>
+
+                                    <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Harga</label>
+                                       
+                                        <div className="col-sm-4 input-group">
+                                            <div className="input-group-prepend">
+                                                <span className="input-group-text">Rp</span>
+                                            </div>
+                                            <input type="tel" className="form-control" name="harga" value={this.state.addProduk.harga} onChange={this.addProdukChange} placeholder='50000' required/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Stok</label>
+                                        <div className="col-sm-4">
+                                            <input type="number" className="form-control" name="stok" value={this.state.addProduk.stok} onChange={this.addProdukChange} min="1" required/>
+                                        </div>
+                                    </div>
+
+                                    <hr/>
+
+                                    <h4 style={{ paddingBottom:'15px'}}>Pengaturan Media</h4>
+
+                                    <div className="form-group row">
+                                        
+                                            <label className="col-sm-2 col-form-label">Foto Produk</label>
+                                            <div className="col-sm-10 row">
+                                                <div className="col-sm-2 text-center" >
+                                                    <div style={{border:'2px dashed red'}}>
+                                                        <div style={{ 
+                                                            // marginTop:'22px', marginBottom:'22px',
+                                                            // position: 'relative',
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            }}>
+                                                            {
+                                                                this.state.addProduk.foto_utama.icon ? (
+                                                                    <FontAwesomeIcon onClick={this.fotoUtamaAdd} icon={faPlus} color='red' style={{
+                                                                        cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                        // position: 'relative', 
+                                                                        // top: '42px', 
+                                                                        // left: '46px',
+                                                                        display: 'inline-block',
+                                                                        position: 'relative',
+                                                                        top: '2px',
+                                                                        margin: '40px',
+                                                                    }} />
+                                                                ):(
+                                                                    <div style={{
+                                                                        position: 'relative',
+                                                                        display: 'inline-block',
+                                                                        padding: '5px',
+                                                                    }}>
+                                                                        <img src={this.state.addProduk.foto_utama.preview} alt={this.state.addProduk.foto_utama.raw.name} style={{
+                                                                            width: '100%',height: 'auto',
+                                                                        }}/>
+                                                                        <div style={{
+                                                                            position:'relative',
+                                                                            top:'4px'
+                                                                        }}>
+                                                                            <FontAwesomeIcon onClick={this.fotoUtamaDelete} icon={faTrash} color='red' style={{
+                                                                                cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                right: '-32%', 
+                                                                            }} />
+                                                                            <FontAwesomeIcon onClick={this.fotoUtamaShow} icon={faEye} color='green' style={{
+                                                                                cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                left: '-32%', 
+                                                                            }} />
+                                                                        </div>
+                                                                    </div>
+                                                                ) 
+                                                            }
+                                                            
+
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <p>Foto Utama</p>
+                                                    <input id="foto_utama" type="file" ref={this.fotoUtamaInput} style={{ display: "none" }} name="foto_utama" onChange={this.fotoUtamaChange} onClick={this.fotoUtamaReset}/>
+                                                </div>
+
+                                                <div className="col-sm-2 text-center" >
+                                                    <div style={{border:'2px dashed red'}}>
+                                                        <div style={{ 
+                                                            // marginTop:'22px', marginBottom:'22px',
+                                                            // position: 'relative',
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            }}>
+                                                            {
+                                                                this.state.addProduk.foto1.icon ? (
+                                                                    <FontAwesomeIcon onClick={this.foto1Add} icon={faPlus} color='red' style={{
+                                                                        cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                        // position: 'relative', 
+                                                                        // top: '42px', 
+                                                                        // left: '46px',
+                                                                        display: 'inline-block',
+                                                                        position: 'relative',
+                                                                        top: '2px',
+                                                                        margin: '40px',
+                                                                    }} />
+                                                                ):(
+                                                                    <div style={{
+                                                                        position: 'relative',
+                                                                        display: 'inline-block',
+                                                                        padding: '5px',
+                                                                    }}>
+                                                                        <img src={this.state.addProduk.foto1.preview} alt={this.state.addProduk.foto1.raw.name} style={{
+                                                                            width: '100%',height: 'auto',
+                                                                        }}/>
+                                                                        <div style={{
+                                                                            position:'relative',
+                                                                            top:'4px'
+                                                                        }}>
+                                                                            <FontAwesomeIcon onClick={this.foto1Delete} icon={faTrash} color='red' style={{
+                                                                                cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                right: '-32%', 
+                                                                            }} />
+                                                                            <FontAwesomeIcon onClick={this.foto1Show} icon={faEye} color='green' style={{
+                                                                                cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                left: '-32%', 
+                                                                            }} />
+                                                                        </div>
+                                                                    </div>
+                                                                ) 
+                                                            }
+                                                            
+
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <p>Foto 1</p>
+                                                    <input id="foto1" type="file" ref={this.foto1Input} style={{ display: "none" }} name="foto1" onChange={this.foto1Change} onClick={this.foto1Reset} />
+                                                </div>
+
+                                                <div className="col-sm-2 text-center" >
+                                                    <div style={{border:'2px dashed red'}}>
+                                                        <div style={{ 
+                                                            // marginTop:'22px', marginBottom:'22px',
+                                                            // position: 'relative',
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            }}>
+                                                            {
+                                                                this.state.addProduk.foto2.icon ? (
+                                                                    <FontAwesomeIcon onClick={this.foto2Add} icon={faPlus} color='red' style={{
+                                                                        cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                        // position: 'relative', 
+                                                                        // top: '42px', 
+                                                                        // left: '46px',
+                                                                        display: 'inline-block',
+                                                                        position: 'relative',
+                                                                        top: '2px',
+                                                                        margin: '40px',
+                                                                    }} />
+                                                                ):(
+                                                                    <div style={{
+                                                                        position: 'relative',
+                                                                        display: 'inline-block',
+                                                                        padding: '5px',
+                                                                    }}>
+                                                                        <img src={this.state.addProduk.foto2.preview} alt={this.state.addProduk.foto2.raw.name} style={{
+                                                                            width: '100%',height: 'auto',
+                                                                        }}/>
+                                                                        <div style={{
+                                                                            position:'relative',
+                                                                            top:'4px'
+                                                                        }}>
+                                                                            <FontAwesomeIcon onClick={this.foto2Delete} icon={faTrash} color='red' style={{
+                                                                                cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                right: '-32%', 
+                                                                            }} />
+                                                                            <FontAwesomeIcon onClick={this.foto2Show} icon={faEye} color='green' style={{
+                                                                                cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                left: '-32%', 
+                                                                            }} />
+                                                                        </div>
+                                                                    </div>
+                                                                ) 
+                                                            }
+                                                            
+
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <p>Foto 2</p>
+                                                    <input id="foto2" type="file" ref={this.foto2Input} style={{ display: "none" }} name="foto2" onChange={this.foto2Change} onClick={this.foto2Reset} />
+                                                </div>
+
+                                                <div className="col-sm-2 text-center" >
+                                                    <div style={{border:'2px dashed red'}}>
+                                                        <div style={{ 
+                                                            // marginTop:'22px', marginBottom:'22px',
+                                                            // position: 'relative',
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            }}>
+                                                            {
+                                                                this.state.addProduk.foto3.icon ? (
+                                                                    <FontAwesomeIcon onClick={this.foto3Add} icon={faPlus} color='red' style={{
+                                                                        cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                        // position: 'relative', 
+                                                                        // top: '42px', 
+                                                                        // left: '46px',
+                                                                        display: 'inline-block',
+                                                                        position: 'relative',
+                                                                        top: '2px',
+                                                                        margin: '40px',
+                                                                    }} />
+                                                                ):(
+                                                                    <div style={{
+                                                                        position: 'relative',
+                                                                        display: 'inline-block',
+                                                                        padding: '5px',
+                                                                    }}>
+                                                                        <img src={this.state.addProduk.foto3.preview} alt={this.state.addProduk.foto3.raw.name} style={{
+                                                                            width: '100%',height: 'auto',
+                                                                        }}/>
+                                                                        <div style={{
+                                                                            position:'relative',
+                                                                            top:'4px'
+                                                                        }}>
+                                                                            <FontAwesomeIcon onClick={this.foto3Delete} icon={faTrash} color='red' style={{
+                                                                                cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                right: '-32%', 
+                                                                            }} />
+                                                                            <FontAwesomeIcon onClick={this.foto3Show} icon={faEye} color='green' style={{
+                                                                                cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                left: '-32%', 
+                                                                            }} />
+                                                                        </div>
+                                                                    </div>
+                                                                ) 
+                                                            }
+                                                            
+
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <p>Foto 3</p>
+                                                    <input id="foto3" type="file" ref={this.foto3Input} style={{ display: "none" }} name="foto3" onChange={this.foto3Change} onClick={this.foto3Reset} />
+                                                </div>
+
+                                                <div className="col-sm-2 text-center" >
+                                                    <div style={{border:'2px dashed red'}}>
+                                                        <div style={{ 
+                                                            // marginTop:'22px', marginBottom:'22px',
+                                                            // position: 'relative',
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            }}>
+                                                            {
+                                                                this.state.addProduk.foto4.icon ? (
+                                                                    <FontAwesomeIcon onClick={this.foto4Add} icon={faPlus} color='red' style={{
+                                                                        cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                        // position: 'relative', 
+                                                                        // top: '42px', 
+                                                                        // left: '46px',
+                                                                        display: 'inline-block',
+                                                                        position: 'relative',
+                                                                        top: '2px',
+                                                                        margin: '40px',
+                                                                    }} />
+                                                                ):(
+                                                                    <div style={{
+                                                                        position: 'relative',
+                                                                        display: 'inline-block',
+                                                                        padding: '5px',
+                                                                    }}>
+                                                                        <img src={this.state.addProduk.foto4.preview} alt={this.state.addProduk.foto4.raw.name} style={{
+                                                                            width: '100%',height: 'auto',
+                                                                        }}/>
+                                                                        <div style={{
+                                                                            position:'relative',
+                                                                            top:'4px'
+                                                                        }}>
+                                                                            <FontAwesomeIcon onClick={this.foto4Delete} icon={faTrash} color='red' style={{
+                                                                                cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                right: '-32%', 
+                                                                            }} />
+                                                                            <FontAwesomeIcon onClick={this.foto4Show} icon={faEye} color='green' style={{
+                                                                                cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                left: '-32%', 
+                                                                            }} />
+                                                                        </div>
+                                                                    </div>
+                                                                ) 
+                                                            }
+                                                            
+
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <p>Foto 4</p>
+                                                    <input id="foto4" type="file" ref={this.foto4Input} style={{ display: "none" }} name="foto4" onChange={this.foto4Change} onClick={this.foto4Reset} />
+                                                </div>
+
+                                                <div className="col-sm-2 text-center" >
+                                                    <div style={{border:'2px dashed red'}}>
+                                                        <div style={{ 
+                                                            // marginTop:'22px', marginBottom:'22px',
+                                                            // position: 'relative',
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            }}>
+                                                            {
+                                                                this.state.addProduk.foto5.icon ? (
+                                                                    <FontAwesomeIcon onClick={this.foto5Add} icon={faPlus} color='red' style={{
+                                                                        cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                        // position: 'relative', 
+                                                                        // top: '42px', 
+                                                                        // left: '46px',
+                                                                        display: 'inline-block',
+                                                                        position: 'relative',
+                                                                        top: '2px',
+                                                                        margin: '40px',
+                                                                    }} />
+                                                                ):(
+                                                                    <div style={{
+                                                                        position: 'relative',
+                                                                        display: 'inline-block',
+                                                                        padding: '5px',
+                                                                    }}>
+                                                                        <img src={this.state.addProduk.foto5.preview} alt={this.state.addProduk.foto5.raw.name} style={{
+                                                                            width: '100%',height: 'auto',
+                                                                        }}/>
+                                                                        <div style={{
+                                                                            position:'relative',
+                                                                            top:'4px'
+                                                                        }}>
+                                                                            <FontAwesomeIcon onClick={this.foto5Delete} icon={faTrash} color='red' style={{
+                                                                                cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                right: '-32%', 
+                                                                            }} />
+                                                                            <FontAwesomeIcon onClick={this.foto5Show} icon={faEye} color='green' style={{
+                                                                                cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                left: '-32%', 
+                                                                            }} />
+                                                                        </div>
+                                                                    </div>
+                                                                ) 
+                                                            }
+                                                            
+
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <p>Foto 5</p>
+                                                    <input id="foto5" type="file" ref={this.foto5Input} style={{ display: "none" }} name="foto5" onChange={this.foto5Change} onClick={this.foto5Reset} />
+                                                </div>
+
+                                                <div className="col-sm-2 text-center" >
+                                                    <div style={{border:'2px dashed red'}}>
+                                                        <div style={{ 
+                                                            // marginTop:'22px', marginBottom:'22px',
+                                                            // position: 'relative',
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            }}>
+                                                            {
+                                                                this.state.addProduk.foto6.icon ? (
+                                                                    <FontAwesomeIcon onClick={this.foto6Add} icon={faPlus} color='red' style={{
+                                                                        cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                        // position: 'relative', 
+                                                                        // top: '42px', 
+                                                                        // left: '46px',
+                                                                        display: 'inline-block',
+                                                                        position: 'relative',
+                                                                        top: '2px',
+                                                                        margin: '40px',
+                                                                    }} />
+                                                                ):(
+                                                                    <div style={{
+                                                                        position: 'relative',
+                                                                        display: 'inline-block',
+                                                                        padding: '5px',
+                                                                    }}>
+                                                                        <img src={this.state.addProduk.foto6.preview} alt={this.state.addProduk.foto6.raw.name} style={{
+                                                                            width: '100%',height: 'auto',
+                                                                        }}/>
+                                                                        <div style={{
+                                                                            position:'relative',
+                                                                            top:'4px'
+                                                                        }}>
+                                                                            <FontAwesomeIcon onClick={this.foto6Delete} icon={faTrash} color='red' style={{
+                                                                                cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                right: '-32%', 
+                                                                            }} />
+                                                                            <FontAwesomeIcon onClick={this.foto6Show} icon={faEye} color='green' style={{
+                                                                                cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                left: '-32%', 
+                                                                            }} />
+                                                                        </div>
+                                                                    </div>
+                                                                ) 
+                                                            }
+                                                            
+
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <p>Foto 6</p>
+                                                    <input id="foto6" type="file" ref={this.foto6Input} style={{ display: "none" }} name="foto6" onChange={this.foto6Change} onClick={this.foto6Reset} />
+                                                </div>
+
+                                                <div className="col-sm-2 text-center" >
+                                                    <div style={{border:'2px dashed red'}}>
+                                                        <div style={{ 
+                                                            // marginTop:'22px', marginBottom:'22px',
+                                                            // position: 'relative',
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            }}>
+                                                            {
+                                                                this.state.addProduk.foto7.icon ? (
+                                                                    <FontAwesomeIcon onClick={this.foto7Add} icon={faPlus} color='red' style={{
+                                                                        cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                        // position: 'relative', 
+                                                                        // top: '42px', 
+                                                                        // left: '46px',
+                                                                        display: 'inline-block',
+                                                                        position: 'relative',
+                                                                        top: '2px',
+                                                                        margin: '40px',
+                                                                    }} />
+                                                                ):(
+                                                                    <div style={{
+                                                                        position: 'relative',
+                                                                        display: 'inline-block',
+                                                                        padding: '5px',
+                                                                    }}>
+                                                                        <img src={this.state.addProduk.foto7.preview} alt={this.state.addProduk.foto7.raw.name} style={{
+                                                                            width: '100%',height: 'auto',
+                                                                        }}/>
+                                                                        <div style={{
+                                                                            position:'relative',
+                                                                            top:'4px'
+                                                                        }}>
+                                                                            <FontAwesomeIcon onClick={this.foto7Delete} icon={faTrash} color='red' style={{
+                                                                                cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                right: '-32%', 
+                                                                            }} />
+                                                                            <FontAwesomeIcon onClick={this.foto7Show} icon={faEye} color='green' style={{
+                                                                                cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                left: '-32%', 
+                                                                            }} />
+                                                                        </div>
+                                                                    </div>
+                                                                ) 
+                                                            }
+                                                            
+
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <p>Foto 7</p>
+                                                    <input id="foto7" type="file" ref={this.foto7Input} style={{ display: "none" }} name="foto7" onChange={this.foto7Change} onClick={this.foto7Reset} />
+                                                </div>
+
+                                                <div className="col-sm-2 text-center" >
+                                                    <div style={{border:'2px dashed red'}}>
+                                                        <div style={{ 
+                                                            // marginTop:'22px', marginBottom:'22px',
+                                                            // position: 'relative',
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            }}>
+                                                            {
+                                                                this.state.addProduk.foto8.icon ? (
+                                                                    <FontAwesomeIcon onClick={this.foto8Add} icon={faPlus} color='red' style={{
+                                                                        cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                        // position: 'relative', 
+                                                                        // top: '42px', 
+                                                                        // left: '46px',
+                                                                        display: 'inline-block',
+                                                                        position: 'relative',
+                                                                        top: '2px',
+                                                                        margin: '40px',
+                                                                    }} />
+                                                                ):(
+                                                                    <div style={{
+                                                                        position: 'relative',
+                                                                        display: 'inline-block',
+                                                                        padding: '5px',
+                                                                    }}>
+                                                                        <img src={this.state.addProduk.foto8.preview} alt={this.state.addProduk.foto8.raw.name} style={{
+                                                                            width: '100%',height: 'auto',
+                                                                        }}/>
+                                                                        <div style={{
+                                                                            position:'relative',
+                                                                            top:'4px'
+                                                                        }}>
+                                                                            <FontAwesomeIcon onClick={this.foto8Delete} icon={faTrash} color='red' style={{
+                                                                                cursor:'pointer', border:'2px dashed red', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                right: '-32%', 
+                                                                            }} />
+                                                                            <FontAwesomeIcon onClick={this.foto8Show} icon={faEye} color='green' style={{
+                                                                                cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
+                                                                                position: 'relative', 
+                                                                                left: '-32%', 
+                                                                            }} />
+                                                                        </div>
+                                                                    </div>
+                                                                ) 
+                                                            }
+                                                            
+
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <p>Foto 8</p>
+                                                    <input id="foto8" type="file" ref={this.foto8Input} style={{ display: "none" }} name="foto8" onChange={this.foto8Change} onClick={this.foto8Reset} />
+                                                </div>
+
+
+                                            </div>
+                                    </div>
+                                    
+                                    {/* <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Video</label>
+                                        <div className="col-sm-4">
+                                            <input type="text" className="form-control" name="video" value='' placeholder="Ex: BCA"/>
+                                        </div>
+                                    </div> */}
+
+                                    <hr/>
+
+                                    <h4 style={{ paddingBottom:'15px'}}>Pengiriman</h4>
+
+                                    <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Berat</label>
+                                        <div className="col-sm-4 input-group">
+                                            <input type="text" className="form-control" name="berat" value={this.state.addProduk.berat} onChange={this.addProdukChange} required/>
+
+                                            <div className="input-group-append">
+                                                <span className="input-group-text">gr</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr/>
+
+                                    <h4 style={{ paddingBottom:'15px'}}>Lainnya</h4>
+
+                                    {/* <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Pre-Order</label>
+                                        <div className="col-sm-4">
+                                            <input type="text" className="form-control" name="pre_order" value='' placeholder="Ex: BCA"/>
+                                        </div>
+                                    </div> */}
+                                    
+                                    <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Kondisi</label>
+                                        <div className="col-sm-4">
+                                            <select className="form-control select2" name="kondisi" value={this.state.addProduk.kondisi} onChange={this.addProdukChange} required>
+                                                <option value="new">Baru</option>
+                                                <option value="used">Pernah Dipakai</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div className="form-group">
+                                        <div className="col-sm-offset-2 col-sm-10">
+                                            <button type="submit" className="btn btn-primary">
+                                                <FontAwesomeIcon icon={faSave}/> Simpan 
+                                            </button> <BtnBack/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        );
+    }
+}
+
+export default AddProduct;
