@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Redirect, useHistory, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faArrowLeft, faPlusCircle, faPlus, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
+import { faSave, faArrowLeft, faPlus, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
+// import axios from "axios";
 import $ from 'jquery';
 import '../../../lib/select2.css';
 import 'select2';
