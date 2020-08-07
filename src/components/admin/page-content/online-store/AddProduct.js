@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect, useHistory, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faArrowLeft, faPlusCircle, faPlus, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -49,6 +49,12 @@ class AddProduct extends Component {
                 berat: '',
                 kondisi: 'new',
             },
+            kategoriList:[],
+            warnaList:[],
+            ukuranList:[],
+            duplikat:'',
+            duplikat2:'',
+            duplikat3:'',
         }
         this.addProdukChange = this.addProdukChange.bind(this);
         this.kategoriChange = this.kategoriChange.bind(this);
@@ -122,7 +128,66 @@ class AddProduct extends Component {
         this.foto7Input = React.createRef();
         this.foto8Input = React.createRef();
 
+        this.addKategoriSubmit = this.addKategoriSubmit.bind(this);
+        this.closeKategori = React.createRef();
+        this.addWarnaSubmit = this.addWarnaSubmit.bind(this);
+        this.closeWarna = React.createRef();
+        this.addUkuranSubmit = this.addUkuranSubmit.bind(this);
+        this.closeUkuran = React.createRef();
 
+    }
+
+    addKategoriSubmit(e){
+        e.preventDefault();
+        const data = this.nama_kategori.value;
+        const onTheList = this.state.kategoriList.includes(data);
+
+        if (onTheList) {
+            this.setState({duplikat: 'duplikat'})
+        } else {
+            data !== '' && this.setState({
+                kategoriList: [...this.state.kategoriList, data],
+                duplikat: ''
+            })
+            this.addKategori.reset();
+            this.closeKategori.current.click();
+        }
+        
+        
+    }
+    addWarnaSubmit(e){
+        e.preventDefault();
+        var data = this.nama_warna.value;
+        const onTheList = this.state.warnaList.includes(data);
+
+        if (onTheList) {
+            this.setState({duplikat: 'duplikat'})
+        } else {
+            this.setState({
+                warnaList: [...this.state.warnaList, data],
+                duplikat2: ''
+            })
+            
+            this.addWarna.reset();
+            this.closeWarna.current.click();
+        }
+    }
+    addUkuranSubmit(e){
+        e.preventDefault();
+        var data = this.nama_ukuran.value;
+        const onTheList = this.state.ukuranList.includes(data);
+
+        if (onTheList) {
+            this.setState({duplikat: 'duplikat'})
+        } else {
+            this.setState({
+                ukuranList: [...this.state.ukuranList, data],
+                duplikat3: ''
+            })
+
+            this.addUkuran.reset();
+            this.closeUkuran.current.click();
+        }
     }
 
     addProdukChange(e) {
@@ -565,7 +630,6 @@ class AddProduct extends Component {
     }
 
 
-
     // onImageChange(e){
     //     if (e.target.files && e.target.files[0]) {
     //       let img = e.target.files[0];
@@ -661,6 +725,26 @@ class AddProduct extends Component {
         $('.select2[name="warna"]').on("change", this.warnaChange);
         $('.select2[name="ukuran"]').on("change", this.ukuranChange);
         $('.select2[name="kondisi"]').on("change", this.addProdukChange);
+
+        // $('#addKategori').submit(function(e) {
+        //     e.preventDefault();
+
+        //     var data = $("#addKategori :input").serialize();
+        //     console.log(data);
+            
+        //     // $.ajax({
+        //     //     url:'http://smartstock.api-8.online/api/AddJob.php',
+        //     //     // url:'http://localhost/dini/api/AddJob.php',
+        //     //     type:'GET',
+        //     //     data: data,
+        //     //     success:function(result){
+        //     //         console.log(result[0].message);
+        //     //         $("#addJob")[0].reset();
+        //     //         $("#modal-default").modal('hide');
+        //     //     }
+
+        //     // });
+        // });
     }
     render() {
         if (this.state.redirect) {
@@ -694,48 +778,78 @@ class AddProduct extends Component {
                                     <div className="form-group row">
                                         <label className="col-sm-2 col-form-label">Kategori</label>
                                         <div className="col-sm-4">
-                                            {/* <input type="text" className="form-control" name="kategori" value='' placeholder="Buat Kategori" required/> */}
-                                            <select className="select2" multiple={true} data-placeholder="Buat Kategori" name="kategori" value={this.state.addProduk.kategori} onChange={this.kategoriChange} style={{ width:'100%'}} required>
-                                                <option value='Alabama'>Alabama</option>
-                                                <option value='Alaska'>Alaska</option>
-                                                <option value='California'>California</option>
-                                                <option value='Delaware'>Delaware</option>
-                                                <option value='Tennessee'>Tennessee</option>
-                                                <option value='Texas'>Texas</option>
-                                                <option value='Washington'>Washington</option>
-                                            </select>
+                                        {
+                                            this.state.kategoriList ? (
+                                                <select className="select2" multiple={true} data-placeholder="Buat Kategori" name="kategori" value={this.state.addProduk.kategori} onChange={this.kategoriChange} style={{ width:'100%'}} required>
+                                                    {
+                                                        this.state.kategoriList.map((value, index) => {
+                                                            return(
+                                                            <option key={index} value={value}>{value}</option>
+                                                            )
+                                                        })
+                                                    }
+                                                </select>
+                                            ):(
+                                                <select className="select2" multiple={true} data-placeholder="Buat Kategori" name="kategori" value={this.state.addProduk.kategori} onChange={this.kategoriChange} style={{ width:'100%'}} required>
+                                                
+                                                </select>
+                                            )
+                                        }
+                                        </div>
+                                        <div className="col-sm-2 col-form-label">
+                                            <Link to='#' data-toggle="modal" data-target="#modal-kategori" >Buat Kategori Baru</Link>
                                         </div>
                                     </div>
 
                                     <div className="form-group row">
                                         <label className="col-sm-2 col-form-label">Warna</label>
                                         <div className="col-sm-4">
-                                            {/* <input type="text" className="form-control" name="warna" value='' placeholder="Buat Warna" required/> */}
-                                            <select className="select2" multiple={true} data-placeholder="Buat Warna" name="warna" value={this.state.addProduk.warna} onChange={this.warnaChange} style={{ width:'100%'}} required>
-                                                <option value='Alabama'>Alabama</option>
-                                                <option value='Alaska'>Alaska</option>
-                                                <option value='California'>California</option>
-                                                <option value='Delaware'>Delaware</option>
-                                                <option value='Tennessee'>Tennessee</option>
-                                                <option value='Texas'>Texas</option>
-                                                <option value='Washington'>Washington</option>
-                                            </select>
+                                        {
+                                            this.state.warnaList ? (
+                                                <select className="select2" multiple={true} data-placeholder="Buat Warna" name="warna" value={this.state.addProduk.warna} onChange={this.warnaChange} style={{ width:'100%'}} required>
+                                                {
+                                                    this.state.warnaList.map((value, index) => {
+                                                        return(
+                                                        <option key={index} value={value}>{value}</option>
+                                                        )
+                                                    })
+                                                }
+                                                </select>
+                                            ):(
+                                                <select className="select2" multiple={true} data-placeholder="Buat Warna" name="warna" value={this.state.addProduk.warna} onChange={this.warnaChange} style={{ width:'100%'}} required>
+                                                
+                                                </select>
+                                            )
+                                        }
+                                        </div>
+                                        <div className="col-sm-2 col-form-label">
+                                            <Link to='#' data-toggle="modal" data-target="#modal-warna" >Buat Warna Baru</Link>
                                         </div>
                                     </div>
                                     
                                     <div className="form-group row">
                                         <label className="col-sm-2 col-form-label">Ukuran</label>
                                         <div className="col-sm-4">
-                                            {/* <input type="text" className="form-control" name="ukuran" value='' placeholder="Buat Ukuran" required/> */}
-                                            <select className="select2" multiple={true} data-placeholder="Buat Ukuran" name="ukuran" value={this.state.addProduk.ukuran} onChange={this.ukuranChange} style={{ width:'100%'}} required>
-                                                <option value='Alabama'>Alabama</option>
-                                                <option value='Alaska'>Alaska</option>
-                                                <option value='California'>California</option>
-                                                <option value='Delaware'>Delaware</option>
-                                                <option value='Tennessee'>Tennessee</option>
-                                                <option value='Texas'>Texas</option>
-                                                <option value='Washington'>Washington</option>
-                                            </select>
+                                        {
+                                            this.state.ukuranList ? (
+                                                <select className="select2" multiple={true} data-placeholder="Buat Ukuran" name="ukuran" value={this.state.addProduk.ukuran} onChange={this.ukuranChange} style={{ width:'100%'}} required>
+                                                {
+                                                    this.state.ukuranList.map((value, index) => {
+                                                        return(
+                                                        <option key={index} value={value}>{value}</option>
+                                                        )
+                                                    })
+                                                }
+                                                </select>
+                                            ):(
+                                                <select className="select2" multiple={true} data-placeholder="Buat Ukuran" name="ukuran" value={this.state.addProduk.ukuran} onChange={this.ukuranChange} style={{ width:'100%'}} required>
+                                                   
+                                                </select>
+                                            )
+                                        }
+                                        </div>
+                                        <div className="col-sm-2 col-form-label">
+                                            <Link to='#' data-toggle="modal" data-target="#modal-ukuran" >Buat Ukuran Baru</Link>
                                         </div>
                                     </div>
 
@@ -1333,9 +1447,105 @@ class AddProduct extends Component {
                         </div>
                     </div>
                 </section>
+
+                
+                <div className="modal fade" id="modal-kategori">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">Tambah Kategori</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <form id="addKategori" ref={form => this.addKategori = form} onSubmit={e => this.addKategoriSubmit(e)} >
+                                    <div className="form-group">
+                                        <label htmlFor="nama_kategori">Nama Kategori</label>
+                                        <input type="text" id="nama_kategori" name="nama_kategori" ref={nama_kategori => this.nama_kategori = nama_kategori} className="form-control" placeholder="Enter Nama Kategori" required />
+                                        {
+                                            this.state.duplikat !== '' && <span className='text-danger'>{this.state.duplikat}</span>
+                                        }
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-4">
+                                            <button  type="submit" className="btn btn-primary btn-block">Simpan</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="modal-footer justify-content-between">
+                                <button type="button" className="btn btn-default" data-dismiss="modal" ref={this.closeKategori}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade" id="modal-warna">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">Tambah Warna</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <form id="addWarna" ref={form => this.addWarna = form} onSubmit={e => this.addWarnaSubmit(e)} >
+                                    <div className="form-group">
+                                        <label htmlFor="nama_warna">Warna</label>
+                                        <input type="text" id="nama_warna" name="nama_warna" ref={nama_warna => this.nama_warna = nama_warna} className="form-control" placeholder="Enter Warna" required />
+                                        {
+                                            this.state.duplikat2 !== '' && <span className='text-danger'>{this.state.duplikat2}</span>
+                                        }
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-4">
+                                            <button  type="submit" className="btn btn-primary btn-block">Simpan</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="modal-footer justify-content-between">
+                                <button type="button" className="btn btn-default" data-dismiss="modal" ref={this.closeWarna}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade" id="modal-ukuran">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">Tambah Ukuran</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <form id="addUkuran" ref={form => this.addUkuran = form} onSubmit={e => this.addUkuranSubmit(e)} >
+                                    <div className="form-group">
+                                        <label htmlFor="nama_ukuran">Ukuran</label>
+                                        <input type="text" id="nama_ukuran" name="nama_ukuran" ref={nama_ukuran => this.nama_ukuran = nama_ukuran} className="form-control" placeholder="Enter Ukuran" required />
+                                        {
+                                            this.state.duplikat3 !== '' && <span className='text-danger'>{this.state.duplikat3}</span>
+                                        }
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-4">
+                                            <button  type="submit" className="btn btn-primary btn-block">Simpan</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="modal-footer justify-content-between">
+                                <button type="button" className="btn btn-default" data-dismiss="modal" ref={this.closeUkuran}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
 }
+
 
 export default AddProduct;

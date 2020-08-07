@@ -170,7 +170,7 @@ class Setting extends Component {
         .then(province => {
             this.setState({
                 province
-            });
+            },()=>console.log(this.state.province));
         })
         .catch(function (error) {
             // handle error
