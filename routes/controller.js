@@ -169,6 +169,32 @@ exports.deletebanklist = function (req, res) {
     });
 };
 
+exports.memberlistbyid = function (req, res) {
+    var id = req.params.id;
+    koneksi.query("SELECT * FROM member WHERE id=?", [id], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok(rows, res);
+        }
+    });
+};
+
+exports.messagelistbyid = function (req, res) {
+    var id = req.params.id;
+    koneksi.query("SELECT * FROM contact WHERE id=?", [id], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok(rows, res);
+        }
+    });
+};
+
+
+
+
+
 exports.dtbanklist = function (req, res) {
     koneksi.query("SELECT * FROM setting_bank", function (error, rows, fields) {
         if (error) {
@@ -189,6 +215,66 @@ exports.dtbanklist = function (req, res) {
                     bank_name=bank_name,
                     bank_rekening= bank_rekening,
                     bank_name_rekening = bank_name_rekening,
+                    id=id,
+                ])
+                no++;
+            }); 
+            response.datatables(Obj, res);
+        }
+
+    });
+};
+
+exports.dtmemberlist = function (req, res) {
+    koneksi.query("SELECT * FROM member", function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            var Obj = [];
+            // console.log(Object.values(rows))
+            var no = 1;
+            rows.forEach(function (element, index) { 
+                
+                var id = element.id
+                var nama_lengkap = element.nama_lengkap
+                var email = element.email
+                var no_hp = element.no_hp
+                // Obj.push(Object.values(element))
+                Obj.push([
+                    no=no,
+                    nama_lengkap=nama_lengkap,
+                    email= email,
+                    no_hp = no_hp,
+                    id=id,
+                ])
+                no++;
+            }); 
+            response.datatables(Obj, res);
+        }
+
+    });
+};
+
+exports.dtmessagelist = function (req, res) {
+    koneksi.query("SELECT * FROM contact", function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+            var Obj = [];
+            // console.log(Object.values(rows))
+            var no = 1;
+            rows.forEach(function (element, index) { 
+                
+                var id = element.id
+                var nama = element.nama
+                var email = element.email
+                var pesan = element.pesan
+                // Obj.push(Object.values(element))
+                Obj.push([
+                    no=no,
+                    nama=nama,
+                    email= email,
+                    pesan = pesan,
                     id=id,
                 ])
                 no++;

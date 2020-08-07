@@ -4,32 +4,40 @@ module.exports = function (app) {
   //url homenya
   app.route('/').get(url.index);
 
-  app.route(apiV1+'city').get(url.city);
+  //admin api
+    app.route(apiV1+'city').get(url.city);
+    app.route(apiV1+'province').get(url.province);
+    app.route(apiV1+'subdistrict').get(url.subdistrict);
 
-  app.route(apiV1+'province').get(url.province);
+    //setting
+    app.route(apiV1+'sosmed').get(url.sosmed);
+    app.route(apiV1+'sosmed').put(url.updatesosmed);
+    app.route(apiV1+'infoweb').get(url.infoweb);
+    app.route(apiV1+'infoweb').put(url.updateinfoweb);
+    app.route(apiV1+'banklist').get(url.banklist);
+    app.route(apiV1+'banklist').post(url.addbanklist);
+    app.route(apiV1+'banklist/:id').get(url.banklistbyid);
+    app.route(apiV1+'banklist').put(url.updatebanklist);
+    app.route(apiV1+'banklist/:id').delete(url.deletebanklist);
+    //end setting
+    
+    //member
+    app.route(apiV1+'memberlist/:id').get(url.memberlistbyid);
+    //end member
 
-  app.route(apiV1+'subdistrict').get(url.subdistrict);
+    //message
+    app.route(apiV1+'messagelist/:id').get(url.messagelistbyid);
+    //end message
 
-  app.route(apiV1+'sosmed').get(url.sosmed);
 
-  app.route(apiV1+'sosmed').put(url.updatesosmed);
+    //datatables
+    app.route(apiV1+'dt/banklist').get(url.dtbanklist);
+    app.route(apiV1+'dt/memberlist').get(url.dtmemberlist);
+    app.route(apiV1+'dt/messagelist').get(url.dtmessagelist);
+    //end datatables
 
-  app.route(apiV1+'infoweb').get(url.infoweb);
+  //end admin api
 
-  app.route(apiV1+'infoweb').put(url.updateinfoweb);
-
-  app.route(apiV1+'banklist').get(url.banklist);
-
-  app.route(apiV1+'banklist').post(url.addbanklist);
-
-  app.route(apiV1+'banklist/:id').get(url.banklistbyid);
-
-  app.route(apiV1+'banklist').put(url.updatebanklist);
-
-  app.route(apiV1+'banklist/:id').delete(url.deletebanklist);
-  
-
-  app.route(apiV1+'dt/banklist').get(url.dtbanklist);
 
   // app.route(apiV1+'users/:id').get(url.userbyid);
 
