@@ -7,6 +7,8 @@ import axios from "axios";
 // ES6 Modules or TypeScript
 import Swal from 'sweetalert2'
 
+const uAPI = 'https://api-online-store-v1.herokuapp.com';
+
 class AddBank extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +26,7 @@ class AddBank extends Component {
     }
 
     componentDidMount(){
-        axios.get('http://localhost:8080/api/v1/banklist/'+this.props.id)
+        axios.get(uAPI+'/api/v1/banklist/'+this.props.id)
         .then(function(response) {
             return response;
         })
@@ -67,7 +69,7 @@ class AddBank extends Component {
             allowOutsideClick: false
         }).then((result) => {
             if (result.value) {
-                axios.put('http://localhost:8080/api/v1/banklist',{
+                axios.put(uAPI+'/api/v1/banklist',{
                     id: this.state.dataBank.id,
                     bank_name: this.state.dataBank.bank_name,
                     bank_rekening: this.state.dataBank.bank_rekening,

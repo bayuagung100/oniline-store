@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
+const uAPI = 'https://api-online-store-v1.herokuapp.com';
+
 class Member extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +26,7 @@ class Member extends Component {
     }
 
     componentDidMount(){
-        axios.get('http://localhost:8080/api/v1/memberlist/'+this.props.id)
+        axios.get(uAPI+'/api/v1/memberlist/'+this.props.id)
         .then(function(response) {
             return response;
         })

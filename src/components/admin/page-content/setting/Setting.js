@@ -13,7 +13,7 @@ import axios from "axios";
 // ES6 Modules or TypeScript
 import Swal from 'sweetalert2'
 
-
+const uAPI = 'https://api-online-store-v1.herokuapp.com';
 
 
 class Setting extends Component {
@@ -77,7 +77,7 @@ class Setting extends Component {
             allowOutsideClick: false
         }).then((result) => {
             if (result.value) {
-                axios.put('http://localhost:8080/api/v1/infoweb',{
+                axios.put(uAPI+'/api/v1/infoweb',{
                     id: this.state.infoweb.id,
                     judul: this.state.infoweb.judul,
                     deskripsi: this.state.infoweb.deskripsi,
@@ -122,7 +122,7 @@ class Setting extends Component {
             allowOutsideClick: false
         }).then((result) => {
             if (result.value) {
-                axios.put('http://localhost:8080/api/v1/sosmed',{
+                axios.put(uAPI+'/api/v1/sosmed',{
                     id: this.state.sosmed.id,
                     email: this.state.sosmed.email,
                     whatsapp: this.state.sosmed.whatsapp,
@@ -160,7 +160,7 @@ class Setting extends Component {
         // });
 
         // pakai axios
-        axios.get('http://localhost:8080/api/v1/province')
+        axios.get(uAPI+'/api/v1/province')
         .then(response => 
             response.data.results.map(province => ({
                 province_id: `${province.province_id}`,
@@ -170,7 +170,7 @@ class Setting extends Component {
         .then(province => {
             this.setState({
                 province
-            },()=>console.log(this.state.province));
+            });
         })
         .catch(function (error) {
             // handle error
@@ -190,7 +190,7 @@ class Setting extends Component {
         // });
 
         // pakai axios
-        axios.get('http://localhost:8080/api/v1/city')
+        axios.get(uAPI+'/api/v1/city')
         .then(response => 
             response.data.results.map(city => ({
                 city_id: `${city.city_id}`,
@@ -222,7 +222,7 @@ class Setting extends Component {
         // });
 
         // pakai axios
-        axios.get('http://localhost:8080/api/v1/subdistrict')
+        axios.get(uAPI+'/api/v1/subdistrict')
         .then(response => 
             response.data.results.map(subdistrict => ({
                 subdistrict_id: `${subdistrict.subdistrict_id}`,
@@ -253,7 +253,7 @@ class Setting extends Component {
         // });
 
         // pakai axios
-        axios.get('http://localhost:8080/api/v1/infoweb')
+        axios.get(uAPI+'/api/v1/infoweb')
         .then(response => 
             response.data.results.map(infoweb => ({
                 id: `${infoweb.id}`,
@@ -289,7 +289,7 @@ class Setting extends Component {
         // });
 
         // pakai axios
-        axios.get('http://localhost:8080/api/v1/sosmed')
+        axios.get(uAPI+'/api/v1/sosmed')
         .then(response => 
             response.data.results.map(sosmed => ({
                 id: `${sosmed.id}`,

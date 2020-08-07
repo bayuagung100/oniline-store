@@ -11,6 +11,7 @@ import axios from "axios";
 const $ = require('jquery');
 $.Datatable = require('datatables.net-bs4');
 
+const uAPI = 'https://api-online-store-v1.herokuapp.com';
 
 class DtTable extends React.Component {
     render() {
@@ -89,7 +90,7 @@ class Datatables extends Component {
             allowOutsideClick: false
         }).then((result) => {
             if (result.value) {
-                axios.delete('http://localhost:8080/api/v1/banklist/'+id)
+                axios.delete(uAPI+'/api/v1/banklist/'+id)
                 .then(
                     () =>  Swal.fire({
                         title: 'Success!',
@@ -157,7 +158,7 @@ class Datatables extends Component {
 
         $('#banklist').DataTable( {
             order: [[ 0, "desc" ]],
-            ajax: "http://localhost:8080/api/v1/dt/banklist",
+            ajax: uAPI+"/api/v1/dt/banklist",
             columns: [
                 {title:"No"},
                 {title:"Nama Bank"},
@@ -180,7 +181,7 @@ class Datatables extends Component {
 
         $('#memberlist').DataTable( {
             order: [[ 0, "desc" ]],
-            ajax: "http://localhost:8080/api/v1/dt/memberlist",
+            ajax: uAPI+"/api/v1/dt/memberlist",
             columns: [
                 {title:"No"},
                 {title:"Nama Lengkap"},
@@ -203,7 +204,7 @@ class Datatables extends Component {
 
         $('#messagelist').DataTable( {
             order: [[ 0, "desc" ]],
-            ajax: "http://localhost:8080/api/v1/dt/messagelist",
+            ajax: uAPI+"/api/v1/dt/messagelist",
             columns: [
                 {title:"No"},
                 {title:"Nama Lengkap"},

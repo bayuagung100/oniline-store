@@ -7,6 +7,7 @@ import axios from "axios";
 // ES6 Modules or TypeScript
 import Swal from 'sweetalert2'
 
+const uAPI = 'https://api-online-store-v1.herokuapp.com';
 
 function BtnBack() {
     let history = useHistory();
@@ -55,7 +56,7 @@ class AddBank extends Component {
             allowOutsideClick: false
         }).then((result) => {
             if (result.value) {
-                axios.post('http://localhost:8080/api/v1/banklist',{
+                axios.post(uAPI+'/api/v1/banklist',{
                     nama_bank: this.state.addBank.nama_bank,
                     no_rekening: this.state.addBank.no_rekening,
                     nama_rekening: this.state.addBank.nama_rekening,
