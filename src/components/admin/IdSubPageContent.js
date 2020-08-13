@@ -4,6 +4,8 @@ import {
     // useRouteMatch,
     useParams
   } from "react-router-dom";
+
+import EditProduk from './page-content/online-store/EditProduct';
 import EditBank from './page-content/setting/EditBank';
 import DetailMember from './page-content/member/DetailMember';
 import DetailMessage from './page-content/message/DetailMessage';
@@ -14,7 +16,9 @@ function IdSubPageContent(state, props) {
     let { form } = useParams();
     let { formId } = useParams();
     
-    if (pageContent === 'setting' && form === 'edit-bank'){
+    if (pageContent === 'online-store' && form === 'edit-product'){
+        return <EditProduk id={formId}/>
+    } else if (pageContent === 'setting' && form === 'edit-bank'){
         return <EditBank id={formId}/>
     } else if (pageContent === 'member' && form === 'detail'){
         return <DetailMember id={formId}/>

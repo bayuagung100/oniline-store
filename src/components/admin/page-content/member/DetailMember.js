@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 const uAPI = 'https://api-online-store-v1.herokuapp.com';
 
 class Member extends Component {
@@ -22,6 +25,7 @@ class Member extends Component {
                 postal_code: '',
                 alamat: '',
             },
+            loading: true,
         }
     }
 
@@ -55,7 +59,8 @@ class Member extends Component {
                         subdistrict: data.kecamatan,
                         postal_code: data.kode_pos,
                         alamat: data.alamat,
-                    }
+                    },
+                    loading: false,
                 });
                 
             }
@@ -88,40 +93,50 @@ class Member extends Component {
                                 </Link>
                             </div>
                             <div className="card-body">
-                                <div className="form-group row">
-                                    <label className="col-sm-2 control-label">Nama Lengkap <span style={{ float:"right"}}>:</span></label>
-                                    <div className="col-sm-4">
-                                        <b>{this.state.dataMember.name}</b>
+                            {
+                                this.state.loading ? (
+                                    <div className="text-center" >
+                                        <Loader type="Bars" color="#00BFFF" height={60} width={100} />
+                                        Loading ...
                                     </div>
-                                </div>
-                                
-                                <div className="form-group row">
-                                    <label className="col-sm-2" >Email <span style={{ float:"right"}}>:</span></label>
-                                    <div className="col-sm-4">{this.state.dataMember.email}</div>
-                                    <label className="col-sm-2" >No Hp <span style={{ float:"right"}}>:</span></label>
-                                    <div className="col-sm-4">{this.state.dataMember.no_hp}</div>
-                                </div>
-                                
-                                <div className="form-group row">
-                                    <label className="col-sm-2" >Provinsi <span style={{ float:"right"}}>:</span></label>
-                                    <div className="col-sm-4">{this.state.dataMember.province}</div>
-                                    <label className="col-sm-2" >Kota / Kabupaten <span style={{ float:"right"}}>:</span></label>
-                                    <div className="col-sm-4">{kota} ({kabupaten})</div>
-                                </div>
-                                
-                                <div className="form-group row">
-                                    <label className="col-sm-2" >Kecamatan <span style={{ float:"right"}}>:</span></label>
-                                    <div className="col-sm-4">{this.state.dataMember.subdistrict}</div>
-                                    <label className="col-sm-2" >Kode Pos <span style={{ float:"right"}}>:</span></label>
-                                    <div className="col-sm-4">{this.state.dataMember.postal_code}</div>
-                                </div>
+                                ):(
+                                    <div>
+                                        <div className="form-group row">
+                                            <label className="col-sm-2 control-label">Nama Lengkap <span style={{ float:"right"}}>:</span></label>
+                                            <div className="col-sm-4">
+                                                <b>{this.state.dataMember.name}</b>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="form-group row">
+                                            <label className="col-sm-2" >Email <span style={{ float:"right"}}>:</span></label>
+                                            <div className="col-sm-4">{this.state.dataMember.email}</div>
+                                            <label className="col-sm-2" >No Hp <span style={{ float:"right"}}>:</span></label>
+                                            <div className="col-sm-4">{this.state.dataMember.no_hp}</div>
+                                        </div>
+                                        
+                                        <div className="form-group row">
+                                            <label className="col-sm-2" >Provinsi <span style={{ float:"right"}}>:</span></label>
+                                            <div className="col-sm-4">{this.state.dataMember.province}</div>
+                                            <label className="col-sm-2" >Kota / Kabupaten <span style={{ float:"right"}}>:</span></label>
+                                            <div className="col-sm-4">{kota} ({kabupaten})</div>
+                                        </div>
+                                        
+                                        <div className="form-group row">
+                                            <label className="col-sm-2" >Kecamatan <span style={{ float:"right"}}>:</span></label>
+                                            <div className="col-sm-4">{this.state.dataMember.subdistrict}</div>
+                                            <label className="col-sm-2" >Kode Pos <span style={{ float:"right"}}>:</span></label>
+                                            <div className="col-sm-4">{this.state.dataMember.postal_code}</div>
+                                        </div>
 
-                                <div className="form-group row">
-                                        <label className="col-sm-2 control-label">Alamat <span style={{ float:"right"}}>:</span></label>
-                                        <div className="col-sm-4">{this.state.dataMember.alamat}</div>
-                                </div>
-                                
-                             </div>
+                                        <div className="form-group row">
+                                                <label className="col-sm-2 control-label">Alamat <span style={{ float:"right"}}>:</span></label>
+                                                <div className="col-sm-4">{this.state.dataMember.alamat}</div>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                            </div>
                         </div>
                     </div>
                 </section>

@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 const uAPI = 'https://api-online-store-v1.herokuapp.com';
 
 class Member extends Component {
@@ -17,6 +20,7 @@ class Member extends Component {
                 email: '',
                 pesan: '',
             },
+            loading: true,
         }
     }
 
@@ -45,7 +49,8 @@ class Member extends Component {
                         nama: data.nama,
                         email: data.email,
                         pesan: data.pesan,
-                    }
+                    },
+                    loading: false
                 });
                 
             }
@@ -74,24 +79,34 @@ class Member extends Component {
                                 </Link>
                             </div>
                             <div className="card-body">
-                                <div className="form-group row">
-                                    <label className="col-sm-2 control-label">Nama Lengkap <span style={{ float:"right"}}>:</span></label>
-                                    <div className="col-sm-4">
-                                        <b>{this.state.dataMessage.nama}</b>
+                            {
+                                this.state.loading ? (
+                                    <div className="text-center" >
+                                        <Loader type="Bars" color="#00BFFF" height={60} width={100} />
+                                        Loading ...
                                     </div>
-                                </div>
-                                
-                                <div className="form-group row">
-                                    <label className="col-sm-2" >Email <span style={{ float:"right"}}>:</span></label>
-                                    <div className="col-sm-4">{this.state.dataMessage.email}</div>
-                                </div>
+                                ):(
+                                    <div>
+                                        <div className="form-group row">
+                                            <label className="col-sm-2 control-label">Nama Lengkap <span style={{ float:"right"}}>:</span></label>
+                                            <div className="col-sm-4">
+                                                <b>{this.state.dataMessage.nama}</b>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="form-group row">
+                                            <label className="col-sm-2" >Email <span style={{ float:"right"}}>:</span></label>
+                                            <div className="col-sm-4">{this.state.dataMessage.email}</div>
+                                        </div>
 
-                                <div className="form-group row">
-                                        <label className="col-sm-2 control-label">Pesan <span style={{ float:"right"}}>:</span></label>
-                                        <div className="col-sm-4">{this.state.dataMessage.pesan}</div>
-                                </div>
-                                
-                             </div>
+                                        <div className="form-group row">
+                                                <label className="col-sm-2 control-label">Pesan <span style={{ float:"right"}}>:</span></label>
+                                                <div className="col-sm-4">{this.state.dataMessage.pesan}</div>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                            </div>
                         </div>
                     </div>
                 </section>

@@ -19,6 +19,17 @@ function SubPageContent() {
     if (pageContent === 'online-store') {
         if(form === 'add-product'){
             return <AddProduct/>;
+        } else if(form === 'edit-product'){
+            return (
+                <Switch>
+                    <Route path={`${match.path}/:formId`}>
+                        <IdSubPageContent />
+                    </Route>
+                    <Route path={match.path}>
+                        <h3>Not Found</h3>
+                    </Route>
+                </Switch>
+            );
         } else {
             return <h3>Not Found</h3>;
         }

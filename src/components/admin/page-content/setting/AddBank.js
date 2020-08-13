@@ -5,7 +5,8 @@ import { faSave, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 // ES6 Modules or TypeScript
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+
 
 const uAPI = 'https://api-online-store-v1.herokuapp.com';
 
@@ -53,25 +54,27 @@ class AddBank extends Component {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes!',
-            allowOutsideClick: false
-        }).then((result) => {
-            if (result.value) {
-                axios.post(uAPI+'/api/v1/banklist',{
+            allowOutsideClick: false,
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                return axios.post(uAPI+'/api/v1/banklist',{
                     nama_bank: this.state.addBank.nama_bank,
                     no_rekening: this.state.addBank.no_rekening,
                     nama_rekening: this.state.addBank.nama_rekening,
                 })
-                .then(
-                    () => Swal.fire({
-                        title: 'Success!',
-                        text: 'Success tambah rekening bank',
-                        icon: 'success',
-                        allowOutsideClick: false,
-                    }).then(() => this.setState({ redirect: true }))
-                )
                 .catch(function (error) {
                     console.log(error);
+                    Swal.fire('Oops...', 'Something went wrong!', 'error');
                 });
+            }
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Success tambah rekening bank',
+                    icon: 'success',
+                    allowOutsideClick: false,
+                }).then(() => this.setState({ redirect: true }))
             }
         })
     }
@@ -92,15 +95,15 @@ class AddBank extends Component {
                                 <form onSubmit={e => this.addBankSubmit(e)} className="form-horizontal" style={{padding:"10px"}}>
                                     <div className="form-group">
                                         <label>Nama Bank</label>
-                                        <input type="text" className="form-control" name="nama_bank" value={this.state.addBank.nama_bank}  onChange={this.addBankChange} placeholder="Ex: BCA"/>
+                                        <input type="text" className="form-control" name="nama_bank" value={this.state.addBank.nama_bank}  onChange={this.addBankChange} placeholder="Ex: BCA" required/>
                                     </div>
                                     <div className="form-group">
                                         <label>No Rekening</label>
-                                        <input type="tel" className="form-control" name="no_rekening" value={this.state.addBank.no_rekening}  onChange={this.addBankChange} placeholder="Enter no.rekening"/>
+                                        <input type="tel" className="form-control" name="no_rekening" value={this.state.addBank.no_rekening}  onChange={this.addBankChange} placeholder="Enter no.rekening" required/>
                                     </div>
                                     <div className="form-group">
                                         <label>Nama Rekening</label>
-                                        <input type="text" className="form-control" name="nama_rekening" value={this.state.addBank.nama_rekening}  onChange={this.addBankChange} placeholder="Enter nama rekening"/>
+                                        <input type="text" className="form-control" name="nama_rekening" value={this.state.addBank.nama_rekening}  onChange={this.addBankChange} placeholder="Enter nama rekening" required/>
                                     </div>
                                     <div className="form-group">
                                         <div className="col-sm-offset-2 col-sm-10">

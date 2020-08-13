@@ -12,6 +12,7 @@ const $ = require('jquery');
 $.Datatable = require('datatables.net-bs4');
 
 const uAPI = 'https://api-online-store-v1.herokuapp.com';
+const uAPIlocal = 'http://localhost:8080';
 
 class DtTable extends React.Component {
     render() {
@@ -50,10 +51,18 @@ class Datatables extends Component {
         this.state = {
             redirect: '',
         }
+        this.editProduk = this.editProduk.bind(this);
         this.editBank = this.editBank.bind(this);
         this.deleteBank = this.deleteBank.bind(this);
         this.detailMember = this.detailMember.bind(this);
         this.detailMessage = this.detailMessage.bind(this);
+    }
+
+    editProduk(id){
+        this.setState({ 
+            redirect: '/admin/online-store/edit-product',
+            url: '/admin/online-store/edit-product/'+id
+        })
     }
 
     editBank(id){
@@ -77,6 +86,45 @@ class Datatables extends Component {
         })
     }
 
+    deleteProduk(id, name){
+        // e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Hapus Produk: '+name,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Delete!',
+            allowOutsideClick: false,
+            // showLoaderOnConfirm: true,
+            // preConfirm: () => {
+            //     return axios.delete(uAPI+'/api/v1/banklist/'+id)
+            //     // .then(
+            //     //     () =>  Swal.fire({
+            //     //         title: 'Success!',
+            //     //         text: 'Success delete!',
+            //     //         icon: 'success',
+            //     //         allowOutsideClick: false,
+            //     //     }).then(() => this.setState({ redirect: '/admin/setting' }))
+            //     // )
+            //     .catch(function (error) {
+            //         console.log(error);
+            //         Swal.fire('Oops...', 'Something went wrong!', 'error');
+            //     });
+            // }
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Success delete bank!',
+                    icon: 'success',
+                    allowOutsideClick: false,
+                }).then(() => this.setState({ redirect: '/admin/setting' }))
+            }
+        })
+    }
+
     deleteBank(id, name){
         // e.preventDefault();
         Swal.fire({
@@ -87,22 +135,31 @@ class Datatables extends Component {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Delete!',
-            allowOutsideClick: false
-        }).then((result) => {
-            if (result.value) {
-                axios.delete(uAPI+'/api/v1/banklist/'+id)
-                .then(
-                    () =>  Swal.fire({
-                        title: 'Success!',
-                        text: 'Success delete!',
-                        icon: 'success',
-                        allowOutsideClick: false,
-                    }).then(() => this.setState({ redirect: '/admin/setting' }))
-                )
+            allowOutsideClick: false,
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                return axios.delete(uAPI+'/api/v1/banklist/'+id)
+                // .then(
+                //     () =>  Swal.fire({
+                //         title: 'Success!',
+                //         text: 'Success delete!',
+                //         icon: 'success',
+                //         allowOutsideClick: false,
+                //     }).then(() => this.setState({ redirect: '/admin/setting' }))
+                // )
                 .catch(function (error) {
                     console.log(error);
+                    Swal.fire('Oops...', 'Something went wrong!', 'error');
                 });
-                
+            }
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Success delete bank!',
+                    icon: 'success',
+                    allowOutsideClick: false,
+                }).then(() => this.setState({ redirect: '/admin/setting' }))
             }
         })
     }
@@ -156,6 +213,60 @@ class Datatables extends Component {
         //     }
         // } );
 
+        $('#onlinestorelist').DataTable( {
+            order: [[ 0, "desc" ]],
+            ajax: uAPIlocal+"/api/v1/dt/produk",
+            columns: [
+                {title:"No"},
+                {title:"Gambar"},
+                {title:"Nama Produk"},
+                {title:"Deskripsi"},
+                {title:"Harga"},
+                {title:"Stok"},
+                {title:"Aksi"},
+            ],
+            columnDefs: [
+                {
+                    targets: 1,
+                    createdCell: (td, cellData, rowData, row, col) =>
+                        ReactDOM.render(
+                            <BrowserRouter>
+                            {/* {console.log('cellData: '+cellData)}
+                            {console.log('rowData: '+rowData)}
+                            {console.log('row: '+row)}
+                            {console.log('col: '+col)} */}
+                            <img src={uAPIlocal+'/'+rowData[1]} style={{ height:'120px'}} alt={rowData[2]}/>
+                            
+                            </BrowserRouter>, td),
+                },
+                {
+                    targets: 4,
+                    createdCell: (td, cellData, rowData, row, col) =>
+                        ReactDOM.render(
+                            <BrowserRouter>
+                            {/* {console.log('cellData: '+cellData)}
+                            {console.log('rowData: '+rowData)}
+                            {console.log('row: '+row)}
+                            {console.log('col: '+col)} */}
+                            {'Rp.'+rowData[4]}
+                            
+                            </BrowserRouter>, td),
+                },
+                {
+                    targets: -1,
+                    createdCell: (td, cellData, rowData, row, col) =>
+                        ReactDOM.render(
+                            <BrowserRouter>
+                            {/* {console.log('cellData: '+cellData)}
+                            {console.log('rowData: '+rowData)}
+                            {console.log('row: '+row)}
+                            {console.log('col: '+col)} */}
+                            <button type="button"  className="btn btn-primary btn-sm" onClick={() => this.editProduk(rowData[6])}> <FontAwesomeIcon icon={faEdit}/> Edit</button> <button type="button"  className="btn btn-danger btn-sm" onClick={() => this.deleteProduk(rowData[6], rowData[2])}> <FontAwesomeIcon icon={faTrash}/> Delete</button>
+                            </BrowserRouter>, td),
+                },
+            ]   
+        } );
+
         $('#banklist').DataTable( {
             order: [[ 0, "desc" ]],
             ajax: uAPI+"/api/v1/dt/banklist",
@@ -167,7 +278,8 @@ class Datatables extends Component {
                 {title:"Aksi"},
             ],
             columnDefs: [ {
-                targets: -1,createdCell: (td, cellData, rowData, row, col) =>
+                targets: -1,
+                createdCell: (td, cellData, rowData, row, col) =>
                     ReactDOM.render(
                         <BrowserRouter>
                         {/* {console.log('cellData: '+cellData)}
@@ -176,7 +288,7 @@ class Datatables extends Component {
                         {console.log('col: '+col)} */}
                         <button type="button"  className="btn btn-primary btn-sm" onClick={() => this.editBank(rowData[4])}> <FontAwesomeIcon icon={faEdit}/> Edit</button> <button type="button"  className="btn btn-danger btn-sm" onClick={() => this.deleteBank(rowData[4], rowData[1]+'-'+rowData[2]+' a.n '+rowData[3])}> <FontAwesomeIcon icon={faTrash}/> Delete</button>
                         </BrowserRouter>, td),
-        } ]
+            } ]
         } );
 
         $('#memberlist').DataTable( {
@@ -190,7 +302,8 @@ class Datatables extends Component {
                 {title:"Aksi"},
             ],
             columnDefs: [ {
-                targets: -1,createdCell: (td, cellData, rowData, row, col) =>
+                targets: -1,
+                createdCell: (td, cellData, rowData, row, col) =>
                     ReactDOM.render(
                         <BrowserRouter>
                         {/* {console.log('cellData: '+cellData)}
@@ -212,7 +325,8 @@ class Datatables extends Component {
                 {title:"Aksi"},
             ],
             columnDefs: [ {
-                targets: -1,createdCell: (td, cellData, rowData, row, col) =>
+                targets: -1,
+                createdCell: (td, cellData, rowData, row, col) =>
                     ReactDOM.render(
                         <BrowserRouter>
                         {/* {console.log('cellData: '+cellData)}
@@ -238,6 +352,8 @@ class Datatables extends Component {
         } else if (this.state.redirect === '/admin/member/detail'){
             return (<Redirect to={this.state.url}/>)
         } else if (this.state.redirect === '/admin/message/detail'){
+            return (<Redirect to={this.state.url}/>)
+        } else if (this.state.redirect === '/admin/online-store/edit-product'){
             return (<Redirect to={this.state.url}/>)
         }
         return (

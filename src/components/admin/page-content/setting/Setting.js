@@ -11,7 +11,12 @@ import axios from "axios";
 // import AddBank from './AddBank';
 
 // ES6 Modules or TypeScript
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+
+
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 
 const uAPI = 'https://api-online-store-v1.herokuapp.com';
 
@@ -34,6 +39,7 @@ class Setting extends Component {
                 email: '',
                 whatsapp: '',
                 instagram: '',
+                loading: true,
             },
             infoweb: {
                 id: '',
@@ -44,6 +50,7 @@ class Setting extends Component {
                 kabupaten: '',
                 kecamatan: '',
                 kode_pos: '',
+                loading: true,
             }
         }
         this.infoChange = this.infoChange.bind(this);
@@ -74,10 +81,10 @@ class Setting extends Component {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes!',
-            allowOutsideClick: false
-        }).then((result) => {
-            if (result.value) {
-                axios.put(uAPI+'/api/v1/infoweb',{
+            allowOutsideClick: false,
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                return axios.put(uAPI+'/api/v1/infoweb',{
                     id: this.state.infoweb.id,
                     judul: this.state.infoweb.judul,
                     deskripsi: this.state.infoweb.deskripsi,
@@ -87,18 +94,19 @@ class Setting extends Component {
                     kecamatan: this.state.infoweb.kecamatan,
                     kode_pos: this.state.infoweb.kode_pos,
                 })
-                .then(function (response) {
-                    // console.log(response.data.results);
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'Success update informasi website',
-                        icon: 'success',
-                        allowOutsideClick: false
-                    })
-                })
                 .catch(function (error) {
                     console.log(error);
+                    Swal.fire('Oops...', 'Something went wrong!', 'error');
                 });
+            }
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Success update informasi website',
+                    icon: 'success',
+                    allowOutsideClick: false
+                })
             }
         })
     }
@@ -119,27 +127,28 @@ class Setting extends Component {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes!',
-            allowOutsideClick: false
-        }).then((result) => {
-            if (result.value) {
-                axios.put(uAPI+'/api/v1/sosmed',{
+            allowOutsideClick: false,
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                return axios.put(uAPI+'/api/v1/sosmed',{
                     id: this.state.sosmed.id,
                     email: this.state.sosmed.email,
                     whatsapp: this.state.sosmed.whatsapp,
                     instagram: this.state.sosmed.instagram,
                 })
-                .then(function (response) {
-                    // console.log(response.data.results);
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'Success update social media',
-                        icon: 'success',
-                        allowOutsideClick: false
-                    })
-                })
                 .catch(function (error) {
                     console.log(error);
+                    Swal.fire('Oops...', 'Something went wrong!', 'error');
                 });
+            }
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Success update social media',
+                    icon: 'success',
+                    allowOutsideClick: false
+                })
             }
         })
           
@@ -264,6 +273,7 @@ class Setting extends Component {
                 kabupaten: `${infoweb.city}`,
                 kecamatan: `${infoweb.subdistrict}`,
                 kode_pos: `${infoweb.postal_code}`,
+                loading: false,
             }))
         )
         .then(infoweb => {
@@ -296,6 +306,7 @@ class Setting extends Component {
                 email: `${sosmed.email}`,
                 whatsapp: `${sosmed.whatsapp}`,
                 instagram: `${sosmed.instagram}`,
+                loading: false,
             }))
         )
         .then(sosmed => {
@@ -350,6 +361,7 @@ class Setting extends Component {
         this.getApiProvince();
         this.getApiCity();
         this.getApiSubdistrict();
+
     }
 
     // try = () => {
@@ -411,94 +423,103 @@ class Setting extends Component {
                                                 </div>
                                             </div>
                                             <div className="card-body">
-                                                <form onSubmit={e => this.infoSubmit(e)} className="form-horizontal" style={{padding:"10px"}}>
-                                                    <div className="form-group">
-                                                        <label>Judul Website </label>
-                                                        <input type="text" className="form-control" name="judul" value={this.state.infoweb.judul} onChange={this.infoChange} placeholder="Enter judul website" required />
+                                            {
+                                                this.state.infoweb.loading ? (
+                                                    <div className="text-center" >
+                                                        <Loader type="Bars" color="#00BFFF" height={60} width={100} />
+                                                        Loading ...
                                                     </div>
-                                                    <div className="form-group">
-                                                        <label>Deskripsi Website (*Jangan pakai enter)</label>
-                                                        <textarea name="deskripsi"  className="form-control" value={this.state.infoweb.deskripsi} onChange={this.infoChange} placeholder="Enter deskripsi website" required />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <label>Alamat (*Jangan pakai enter)</label>
-                                                        <textarea name="alamat" className="form-control" value={this.state.infoweb.alamat} onChange={this.infoChange} placeholder="Nama jalan dan nomor toko" required />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <label>Provinsi</label>
-                                                        {
-                                                            this.state.province ? (
-                                                                <select className="form-control select2" name="provinsi" value={this.state.infoweb.provinsi} onChange={this.infoChange} required>
-                                                                    <option value="">Pilih provinsi</option>
-                                                                    {
-                                                                        this.state.province.map((value, index) => {
-                                                                            return(
-                                                                            <option key={index} value={value.province_name}>{value.province_name}</option>
-                                                                            )
-                                                                        })
-                                                                    }
-                                                                </select>
-                                                            ):(
-                                                                <select className="form-control select2" name="provinsi" value={this.state.infoweb.provinsi} onChange={this.infoChange} required>
-                                                                    <option value="">Pilih provinsi</option>
-                                                                </select>
-                                                            )
-                                                        }
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <label>Kota / Kabupaten</label>
-                                                        {
-                                                            this.state.city ? (
-                                                                <select className="form-control select2" name="kabupaten" value={this.state.infoweb.kabupaten} onChange={this.infoChange} required>
-                                                                    <option value="">Pilih kota/kabupaten</option>
-                                                                    {
-                                                                        this.state.city.map((value, index) => {
-                                                                            return(
-                                                                            <option key={index} value={value.city_name+"-"+value.type}>{value.city_name} - ({value.type})</option>
-                                                                            )
-                                                                        })
-                                                                    }
-                                                                </select>
-                                                            ):(
-                                                                <select className="form-control select2" name="kabupaten" value={this.state.infoweb.kabupaten} onChange={this.infoChange} required>
-                                                                    <option value="">Pilih kota/kabupaten</option>
-                                                                </select>
-                                                            )
-                                                        }
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <label>Kecamatan</label>
-                                                        {
-                                                            this.state.subdistrict ? (
-                                                                <select className="form-control select2" name="kecamatan" value={this.state.infoweb.kecamatan} onChange={this.infoChange} required>
-                                                                    <option value="">Pilih kecamatan</option>
-                                                                    {
-                                                                        this.state.subdistrict.map((value, index) => {
-                                                                            return(
-                                                                            <option key={index} value={value.subdistrict_name}>{value.subdistrict_name}</option>
-                                                                            )
-                                                                        })
-                                                                    }
-                                                                </select>
-                                                            ):(
-                                                                <select className="form-control select2" name="kecamatan" value={this.state.infoweb.kecamatan} onChange={this.infoChange} required>
-                                                                    <option value="">Pilih kecamatan</option>
-                                                                </select>
-                                                            )
-                                                        }
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <label>Kode Pos </label>
-                                                        <input type="text" className="form-control" name="kode_pos" value={this.state.infoweb.kode_pos} onChange={this.infoChange} placeholder="Enter kode pos" required />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <div className="col-sm-offset-2 col-sm-10">
-                                                            <button type="submit" className="btn btn-primary">
-                                                                <FontAwesomeIcon icon={faSave}/> Simpan 
-                                                            </button>
+                                                ):(
+                                                    <form onSubmit={e => this.infoSubmit(e)} className="form-horizontal" style={{padding:"10px"}}>
+                                                        <div className="form-group">
+                                                            <label>Judul Website </label>
+                                                            <input type="text" className="form-control" name="judul" value={this.state.infoweb.judul} onChange={this.infoChange} placeholder="Enter judul website" required />
                                                         </div>
-                                                    </div>
-                                                </form>
+                                                        <div className="form-group">
+                                                            <label>Deskripsi Website (*Jangan pakai enter)</label>
+                                                            <textarea name="deskripsi"  className="form-control" value={this.state.infoweb.deskripsi} onChange={this.infoChange} placeholder="Enter deskripsi website" required />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label>Alamat (*Jangan pakai enter)</label>
+                                                            <textarea name="alamat" className="form-control" value={this.state.infoweb.alamat} onChange={this.infoChange} placeholder="Nama jalan dan nomor toko" required />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label>Provinsi</label>
+                                                            {
+                                                                this.state.province ? (
+                                                                    <select className="form-control select2" name="provinsi" value={this.state.infoweb.provinsi} onChange={this.infoChange} required>
+                                                                        <option value="">Pilih provinsi</option>
+                                                                        {
+                                                                            this.state.province.map((value, index) => {
+                                                                                return(
+                                                                                <option key={index} value={value.province_name}>{value.province_name}</option>
+                                                                                )
+                                                                            })
+                                                                        }
+                                                                    </select>
+                                                                ):(
+                                                                    <select className="form-control select2" name="provinsi" value={this.state.infoweb.provinsi} onChange={this.infoChange} required>
+                                                                        <option value="">Pilih provinsi</option>
+                                                                    </select>
+                                                                )
+                                                            }
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label>Kota / Kabupaten</label>
+                                                            {
+                                                                this.state.city ? (
+                                                                    <select className="form-control select2" name="kabupaten" value={this.state.infoweb.kabupaten} onChange={this.infoChange} required>
+                                                                        <option value="">Pilih kota/kabupaten</option>
+                                                                        {
+                                                                            this.state.city.map((value, index) => {
+                                                                                return(
+                                                                                <option key={index} value={value.city_name+"-"+value.type}>{value.city_name} - ({value.type})</option>
+                                                                                )
+                                                                            })
+                                                                        }
+                                                                    </select>
+                                                                ):(
+                                                                    <select className="form-control select2" name="kabupaten" value={this.state.infoweb.kabupaten} onChange={this.infoChange} required>
+                                                                        <option value="">Pilih kota/kabupaten</option>
+                                                                    </select>
+                                                                )
+                                                            }
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label>Kecamatan</label>
+                                                            {
+                                                                this.state.subdistrict ? (
+                                                                    <select className="form-control select2" name="kecamatan" value={this.state.infoweb.kecamatan} onChange={this.infoChange} required>
+                                                                        <option value="">Pilih kecamatan</option>
+                                                                        {
+                                                                            this.state.subdistrict.map((value, index) => {
+                                                                                return(
+                                                                                <option key={index} value={value.subdistrict_name}>{value.subdistrict_name}</option>
+                                                                                )
+                                                                            })
+                                                                        }
+                                                                    </select>
+                                                                ):(
+                                                                    <select className="form-control select2" name="kecamatan" value={this.state.infoweb.kecamatan} onChange={this.infoChange} required>
+                                                                        <option value="">Pilih kecamatan</option>
+                                                                    </select>
+                                                                )
+                                                            }
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label>Kode Pos </label>
+                                                            <input type="text" className="form-control" name="kode_pos" value={this.state.infoweb.kode_pos} onChange={this.infoChange} placeholder="Enter kode pos" required />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <div className="col-sm-offset-2 col-sm-10">
+                                                                <button type="submit" className="btn btn-primary">
+                                                                    <FontAwesomeIcon icon={faSave}/> Simpan 
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                )
+                                            }
                                             </div>
                                         </div>
                                     </div>
@@ -513,27 +534,37 @@ class Setting extends Component {
                                                 </div>
                                             </div>
                                             <div className="card-body">
-                                                <form onSubmit={e => this.sosmedSubmit(e)} className="form-horizontal" style={{padding:"10px"}}>
-                                                    <div className="form-group">
-                                                        <label>Email </label>
-                                                        <input type="email" className="form-control" name="email" value={this.state.sosmed.email}  onChange={this.sosmedChange} placeholder="Enter email" required/>
+                                            {
+                                                this.state.sosmed.loading ? (
+                                                    <div className="text-center" >
+                                                        <Loader type="Bars" color="#00BFFF" height={60} width={100} />
+                                                        Loading ...
                                                     </div>
-                                                    <div className="form-group">
-                                                        <label>Whatsapp (*Jangan pakai +)</label>
-                                                        <input type="tel" className="form-control" name="whatsapp" value={this.state.sosmed.whatsapp} onChange={this.sosmedChange} placeholder="628xxxxxxxxxx" required/>
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <label>Instagram</label>
-                                                        <input type="text" className="form-control" name="instagram" value={this.state.sosmed.instagram} onChange={this.sosmedChange} placeholder="https://www.instagram.com/nama_ig/" required/>
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <div className="col-sm-offset-2 col-sm-10">
-                                                            <button type="submit" className="btn btn-primary">
-                                                                <FontAwesomeIcon icon={faSave}/> Simpan 
-                                                            </button>
+                                                ):(
+                                                    <form onSubmit={e => this.sosmedSubmit(e)} className="form-horizontal" style={{padding:"10px"}}>
+                                                        <div className="form-group">
+                                                            <label>Email </label>
+                                                            <input type="email" className="form-control" name="email" value={this.state.sosmed.email}  onChange={this.sosmedChange} placeholder="Enter email" required/>
                                                         </div>
-                                                    </div>
-                                                </form>
+                                                        <div className="form-group">
+                                                            <label>Whatsapp (*Jangan pakai +)</label>
+                                                            <input type="tel" className="form-control" name="whatsapp" value={this.state.sosmed.whatsapp} onChange={this.sosmedChange} placeholder="628xxxxxxxxxx" required/>
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label>Instagram</label>
+                                                            <input type="text" className="form-control" name="instagram" value={this.state.sosmed.instagram} onChange={this.sosmedChange} placeholder="https://www.instagram.com/nama_ig/" required/>
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <div className="col-sm-offset-2 col-sm-10">
+                                                                <button type="submit" className="btn btn-primary">
+                                                                    <FontAwesomeIcon icon={faSave}/> Simpan 
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                )
+                                            }
+                                                
                                             </div>
                                         </div>
                                     </div>

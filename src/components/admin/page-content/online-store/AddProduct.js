@@ -2,14 +2,17 @@ import React, { Component } from "react";
 import { Redirect, useHistory, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faArrowLeft, faPlus, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
-// import axios from "axios";
+import axios from "axios";
 import $ from 'jquery';
 import '../../../lib/select2.css';
+import '../../../lib/ekko-lightbox.css';
 import 'select2';
 
 // ES6 Modules or TypeScript
 import Swal from 'sweetalert2'
 
+const uAPI = 'https://api-online-store-v1.herokuapp.com';
+const uAPIlocal = 'http://localhost:8080';
 
 function BtnBack() {
     let history = useHistory();
@@ -19,6 +22,7 @@ function BtnBack() {
         </button>
     );
 }
+
 
 class AddProduct extends Component {
     constructor(props) {
@@ -62,61 +66,63 @@ class AddProduct extends Component {
         this.ukuranChange = this.ukuranChange.bind(this);
         this.addProdukSubmit = this.addProdukSubmit.bind(this);
 
+
         this.fotoUtamaReset = this.fotoUtamaReset.bind(this);
         this.fotoUtamaChange = this.fotoUtamaChange.bind(this);
         this.fotoUtamaAdd = this.fotoUtamaAdd.bind(this);
-        this.fotoUtamaShow = this.fotoUtamaShow.bind(this);
+        // this.fotoUtamaShow = this.fotoUtamaShow.bind(this);
         this.fotoUtamaDelete = this.fotoUtamaDelete.bind(this);
 
         this.foto1Reset = this.foto1Reset.bind(this);
         this.foto1Change = this.foto1Change.bind(this);
         this.foto1Add = this.foto1Add.bind(this);
-        this.foto1Show = this.foto1Show.bind(this);
+        // this.foto1Show = this.foto1Show.bind(this);
         this.foto1Delete = this.foto1Delete.bind(this);
 
         this.foto2Reset = this.foto2Reset.bind(this);
         this.foto2Change = this.foto2Change.bind(this);
         this.foto2Add = this.foto2Add.bind(this);
-        this.foto2Show = this.foto2Show.bind(this);
+        // this.foto2Show = this.foto2Show.bind(this);
         this.foto2Delete = this.foto2Delete.bind(this);
 
         this.foto3Reset = this.foto3Reset.bind(this);
         this.foto3Change = this.foto3Change.bind(this);
         this.foto3Add = this.foto3Add.bind(this);
-        this.foto3Show = this.foto3Show.bind(this);
+        // this.foto3Show = this.foto3Show.bind(this);
         this.foto3Delete = this.foto3Delete.bind(this);
 
         this.foto4Reset = this.foto4Reset.bind(this);
         this.foto4Change = this.foto4Change.bind(this);
         this.foto4Add = this.foto4Add.bind(this);
-        this.foto4Show = this.foto4Show.bind(this);
+        // this.foto4Show = this.foto4Show.bind(this);
         this.foto4Delete = this.foto4Delete.bind(this);
 
         this.foto5Reset = this.foto5Reset.bind(this);
         this.foto5Change = this.foto5Change.bind(this);
         this.foto5Add = this.foto5Add.bind(this);
-        this.foto5Show = this.foto5Show.bind(this);
+        // this.foto5Show = this.foto5Show.bind(this);
         this.foto5Delete = this.foto5Delete.bind(this);
 
         this.foto6Reset = this.foto6Reset.bind(this);
         this.foto6Change = this.foto6Change.bind(this);
         this.foto6Add = this.foto6Add.bind(this);
-        this.foto6Show = this.foto6Show.bind(this);
+        // this.foto6Show = this.foto6Show.bind(this);
         this.foto6Delete = this.foto6Delete.bind(this);
 
         this.foto7Reset = this.foto7Reset.bind(this);
         this.foto7Change = this.foto7Change.bind(this);
         this.foto7Add = this.foto7Add.bind(this);
-        this.foto7Show = this.foto7Show.bind(this);
+        // this.foto7Show = this.foto7Show.bind(this);
         this.foto7Delete = this.foto7Delete.bind(this);
 
         this.foto8Reset = this.foto8Reset.bind(this);
         this.foto8Change = this.foto8Change.bind(this);
         this.foto8Add = this.foto8Add.bind(this);
-        this.foto8Show = this.foto8Show.bind(this);
+        // this.foto8Show = this.foto8Show.bind(this);
         this.foto8Delete = this.foto8Delete.bind(this);
 
 
+        this.formAddProduk = React.createRef();
         this.nama_produkInput = React.createRef();
         this.fotoUtamaInput = React.createRef();
         this.foto1Input = React.createRef();
@@ -135,6 +141,59 @@ class AddProduct extends Component {
         this.addUkuranSubmit = this.addUkuranSubmit.bind(this);
         this.closeUkuran = React.createRef();
 
+        this.getApikategoriList = this.getApikategoriList.bind(this);
+        this.getApiwarnaList = this.getApiwarnaList.bind(this);
+        this.getApiukuranList = this.getApiukuranList.bind(this);
+
+    }
+
+    getApikategoriList(e){
+        axios.get(uAPIlocal+'/api/v1/categorylist')
+        .then(function(response) {
+            return response;
+        })
+        .then(response => {
+            var data = response.data.results;
+            this.setState({
+                kategoriList: data
+            });
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        });
+    }
+    getApiwarnaList(e){
+        axios.get(uAPIlocal+'/api/v1/colorlist')
+        .then(function(response) {
+            return response;
+        })
+        .then(response => {
+            var data = response.data.results;
+            this.setState({
+                warnaList: data
+            });
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        });
+    }
+    getApiukuranList(e){
+        axios.get(uAPIlocal+'/api/v1/sizelist')
+        .then(function(response) {
+            return response;
+        })
+        .then(response => {
+            var data = response.data.results;
+            this.setState({
+                ukuranList: data
+            });
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        });
     }
 
     addKategoriSubmit(e){
@@ -148,7 +207,7 @@ class AddProduct extends Component {
             data !== '' && this.setState({
                 kategoriList: [...this.state.kategoriList, data],
                 duplikat: ''
-            })
+            },()=>console.log(this.state))
             this.addKategori.reset();
             this.closeKategori.current.click();
         }
@@ -161,7 +220,7 @@ class AddProduct extends Component {
         const onTheList = this.state.warnaList.includes(data);
 
         if (onTheList) {
-            this.setState({duplikat: 'duplikat'})
+            this.setState({duplikat2: 'duplikat'})
         } else {
             this.setState({
                 warnaList: [...this.state.warnaList, data],
@@ -178,7 +237,7 @@ class AddProduct extends Component {
         const onTheList = this.state.ukuranList.includes(data);
 
         if (onTheList) {
-            this.setState({duplikat: 'duplikat'})
+            this.setState({duplikat3: 'duplikat'})
         } else {
             this.setState({
                 ukuranList: [...this.state.ukuranList, data],
@@ -206,7 +265,6 @@ class AddProduct extends Component {
             value.push(options[i].value);
             }
         }
-        // console.log(value)
         this.setState({
             addProduk:{
                 ...this.state.addProduk,
@@ -224,7 +282,6 @@ class AddProduct extends Component {
             value.push(options[i].value);
             }
         }
-        // console.log(value)
         this.setState({
             addProduk:{
                 ...this.state.addProduk,
@@ -242,7 +299,6 @@ class AddProduct extends Component {
             value.push(options[i].value);
             }
         }
-        // console.log(value)
         this.setState({
             addProduk:{
                 ...this.state.addProduk,
@@ -270,14 +326,11 @@ class AddProduct extends Component {
                 }
                 
             }
-          },()=>console.log(this.state.addProduk));
+          });
         }
     };
     fotoUtamaAdd(e){
         this.fotoUtamaInput.current.click();
-    }
-    fotoUtamaShow(e){
-        alert('show')
     }
     fotoUtamaDelete(e){
         this.setState({
@@ -290,7 +343,7 @@ class AddProduct extends Component {
                 }
                 
             }
-        },()=>console.log(this.state.addProduk));
+        });
     }
 
     foto1Reset(e){
@@ -312,14 +365,11 @@ class AddProduct extends Component {
                 }
                 
             }
-          },()=>console.log(this.state.addProduk));
+          });
         }
     };
     foto1Add(e){
         this.foto1Input.current.click();
-    }
-    foto1Show(e){
-        alert('show')
     }
     foto1Delete(e){
         this.setState({
@@ -332,7 +382,7 @@ class AddProduct extends Component {
                 }
                 
             }
-        },()=>console.log(this.state.addProduk));
+        });
     }
 
     foto2Reset(e){
@@ -354,14 +404,11 @@ class AddProduct extends Component {
                 }
                 
             }
-          },()=>console.log(this.state.addProduk));
+          });
         }
     };
     foto2Add(e){
         this.foto2Input.current.click();
-    }
-    foto2Show(e){
-        alert('show')
     }
     foto2Delete(e){
         this.setState({
@@ -374,7 +421,7 @@ class AddProduct extends Component {
                 }
                 
             }
-        },()=>console.log(this.state.addProduk));
+        });
     }
 
     foto3Reset(e){
@@ -396,14 +443,11 @@ class AddProduct extends Component {
                 }
                 
             }
-          },()=>console.log(this.state.addProduk));
+          });
         }
     };
     foto3Add(e){
         this.foto3Input.current.click();
-    }
-    foto3Show(e){
-        alert('show')
     }
     foto3Delete(e){
         this.setState({
@@ -416,7 +460,7 @@ class AddProduct extends Component {
                 }
                 
             }
-        },()=>console.log(this.state.addProduk));
+        });
     }
 
     foto4Reset(e){
@@ -438,14 +482,11 @@ class AddProduct extends Component {
                 }
                 
             }
-          },()=>console.log(this.state.addProduk));
+          });
         }
     };
     foto4Add(e){
         this.foto4Input.current.click();
-    }
-    foto4Show(e){
-        alert('show')
     }
     foto4Delete(e){
         this.setState({
@@ -458,7 +499,7 @@ class AddProduct extends Component {
                 }
                 
             }
-        },()=>console.log(this.state.addProduk));
+        });
     }
 
     foto5Reset(e){
@@ -480,14 +521,11 @@ class AddProduct extends Component {
                 }
                 
             }
-          },()=>console.log(this.state.addProduk));
+          });
         }
     };
     foto5Add(e){
         this.foto5Input.current.click();
-    }
-    foto5Show(e){
-        alert('show')
     }
     foto5Delete(e){
         this.setState({
@@ -500,7 +538,7 @@ class AddProduct extends Component {
                 }
                 
             }
-        },()=>console.log(this.state.addProduk));
+        });
     }
 
     foto6Reset(e){
@@ -522,14 +560,11 @@ class AddProduct extends Component {
                 }
                 
             }
-          },()=>console.log(this.state.addProduk));
+          });
         }
     };
     foto6Add(e){
         this.foto6Input.current.click();
-    }
-    foto6Show(e){
-        alert('show')
     }
     foto6Delete(e){
         this.setState({
@@ -542,7 +577,7 @@ class AddProduct extends Component {
                 }
                 
             }
-        },()=>console.log(this.state.addProduk));
+        });
     }
 
     foto7Reset(e){
@@ -564,14 +599,11 @@ class AddProduct extends Component {
                 }
                 
             }
-          },()=>console.log(this.state.addProduk));
+          });
         }
     };
     foto7Add(e){
         this.foto7Input.current.click();
-    }
-    foto7Show(e){
-        alert('show')
     }
     foto7Delete(e){
         this.setState({
@@ -584,7 +616,7 @@ class AddProduct extends Component {
                 }
                 
             }
-        },()=>console.log(this.state.addProduk));
+        });
     }
 
     foto8Reset(e){
@@ -606,14 +638,11 @@ class AddProduct extends Component {
                 }
                 
             }
-          },()=>console.log(this.state.addProduk));
+          });
         }
     };
     foto8Add(e){
         this.foto8Input.current.click();
-    }
-    foto8Show(e){
-        alert('show')
     }
     foto8Delete(e){
         this.setState({
@@ -626,7 +655,7 @@ class AddProduct extends Component {
                 }
                 
             }
-        },()=>console.log(this.state.addProduk));
+        });
     }
 
 
@@ -646,7 +675,7 @@ class AddProduct extends Component {
     //             }
                 
     //         }
-    //       },()=>console.log(this.state.addProduk));
+    //       });
     //     }
     // };
 
@@ -658,6 +687,31 @@ class AddProduct extends Component {
 
     addProdukSubmit(e){
         e.preventDefault();
+        const formData = new FormData();
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        };
+        formData.append('nama_produk',this.state.addProduk.nama_produk);
+        formData.append('deskripsi_produk',this.state.addProduk.deskripsi_produk);
+        formData.append('kategori',this.state.addProduk.kategori.join(','));
+        formData.append('warna',this.state.addProduk.warna.join(','));
+        formData.append('ukuran',this.state.addProduk.ukuran.join(','));
+        formData.append('harga',this.state.addProduk.harga);
+        formData.append('stok',this.state.addProduk.stok);
+        formData.append('foto_utama',this.state.addProduk.foto_utama.raw);
+        formData.append('foto1',this.state.addProduk.foto1.raw);
+        formData.append('foto2',this.state.addProduk.foto2.raw);
+        formData.append('foto3',this.state.addProduk.foto3.raw);
+        formData.append('foto4',this.state.addProduk.foto4.raw);
+        formData.append('foto5',this.state.addProduk.foto5.raw);
+        formData.append('foto6',this.state.addProduk.foto6.raw);
+        formData.append('foto7',this.state.addProduk.foto7.raw);
+        formData.append('foto8',this.state.addProduk.foto8.raw);
+        formData.append('berat',this.state.addProduk.berat);
+        formData.append('kondisi',this.state.addProduk.kondisi);
+        
         Swal.fire({
             title: 'Are you sure?',
             icon: 'warning',
@@ -665,9 +719,9 @@ class AddProduct extends Component {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes!',
-            allowOutsideClick: false
-        }).then((result) => {
-            if (result.value) {
+            allowOutsideClick: false,
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
                 if (this.state.addProduk.foto_utama.icon === true) {
                     Swal.fire({
                         title: 'Oops!',
@@ -676,17 +730,37 @@ class AddProduct extends Component {
                         allowOutsideClick: false
                     })
                 } else {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'Success Tambah Produk',
-                        icon: 'success',
-                        allowOutsideClick: false
+                    return axios.post(uAPIlocal+'/api/v1/produk',formData,config)
+                    .then(function(response) {
+                        //status 406 = data sudah ada (not acceptable)
+                        if (response.data.status === 406 ) {
+                            Swal.fire({
+                                title: 'Oops...!',
+                                html: response.data.message,
+                                icon: 'error',
+                                allowOutsideClick: false,
+                            })
+                        }
                     })
+                    .catch(function (error) {
+                        console.log(error);
+                        Swal.fire('Oops...', 'Something went wrong!', 'error');
+                    });
+                    
                 }
+            }
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Success tambah produk',
+                    icon: 'success',
+                    allowOutsideClick: false,
+                })
+                .then(() => this.setState({ redirect: true }))
             }
         })
         
-        console.log(this.state.addProduk);
         
         // Swal.fire({
         //     title: 'Are you sure?',
@@ -720,6 +794,9 @@ class AddProduct extends Component {
     }
 
     componentDidMount(){
+        this.getApikategoriList();
+        this.getApiwarnaList();
+        this.getApiukuranList();
         $('.select2').select2();
         $('.select2[name="kategori"]').on("change", this.kategoriChange);
         $('.select2[name="warna"]').on("change", this.warnaChange);
@@ -730,7 +807,6 @@ class AddProduct extends Component {
         //     e.preventDefault();
 
         //     var data = $("#addKategori :input").serialize();
-        //     console.log(data);
             
         //     // $.ajax({
         //     //     url:'http://smartstock.api-8.online/api/AddJob.php',
@@ -738,7 +814,6 @@ class AddProduct extends Component {
         //     //     type:'GET',
         //     //     data: data,
         //     //     success:function(result){
-        //     //         console.log(result[0].message);
         //     //         $("#addJob")[0].reset();
         //     //         $("#modal-default").modal('hide');
         //     //     }
@@ -759,7 +834,7 @@ class AddProduct extends Component {
                                 <h3 className="card-title">Tambah Produk</h3>
                             </div>
                             <div className="card-body">
-                                <form onSubmit={e => this.addProdukSubmit(e)} className="form-horizontal" style={{padding:"10px"}}>
+                                <form ref={form => this.formAddProduk = form} onSubmit={e => this.addProdukSubmit(e)} className="form-horizontal" style={{padding:"10px"}}>
                                     <h4 style={{ paddingBottom:'15px'}}>Informasi Produk</h4>
                                     <div className="form-group row">
                                         <label className="col-sm-2 col-form-label">Nama Produk</label>
@@ -771,7 +846,7 @@ class AddProduct extends Component {
                                     <div className="form-group row">
                                         <label className="col-sm-2 col-form-label">Deskripsi Produk</label>
                                         <div className="col-sm-10">
-                                            <textarea name="deskripsi_produk" className="form-control" value={this.state.addProduk.deskripsi_produk} onChange={this.addProdukChange} rows='9' required />
+                                            <textarea name="deskripsi_produk" className="form-control" value={this.state.addProduk.deskripsi_produk} onChange={this.addProdukChange} rows='9' required/>
                                         </div>
                                     </div>
 
@@ -921,11 +996,13 @@ class AddProduct extends Component {
                                                                                 position: 'relative', 
                                                                                 right: '-32%', 
                                                                             }} />
-                                                                            <FontAwesomeIcon onClick={this.fotoUtamaShow} icon={faEye} color='green' style={{
+                                                                            <Link to='#' data-toggle="modal" data-target="#modal-fotoUtama" >
+                                                                            <FontAwesomeIcon icon={faEye} color='green' style={{
                                                                                 cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
                                                                                 position: 'relative', 
                                                                                 left: '-32%', 
                                                                             }} />
+                                                                            </Link>
                                                                         </div>
                                                                     </div>
                                                                 ) 
@@ -977,11 +1054,13 @@ class AddProduct extends Component {
                                                                                 position: 'relative', 
                                                                                 right: '-32%', 
                                                                             }} />
-                                                                            <FontAwesomeIcon onClick={this.foto1Show} icon={faEye} color='green' style={{
+                                                                            <Link to='#' data-toggle="modal" data-target="#modal-foto1" >
+                                                                            <FontAwesomeIcon icon={faEye} color='green' style={{
                                                                                 cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
                                                                                 position: 'relative', 
                                                                                 left: '-32%', 
                                                                             }} />
+                                                                            </Link>
                                                                         </div>
                                                                     </div>
                                                                 ) 
@@ -1033,11 +1112,13 @@ class AddProduct extends Component {
                                                                                 position: 'relative', 
                                                                                 right: '-32%', 
                                                                             }} />
-                                                                            <FontAwesomeIcon onClick={this.foto2Show} icon={faEye} color='green' style={{
+                                                                            <Link to='#' data-toggle="modal" data-target="#modal-foto2" >
+                                                                            <FontAwesomeIcon icon={faEye} color='green' style={{
                                                                                 cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
                                                                                 position: 'relative', 
                                                                                 left: '-32%', 
                                                                             }} />
+                                                                            </Link>
                                                                         </div>
                                                                     </div>
                                                                 ) 
@@ -1089,11 +1170,13 @@ class AddProduct extends Component {
                                                                                 position: 'relative', 
                                                                                 right: '-32%', 
                                                                             }} />
-                                                                            <FontAwesomeIcon onClick={this.foto3Show} icon={faEye} color='green' style={{
+                                                                            <Link to='#' data-toggle="modal" data-target="#modal-foto3" >
+                                                                            <FontAwesomeIcon icon={faEye} color='green' style={{
                                                                                 cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
                                                                                 position: 'relative', 
                                                                                 left: '-32%', 
                                                                             }} />
+                                                                            </Link>
                                                                         </div>
                                                                     </div>
                                                                 ) 
@@ -1145,11 +1228,13 @@ class AddProduct extends Component {
                                                                                 position: 'relative', 
                                                                                 right: '-32%', 
                                                                             }} />
-                                                                            <FontAwesomeIcon onClick={this.foto4Show} icon={faEye} color='green' style={{
+                                                                            <Link to='#' data-toggle="modal" data-target="#modal-foto4" >
+                                                                            <FontAwesomeIcon icon={faEye} color='green' style={{
                                                                                 cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
                                                                                 position: 'relative', 
                                                                                 left: '-32%', 
                                                                             }} />
+                                                                            </Link>
                                                                         </div>
                                                                     </div>
                                                                 ) 
@@ -1201,11 +1286,13 @@ class AddProduct extends Component {
                                                                                 position: 'relative', 
                                                                                 right: '-32%', 
                                                                             }} />
-                                                                            <FontAwesomeIcon onClick={this.foto5Show} icon={faEye} color='green' style={{
+                                                                            <Link to='#' data-toggle="modal" data-target="#modal-foto5" >
+                                                                            <FontAwesomeIcon icon={faEye} color='green' style={{
                                                                                 cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
                                                                                 position: 'relative', 
                                                                                 left: '-32%', 
                                                                             }} />
+                                                                            </Link>
                                                                         </div>
                                                                     </div>
                                                                 ) 
@@ -1257,11 +1344,13 @@ class AddProduct extends Component {
                                                                                 position: 'relative', 
                                                                                 right: '-32%', 
                                                                             }} />
-                                                                            <FontAwesomeIcon onClick={this.foto6Show} icon={faEye} color='green' style={{
+                                                                            <Link to='#' data-toggle="modal" data-target="#modal-foto6" >
+                                                                            <FontAwesomeIcon icon={faEye} color='green' style={{
                                                                                 cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
                                                                                 position: 'relative', 
                                                                                 left: '-32%', 
                                                                             }} />
+                                                                            </Link>
                                                                         </div>
                                                                     </div>
                                                                 ) 
@@ -1313,11 +1402,13 @@ class AddProduct extends Component {
                                                                                 position: 'relative', 
                                                                                 right: '-32%', 
                                                                             }} />
-                                                                            <FontAwesomeIcon onClick={this.foto7Show} icon={faEye} color='green' style={{
+                                                                            <Link to='#' data-toggle="modal" data-target="#modal-foto7" >
+                                                                            <FontAwesomeIcon icon={faEye} color='green' style={{
                                                                                 cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
                                                                                 position: 'relative', 
                                                                                 left: '-32%', 
                                                                             }} />
+                                                                            </Link>
                                                                         </div>
                                                                     </div>
                                                                 ) 
@@ -1369,11 +1460,13 @@ class AddProduct extends Component {
                                                                                 position: 'relative', 
                                                                                 right: '-32%', 
                                                                             }} />
-                                                                            <FontAwesomeIcon onClick={this.foto8Show} icon={faEye} color='green' style={{
+                                                                            <Link to='#' data-toggle="modal" data-target="#modal-foto8" >
+                                                                            <FontAwesomeIcon icon={faEye} color='green' style={{
                                                                                 cursor:'pointer', border:'2px dashed green', borderRadius:'100%', padding:'4px', width:'29px', height:'29px',
                                                                                 position: 'relative', 
                                                                                 left: '-32%', 
                                                                             }} />
+                                                                            </Link>
                                                                         </div>
                                                                     </div>
                                                                 ) 
@@ -1538,6 +1631,142 @@ class AddProduct extends Component {
                             </div>
                             <div className="modal-footer justify-content-between">
                                 <button type="button" className="btn btn-default" data-dismiss="modal" ref={this.closeUkuran}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="modal fade" id="modal-fotoUtama">
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">{this.state.addProduk.foto_utama.raw.name}</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                            <img src={this.state.addProduk.foto_utama.preview} alt={this.state.addProduk.foto_utama.raw.name} style={{width: '100%',height: 'auto',}}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade" id="modal-foto1">
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">{this.state.addProduk.foto1.raw.name}</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                            <img src={this.state.addProduk.foto1.preview} alt={this.state.addProduk.foto1.raw.name} style={{width: '100%',height: 'auto',}}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade" id="modal-foto2">
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">{this.state.addProduk.foto2.raw.name}</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                            <img src={this.state.addProduk.foto2.preview} alt={this.state.addProduk.foto2.raw.name} style={{width: '100%',height: 'auto',}}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade" id="modal-foto3">
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">{this.state.addProduk.foto3.raw.name}</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                            <img src={this.state.addProduk.foto3.preview} alt={this.state.addProduk.foto3.raw.name} style={{width: '100%',height: 'auto',}}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade" id="modal-foto4">
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">{this.state.addProduk.foto4.raw.name}</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                            <img src={this.state.addProduk.foto4.preview} alt={this.state.addProduk.foto4.raw.name} style={{width: '100%',height: 'auto',}}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade" id="modal-foto5">
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">{this.state.addProduk.foto5.raw.name}</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                            <img src={this.state.addProduk.foto5.preview} alt={this.state.addProduk.foto5.raw.name} style={{width: '100%',height: 'auto',}}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade" id="modal-foto6">
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">{this.state.addProduk.foto6.raw.name}</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                            <img src={this.state.addProduk.foto6.preview} alt={this.state.addProduk.foto6.raw.name} style={{width: '100%',height: 'auto',}}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade" id="modal-foto7">
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">{this.state.addProduk.foto7.raw.name}</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                            <img src={this.state.addProduk.foto7.preview} alt={this.state.addProduk.foto7.raw.name} style={{width: '100%',height: 'auto',}}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade" id="modal-foto8">
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">{this.state.addProduk.foto8.raw.name}</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                            <img src={this.state.addProduk.foto8.preview} alt={this.state.addProduk.foto8.raw.name} style={{width: '100%',height: 'auto',}}/>
                             </div>
                         </div>
                     </div>
