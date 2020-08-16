@@ -11,6 +11,7 @@ import Loader from 'react-loader-spinner';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const uAPI = 'https://api-online-store-v1.herokuapp.com';
+const uAPIlocal = 'http://localhost:8080';
 
 class AddBank extends Component {
     constructor(props) {
@@ -30,7 +31,7 @@ class AddBank extends Component {
     }
 
     componentDidMount(){
-        axios.get(uAPI+'/api/v1/banklist/'+this.props.id)
+        axios.get(uAPIlocal+'/api/v1/banklist/'+this.props.id)
         .then(function(response) {
             return response;
         })
@@ -74,7 +75,7 @@ class AddBank extends Component {
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
             preConfirm: () => {
-                return axios.put(uAPI+'/api/v1/banklist',{
+                return axios.put(uAPIlocal+'/api/v1/banklist',{
                     id: this.state.dataBank.id,
                     bank_name: this.state.dataBank.bank_name,
                     bank_rekening: this.state.dataBank.bank_rekening,

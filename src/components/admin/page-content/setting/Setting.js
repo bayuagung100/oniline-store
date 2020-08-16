@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-
+import Select from 'react-select';
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faCreditCard, faExclamationTriangle, faSave } from "@fortawesome/free-solid-svg-icons";
 import Tbl from "../../../lib/Datatables";
 import $ from 'jquery';
-import '../../../lib/select2.css';
-import 'select2';
 import axios from "axios";
+// import 'select2';
 // import AddBank from './AddBank';
 
 // ES6 Modules or TypeScript
@@ -19,6 +18,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 
 const uAPI = 'https://api-online-store-v1.herokuapp.com';
+const uAPIlocal = 'http://localhost:8080';
 
 
 class Setting extends Component {
@@ -70,7 +70,7 @@ class Setting extends Component {
         newinfo[e.target.name] = e.target.value;
         this.setState({
             infoweb: newinfo
-        });
+        },()=>console.log(this.state.infoweb));
     }
     infoSubmit(e) {
         e.preventDefault();
@@ -84,7 +84,7 @@ class Setting extends Component {
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
             preConfirm: () => {
-                return axios.put(uAPI+'/api/v1/infoweb',{
+                return axios.put(uAPIlocal+'/api/v1/infoweb',{
                     id: this.state.infoweb.id,
                     judul: this.state.infoweb.judul,
                     deskripsi: this.state.infoweb.deskripsi,
@@ -130,7 +130,7 @@ class Setting extends Component {
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
             preConfirm: () => {
-                return axios.put(uAPI+'/api/v1/sosmed',{
+                return axios.put(uAPIlocal+'/api/v1/sosmed',{
                     id: this.state.sosmed.id,
                     email: this.state.sosmed.email,
                     whatsapp: this.state.sosmed.whatsapp,
@@ -169,17 +169,17 @@ class Setting extends Component {
         // });
 
         // pakai axios
-        axios.get(uAPI+'/api/v1/province')
+        axios.get(uAPIlocal+'/api/v1/province')
         .then(response => 
             response.data.results.map(province => ({
-                province_id: `${province.province_id}`,
-                province_name: `${province.province_name}`,
+                value: `${province.province_name}`,
+                label: `${province.province_name}`,
             }))
         )
         .then(province => {
             this.setState({
                 province
-            });
+            },()=>console.log(this.state.province));
         })
         .catch(function (error) {
             // handle error
@@ -199,19 +199,21 @@ class Setting extends Component {
         // });
 
         // pakai axios
-        axios.get(uAPI+'/api/v1/city')
+        axios.get(uAPIlocal+'/api/v1/city')
         .then(response => 
             response.data.results.map(city => ({
-                city_id: `${city.city_id}`,
-                city_name: `${city.city_name}`,
-                type: `${city.type}`,
-                postal_code: `${city.postal_code}`,
+                value: `${city.city_name} - (${city.type})`,
+                label: `${city.city_name} - (${city.type})`,
+                // city_id: `${city.city_id}`,
+                // city_name: `${city.city_name}`,
+                // type: `${city.type}`,
+                // postal_code: `${city.postal_code}`,
             }))
         )
         .then(city => {
             this.setState({
                 city
-            });
+            },()=>console.log(this.state.city));
         })
         .catch(function (error) {
             // handle error
@@ -231,11 +233,13 @@ class Setting extends Component {
         // });
 
         // pakai axios
-        axios.get(uAPI+'/api/v1/subdistrict')
+        axios.get(uAPIlocal+'/api/v1/subdistrict')
         .then(response => 
             response.data.results.map(subdistrict => ({
-                subdistrict_id: `${subdistrict.subdistrict_id}`,
-                subdistrict_name: `${subdistrict.subdistrict_name}`,
+                value: `${subdistrict.subdistrict_name}`,
+                label: `${subdistrict.subdistrict_name}`,
+                // subdistrict_id: `${subdistrict.subdistrict_id}`,
+                // subdistrict_name: `${subdistrict.subdistrict_name}`,
             }))
         )
         .then(subdistrict => {
@@ -262,16 +266,25 @@ class Setting extends Component {
         // });
 
         // pakai axios
-        axios.get(uAPI+'/api/v1/infoweb')
+        axios.get(uAPIlocal+'/api/v1/infoweb')
         .then(response => 
             response.data.results.map(infoweb => ({
                 id: `${infoweb.id}`,
                 judul: `${infoweb.judul_website}`,
                 deskripsi: `${infoweb.deskripsi_website}`,
                 alamat: `${infoweb.alamat}`,
-                provinsi: `${infoweb.province}`,
-                kabupaten: `${infoweb.city}`,
-                kecamatan: `${infoweb.subdistrict}`,
+                provinsi: {
+                    value: `${infoweb.province}`,
+                    label: `${infoweb.province}`,
+                },
+                kabupaten: {
+                    value: `${infoweb.city}`,
+                    label: `${infoweb.city}`,
+                },
+                kecamatan: {
+                    value: `${infoweb.subdistrict}`,
+                    label: `${infoweb.subdistrict}`,
+                },
                 kode_pos: `${infoweb.postal_code}`,
                 loading: false,
             }))
@@ -279,7 +292,7 @@ class Setting extends Component {
         .then(infoweb => {
             this.setState({
                 infoweb: infoweb[0]
-            });
+            },()=>console.log(this.state.infoweb));
         })
         .catch(function (error) {
             // handle error
@@ -299,7 +312,7 @@ class Setting extends Component {
         // });
 
         // pakai axios
-        axios.get(uAPI+'/api/v1/sosmed')
+        axios.get(uAPIlocal+'/api/v1/sosmed')
         .then(response => 
             response.data.results.map(sosmed => ({
                 id: `${sosmed.id}`,
@@ -351,9 +364,36 @@ class Setting extends Component {
         // })
     }
     
+    provChange = selectedProv => {
+        this.setState({ 
+            infoweb:{
+                ...this.state.infoweb,
+                provinsi: selectedProv.value,
+            }
+        },()=>console.log(this.state.infoweb));
+    };
+
+    cityChange = selectedCity => {
+        this.setState({ 
+            infoweb:{
+                ...this.state.infoweb,
+                kabupaten: selectedCity.value,
+            }
+        },()=>console.log(this.state.infoweb));
+    };
+
+    subChange = selectedSub => {
+        this.setState({ 
+            infoweb:{
+                ...this.state.infoweb,
+                kecamatan: selectedSub.value,
+            }
+        },()=>console.log(this.state.infoweb));
+    };
+    
 
     componentDidMount(){
-        $('.select2').select2();
+        // $('.select2').select2();
         $('.select2').on("change", this.infoChange);
 
         this.getApiSosmed();
@@ -445,6 +485,36 @@ class Setting extends Component {
                                                         </div>
                                                         <div className="form-group">
                                                             <label>Provinsi</label>
+                                                            <Select
+                                                                placeholder='Pilih Provinsi'
+                                                                defaultValue={this.state.infoweb.provinsi}
+                                                                value={this.state.selectedProv}
+                                                                onChange={this.provChange}
+                                                                options={this.state.province}
+                                                            />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label>Kota / Kabupaten</label>
+                                                            <Select
+                                                                placeholder='Pilih Kota/Kabupaten'
+                                                                defaultValue={this.state.infoweb.kabupaten}
+                                                                value={this.state.selectedCity}
+                                                                onChange={this.cityChange}
+                                                                options={this.state.city}
+                                                            />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label>Kecamatan</label>
+                                                            <Select
+                                                                placeholder='Pilih Kecamatan'
+                                                                defaultValue={this.state.infoweb.kecamatan}
+                                                                value={this.state.selectedSub}
+                                                                onChange={this.subChange}
+                                                                options={this.state.subdistrict}
+                                                            />
+                                                        </div>
+                                                        {/* <div className="form-group">
+                                                            <label>Provinsi</label>
                                                             {
                                                                 this.state.province ? (
                                                                     <select className="form-control select2" name="provinsi" value={this.state.infoweb.provinsi} onChange={this.infoChange} required>
@@ -505,7 +575,7 @@ class Setting extends Component {
                                                                     </select>
                                                                 )
                                                             }
-                                                        </div>
+                                                        </div> */}
                                                         <div className="form-group">
                                                             <label>Kode Pos </label>
                                                             <input type="text" className="form-control" name="kode_pos" value={this.state.infoweb.kode_pos} onChange={this.infoChange} placeholder="Enter kode pos" required />

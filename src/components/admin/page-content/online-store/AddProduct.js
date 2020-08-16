@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faArrowLeft, faPlus, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import $ from 'jquery';
-import '../../../lib/select2.css';
-import '../../../lib/ekko-lightbox.css';
-import 'select2';
+// import '../../../lib/select2.css';
+// import '../../../lib/ekko-lightbox.css';
+// import 'select2';
 
 // ES6 Modules or TypeScript
 import Swal from 'sweetalert2'
@@ -797,7 +797,7 @@ class AddProduct extends Component {
         this.getApikategoriList();
         this.getApiwarnaList();
         this.getApiukuranList();
-        $('.select2').select2();
+        // $('.select2').select2();
         $('.select2[name="kategori"]').on("change", this.kategoriChange);
         $('.select2[name="warna"]').on("change", this.warnaChange);
         $('.select2[name="ukuran"]').on("change", this.ukuranChange);

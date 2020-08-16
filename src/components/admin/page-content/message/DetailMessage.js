@@ -8,6 +8,7 @@ import Loader from 'react-loader-spinner';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const uAPI = 'https://api-online-store-v1.herokuapp.com';
+const uAPIlocal = 'http://localhost:8080';
 
 class Member extends Component {
     constructor(props) {
@@ -25,7 +26,7 @@ class Member extends Component {
     }
 
     componentDidMount(){
-        axios.get(uAPI+'/api/v1/messagelist/'+this.props.id)
+        axios.get(uAPIlocal+'/api/v1/messagelist/'+this.props.id)
         .then(function(response) {
             return response;
         })

@@ -138,7 +138,7 @@ class Datatables extends Component {
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
             preConfirm: () => {
-                return axios.delete(uAPI+'/api/v1/banklist/'+id)
+                return axios.delete(uAPIlocal+'/api/v1/banklist/'+id)
                 // .then(
                 //     () =>  Swal.fire({
                 //         title: 'Success!',
@@ -269,7 +269,7 @@ class Datatables extends Component {
 
         $('#banklist').DataTable( {
             order: [[ 0, "desc" ]],
-            ajax: uAPI+"/api/v1/dt/banklist",
+            ajax: uAPIlocal+"/api/v1/dt/banklist",
             columns: [
                 {title:"No"},
                 {title:"Nama Bank"},
@@ -293,7 +293,7 @@ class Datatables extends Component {
 
         $('#memberlist').DataTable( {
             order: [[ 0, "desc" ]],
-            ajax: uAPI+"/api/v1/dt/memberlist",
+            ajax: uAPIlocal+"/api/v1/dt/memberlist",
             columns: [
                 {title:"No"},
                 {title:"Nama Lengkap"},
@@ -317,7 +317,7 @@ class Datatables extends Component {
 
         $('#messagelist').DataTable( {
             order: [[ 0, "desc" ]],
-            ajax: uAPI+"/api/v1/dt/messagelist",
+            ajax: uAPIlocal+"/api/v1/dt/messagelist",
             columns: [
                 {title:"No"},
                 {title:"Nama Lengkap"},

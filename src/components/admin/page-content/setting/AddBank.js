@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 
 
 const uAPI = 'https://api-online-store-v1.herokuapp.com';
+const uAPIlocal = 'http://localhost:8080';
 
 function BtnBack() {
     let history = useHistory();
@@ -57,7 +58,7 @@ class AddBank extends Component {
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
             preConfirm: () => {
-                return axios.post(uAPI+'/api/v1/banklist',{
+                return axios.post(uAPIlocal+'/api/v1/banklist',{
                     nama_bank: this.state.addBank.nama_bank,
                     no_rekening: this.state.addBank.no_rekening,
                     nama_rekening: this.state.addBank.nama_rekening,
