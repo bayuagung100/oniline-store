@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Select from 'react-select';
 import { Redirect, useHistory, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faArrowLeft, faPlus, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
@@ -149,13 +150,24 @@ class AddProduct extends Component {
 
     getApikategoriList(e){
         axios.get(uAPIlocal+'/api/v1/categorylist')
-        .then(function(response) {
-            return response;
-        })
-        .then(response => {
-            var data = response.data.results;
+        // .then(function(response) {
+        //     return response;
+        // })
+        // .then(response => {
+        //     var data = response.data.results;
+        //     this.setState({
+        //         kategoriList: data
+        //     },()=>console.log(this.state.kategoriList));
+        // })
+        .then(response => 
+            response.data.results.map(kategoriList => ({
+                value: `${kategoriList}`,
+                label: `${kategoriList}`,
+            }))
+        )
+        .then(kategoriList => {
             this.setState({
-                kategoriList: data
+                kategoriList
             });
         })
         .catch(function (error) {
@@ -165,13 +177,24 @@ class AddProduct extends Component {
     }
     getApiwarnaList(e){
         axios.get(uAPIlocal+'/api/v1/colorlist')
-        .then(function(response) {
-            return response;
-        })
-        .then(response => {
-            var data = response.data.results;
+        // .then(function(response) {
+        //     return response;
+        // })
+        // .then(response => {
+        //     var data = response.data.results;
+        //     this.setState({
+        //         warnaList: data
+        //     });
+        // })
+        .then(response => 
+            response.data.results.map(warnaList => ({
+                value: `${warnaList}`,
+                label: `${warnaList}`,
+            }))
+        )
+        .then(warnaList => {
             this.setState({
-                warnaList: data
+                warnaList
             });
         })
         .catch(function (error) {
@@ -181,13 +204,24 @@ class AddProduct extends Component {
     }
     getApiukuranList(e){
         axios.get(uAPIlocal+'/api/v1/sizelist')
-        .then(function(response) {
-            return response;
-        })
-        .then(response => {
-            var data = response.data.results;
+        // .then(function(response) {
+        //     return response;
+        // })
+        // .then(response => {
+        //     var data = response.data.results;
+        //     this.setState({
+        //         ukuranList: data
+        //     });
+        // })
+        .then(response => 
+            response.data.results.map(ukuranList => ({
+                value: `${ukuranList}`,
+                label: `${ukuranList}`,
+            }))
+        )
+        .then(ukuranList => {
             this.setState({
-                ukuranList: data
+                ukuranList
             });
         })
         .catch(function (error) {
@@ -198,9 +232,14 @@ class AddProduct extends Component {
 
     addKategoriSubmit(e){
         e.preventDefault();
-        const data = this.nama_kategori.value;
-        const onTheList = this.state.kategoriList.includes(data);
-
+        const data = {value:this.nama_kategori.value, label:this.nama_kategori.value};
+        var Obj = [];
+        this.state.kategoriList.forEach(el => {
+            Obj.push(
+                el.value,
+            )
+        });
+        const onTheList = Obj.includes(data.value);
         if (onTheList) {
             this.setState({duplikat: 'duplikat'})
         } else {
@@ -216,8 +255,14 @@ class AddProduct extends Component {
     }
     addWarnaSubmit(e){
         e.preventDefault();
-        var data = this.nama_warna.value;
-        const onTheList = this.state.warnaList.includes(data);
+        const data = {value:this.nama_warna.value, label:this.nama_warna.value};
+        var Obj = [];
+        this.state.warnaList.forEach(el => {
+            Obj.push(
+                el.value,
+            )
+        });
+        const onTheList = Obj.includes(data.value);
 
         if (onTheList) {
             this.setState({duplikat2: 'duplikat'})
@@ -233,8 +278,16 @@ class AddProduct extends Component {
     }
     addUkuranSubmit(e){
         e.preventDefault();
-        var data = this.nama_ukuran.value;
-        const onTheList = this.state.ukuranList.includes(data);
+        // var data = this.nama_ukuran.value;
+        // const onTheList = this.state.ukuranList.includes(data);
+        const data = {value:this.nama_ukuran.value, label:this.nama_ukuran.value};
+        var Obj = [];
+        this.state.ukuranList.forEach(el => {
+            Obj.push(
+                el.value,
+            )
+        });
+        const onTheList = Obj.includes(data.value);
 
         if (onTheList) {
             this.setState({duplikat3: 'duplikat'})
@@ -256,53 +309,100 @@ class AddProduct extends Component {
             addProduk: newaddProduk
         });
     }
+    
     kategoriChange(e){
-        let options = { ...this.state.addProduk.kategori };
-        options = e.target.options;
+        // let options = { ...this.state.addProduk.kategori };
+        // options = e.target.options;
+        // console.log(options)
+        // var value = [];
+        // for (var i = 0, l = options.length; i < l; i++) {
+        //     if (options[i].selected) {
+        //     value.push(options[i].value);
+        //     }
+        // }
+
         var value = [];
-        for (var i = 0, l = options.length; i < l; i++) {
-            if (options[i].selected) {
-            value.push(options[i].value);
-            }
+        if (e) {
+            e.forEach(el => {
+                value.push(
+                    {value: el.value, label: el.label}
+                )
+            });
         }
+        
+        var val = value.map(a => a.value).join(",");
         this.setState({
             addProduk:{
                 ...this.state.addProduk,
-                kategori: value
+                kategori: val
             }
         });
     }
 
     warnaChange(e){
-        let options = { ...this.state.addProduk.warna };
-        options = e.target.options;
+        // let options = { ...this.state.addProduk.warna };
+        // options = e.target.options;
+        // var value = [];
+        // for (var i = 0, l = options.length; i < l; i++) {
+        //     if (options[i].selected) {
+        //     value.push(options[i].value);
+        //     }
+        // }
+        // this.setState({
+        //     addProduk:{
+        //         ...this.state.addProduk,
+        //         warna: value
+        //     }
+        // });
+
         var value = [];
-        for (var i = 0, l = options.length; i < l; i++) {
-            if (options[i].selected) {
-            value.push(options[i].value);
-            }
+        if (e) {
+            e.forEach(el => {
+                value.push(
+                    {value: el.value, label: el.label}
+                )
+            });
         }
+        
+        var val = value.map(a => a.value).join(",");
         this.setState({
             addProduk:{
                 ...this.state.addProduk,
-                warna: value
+                warna: val
             }
         });
     }
 
     ukuranChange(e){
-        let options = { ...this.state.addProduk.ukuran };
-        options = e.target.options;
+        // let options = { ...this.state.addProduk.ukuran };
+        // options = e.target.options;
+        // var value = [];
+        // for (var i = 0, l = options.length; i < l; i++) {
+        //     if (options[i].selected) {
+        //     value.push(options[i].value);
+        //     }
+        // }
+        // this.setState({
+        //     addProduk:{
+        //         ...this.state.addProduk,
+        //         ukuran: value
+        //     }
+        // });
+
         var value = [];
-        for (var i = 0, l = options.length; i < l; i++) {
-            if (options[i].selected) {
-            value.push(options[i].value);
-            }
+        if (e) {
+            e.forEach(el => {
+                value.push(
+                    {value: el.value, label: el.label}
+                )
+            });
         }
+        
+        var val = value.map(a => a.value).join(",");
         this.setState({
             addProduk:{
                 ...this.state.addProduk,
-                ukuran: value
+                ukuran: val
             }
         });
     }
@@ -695,9 +795,9 @@ class AddProduct extends Component {
         };
         formData.append('nama_produk',this.state.addProduk.nama_produk);
         formData.append('deskripsi_produk',this.state.addProduk.deskripsi_produk);
-        formData.append('kategori',this.state.addProduk.kategori.join(','));
-        formData.append('warna',this.state.addProduk.warna.join(','));
-        formData.append('ukuran',this.state.addProduk.ukuran.join(','));
+        formData.append('kategori',this.state.addProduk.kategori);
+        formData.append('warna',this.state.addProduk.warna);
+        formData.append('ukuran',this.state.addProduk.ukuran);
         formData.append('harga',this.state.addProduk.harga);
         formData.append('stok',this.state.addProduk.stok);
         formData.append('foto_utama',this.state.addProduk.foto_utama.raw);
@@ -711,7 +811,11 @@ class AddProduct extends Component {
         formData.append('foto8',this.state.addProduk.foto8.raw);
         formData.append('berat',this.state.addProduk.berat);
         formData.append('kondisi',this.state.addProduk.kondisi);
-        
+
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0]+ ', ' + pair[1]); 
+        // }
+
         Swal.fire({
             title: 'Are you sure?',
             icon: 'warning',
@@ -722,6 +826,7 @@ class AddProduct extends Component {
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
             preConfirm: () => {
+                
                 if (this.state.addProduk.foto_utama.icon === true) {
                     Swal.fire({
                         title: 'Oops!',
@@ -798,10 +903,10 @@ class AddProduct extends Component {
         this.getApiwarnaList();
         this.getApiukuranList();
         // $('.select2').select2();
-        $('.select2[name="kategori"]').on("change", this.kategoriChange);
-        $('.select2[name="warna"]').on("change", this.warnaChange);
-        $('.select2[name="ukuran"]').on("change", this.ukuranChange);
-        $('.select2[name="kondisi"]').on("change", this.addProdukChange);
+        // $('.select2[name="kategori"]').on("change", this.kategoriChange);
+        // $('.select2[name="warna"]').on("change", this.warnaChange);
+        // $('.select2[name="ukuran"]').on("change", this.ukuranChange);
+        // $('.select2[name="kondisi"]').on("change", this.addProdukChange);
 
         // $('#addKategori').submit(function(e) {
         //     e.preventDefault();
@@ -821,10 +926,12 @@ class AddProduct extends Component {
         //     // });
         // });
     }
+    
     render() {
         if (this.state.redirect) {
             return (<Redirect to="/admin/online-store" />)
         }
+        // const { selectedOption } = this.state;
         return (
             <div>
                 <section className="content" style={{paddingTop:"20px"}}>
@@ -853,7 +960,13 @@ class AddProduct extends Component {
                                     <div className="form-group row">
                                         <label className="col-sm-2 col-form-label">Kategori</label>
                                         <div className="col-sm-4">
-                                        {
+                                            <Select
+                                                placeholder='Pilih kategori'
+                                                onChange={this.kategoriChange}
+                                                options={this.state.kategoriList}
+                                                isMulti
+                                            />
+                                        {/* {
                                             this.state.kategoriList ? (
                                                 <select className="select2" multiple={true} data-placeholder="Buat Kategori" name="kategori" value={this.state.addProduk.kategori} onChange={this.kategoriChange} style={{ width:'100%'}} required>
                                                     {
@@ -869,7 +982,7 @@ class AddProduct extends Component {
                                                 
                                                 </select>
                                             )
-                                        }
+                                        } */}
                                         </div>
                                         <div className="col-sm-2 col-form-label">
                                             <Link to='#' data-toggle="modal" data-target="#modal-kategori" >Buat Kategori Baru</Link>
@@ -879,7 +992,13 @@ class AddProduct extends Component {
                                     <div className="form-group row">
                                         <label className="col-sm-2 col-form-label">Warna</label>
                                         <div className="col-sm-4">
-                                        {
+                                            <Select
+                                                placeholder='Pilih warna'
+                                                onChange={this.warnaChange}
+                                                options={this.state.warnaList}
+                                                isMulti
+                                            />
+                                        {/* {
                                             this.state.warnaList ? (
                                                 <select className="select2" multiple={true} data-placeholder="Buat Warna" name="warna" value={this.state.addProduk.warna} onChange={this.warnaChange} style={{ width:'100%'}} required>
                                                 {
@@ -895,7 +1014,7 @@ class AddProduct extends Component {
                                                 
                                                 </select>
                                             )
-                                        }
+                                        } */}
                                         </div>
                                         <div className="col-sm-2 col-form-label">
                                             <Link to='#' data-toggle="modal" data-target="#modal-warna" >Buat Warna Baru</Link>
@@ -905,7 +1024,13 @@ class AddProduct extends Component {
                                     <div className="form-group row">
                                         <label className="col-sm-2 col-form-label">Ukuran</label>
                                         <div className="col-sm-4">
-                                        {
+                                            <Select
+                                                placeholder='Pilih ukuran'
+                                                onChange={this.ukuranChange}
+                                                options={this.state.ukuranList}
+                                                isMulti
+                                            />
+                                        {/* {
                                             this.state.ukuranList ? (
                                                 <select className="select2" multiple={true} data-placeholder="Buat Ukuran" name="ukuran" value={this.state.addProduk.ukuran} onChange={this.ukuranChange} style={{ width:'100%'}} required>
                                                 {
@@ -921,7 +1046,7 @@ class AddProduct extends Component {
                                                    
                                                 </select>
                                             )
-                                        }
+                                        } */}
                                         </div>
                                         <div className="col-sm-2 col-form-label">
                                             <Link to='#' data-toggle="modal" data-target="#modal-ukuran" >Buat Ukuran Baru</Link>

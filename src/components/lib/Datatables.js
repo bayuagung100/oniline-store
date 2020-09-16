@@ -52,6 +52,7 @@ class Datatables extends Component {
             redirect: '',
         }
         this.editProduk = this.editProduk.bind(this);
+        this.deleteProduk = this.deleteProduk.bind(this);
         this.editBank = this.editBank.bind(this);
         this.deleteBank = this.deleteBank.bind(this);
         this.detailMember = this.detailMember.bind(this);
@@ -97,30 +98,30 @@ class Datatables extends Component {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Delete!',
             allowOutsideClick: false,
-            // showLoaderOnConfirm: true,
-            // preConfirm: () => {
-            //     return axios.delete(uAPI+'/api/v1/banklist/'+id)
-            //     // .then(
-            //     //     () =>  Swal.fire({
-            //     //         title: 'Success!',
-            //     //         text: 'Success delete!',
-            //     //         icon: 'success',
-            //     //         allowOutsideClick: false,
-            //     //     }).then(() => this.setState({ redirect: '/admin/setting' }))
-            //     // )
-            //     .catch(function (error) {
-            //         console.log(error);
-            //         Swal.fire('Oops...', 'Something went wrong!', 'error');
-            //     });
-            // }
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                return axios.delete(uAPIlocal+'/api/v1/produk/'+id)
+                // .then(
+                //     () =>  Swal.fire({
+                //         title: 'Success!',
+                //         text: 'Success delete!',
+                //         icon: 'success',
+                //         allowOutsideClick: false,
+                //     }).then(() => this.setState({ redirect: '/admin/setting' }))
+                // )
+                .catch(function (error) {
+                    console.log(error);
+                    Swal.fire('Oops...', 'Something went wrong!', 'error');
+                });
+            }
         }).then((result) => {
             if (result.value) {
                 Swal.fire({
                     title: 'Success!',
-                    text: 'Success delete bank!',
+                    text: 'Success delete produk!',
                     icon: 'success',
                     allowOutsideClick: false,
-                }).then(() => this.setState({ redirect: '/admin/setting' }))
+                }).then(() => this.setState({ redirect: '/admin/online-store' }))
             }
         })
     }
@@ -341,10 +342,16 @@ class Datatables extends Component {
     }
 
     render() {
-        if (this.state.redirect === '/admin/setting') {
+        if (this.state.redirect === '/admin/setting') { //redirect setelah delete bank
             return (
                 <Route path='/admin/setting'>
                     <Datatables id='banklist'/>
+                </Route>
+            )
+        } else if (this.state.redirect === '/admin/online-store') { //redirect setelah delete produk
+            return (
+                <Route path='/admin/online-store'>
+                    <Datatables id='onlinestorelist'/>
                 </Route>
             )
         } else if (this.state.redirect === '/admin/setting/edit-bank'){
