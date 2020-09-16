@@ -12,6 +12,18 @@ exports.ok = function (values, res, status="200") {
     res.end();
 };
 
+exports.produk = function (message, res, status="200") {
+
+    var data = {
+        'status': status,
+        'message': message
+    };
+
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json(data);
+    res.end();
+};
+
 exports.auth = function (session, values, res) {
     var data = {
         'status': 200,
@@ -31,6 +43,16 @@ exports.datatables = function (values, res) {
 
     var data = {
         'data': values
+    };
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json(data);
+    res.end();
+};
+
+exports.optionList = function (values, res) {
+
+    var data = {
+        'results': values
     };
     res.header("Access-Control-Allow-Origin", "*");
     res.json(data);

@@ -8,6 +8,9 @@ module.exports = function (app) {
     app.route(apiV1+'city').get(url.city);
     app.route(apiV1+'province').get(url.province);
     app.route(apiV1+'subdistrict').get(url.subdistrict);
+    app.route(apiV1+'categorylist').get(url.categorylist);
+    app.route(apiV1+'colorlist').get(url.colorlist);
+    app.route(apiV1+'sizelist').get(url.sizelist);
 
     //setting
     app.route(apiV1+'sosmed').get(url.sosmed);
@@ -29,8 +32,16 @@ module.exports = function (app) {
     app.route(apiV1+'messagelist/:id').get(url.messagelistbyid);
     //end message
 
+    //online-store
+    app.route(apiV1+'produk').post(url.addproduk);
+    app.route(apiV1+'produk/:id').get(url.produkbyid);
+    app.route(apiV1+'produk').put(url.updateproduk);
+    app.route(apiV1+'produk/:id').delete(url.deleteproduk);
+    //end online-store
+
 
     //datatables
+    app.route(apiV1+'dt/produk').get(url.dtproduk);
     app.route(apiV1+'dt/banklist').get(url.dtbanklist);
     app.route(apiV1+'dt/memberlist').get(url.dtmemberlist);
     app.route(apiV1+'dt/messagelist').get(url.dtmessagelist);
