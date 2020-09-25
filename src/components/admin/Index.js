@@ -9,7 +9,7 @@ import {
     withRouter
 } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars,faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
+import { faBars, faEye, faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 import MenuSide from '../lib/MenuSide';
 import Dashboard from './page-content/Dashboard';
 import PageContent from './PageContent';
@@ -112,6 +112,9 @@ class Index extends Component {
                             </li>
                         </ul>
                         <ul className="navbar-nav ml-auto">
+                            <li className="nav-item">
+                                <Link to="/" className="nav-link" target="_blank"><FontAwesomeIcon icon={faEye}/> Website</Link>
+                            </li>
                             <li className="nav-item">
                                 <Link to="#" className="nav-link" onClick={this.logout}><FontAwesomeIcon icon={faSignOutAlt}/> Logout</Link>
                             </li>
