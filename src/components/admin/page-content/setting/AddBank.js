@@ -8,7 +8,7 @@ import axios from "axios";
 import Swal from 'sweetalert2';
 
 
-const uAPI = 'https://api-online-store-v1.herokuapp.com';
+// const uAPI = 'https://api-online-store-v1.herokuapp.com';
 const uAPIlocal = 'http://localhost:8080';
 
 function BtnBack() {

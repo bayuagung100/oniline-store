@@ -3,7 +3,7 @@ import "./datatables.min.css";
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faEye} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash, faEye, faTimesCircle, faCheckCircle} from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2'
 import axios from "axios";
 
@@ -11,7 +11,7 @@ import axios from "axios";
 const $ = require('jquery');
 $.Datatable = require('datatables.net-bs4');
 
-const uAPI = 'https://api-online-store-v1.herokuapp.com';
+// const uAPI = 'https://api-online-store-v1.herokuapp.com';
 const uAPIlocal = 'http://localhost:8080';
 
 class DtTable extends React.Component {
@@ -58,7 +58,8 @@ class Datatables extends Component {
         this.detailMember = this.detailMember.bind(this);
         this.detailMessage = this.detailMessage.bind(this);
     }
-
+    
+    
     editProduk(id){
         this.setState({ 
             redirect: '/admin/online-store/edit-product',
@@ -165,6 +166,67 @@ class Datatables extends Component {
         })
     }
 
+    Slide = (id, slide) => {
+        if (slide === "Y") {
+            return <FontAwesomeIcon color="green" icon={faCheckCircle} style={{cursor: "pointer"}} onClick={() => this.updateSlide(id, 'N')} />;
+        }
+        return <FontAwesomeIcon color="red" icon={faTimesCircle} style={{cursor: "pointer"}} onClick={() => this.updateSlide(id, 'Y')} />;
+    }
+
+    updateSlide = (id, slide) => {
+        // e.preventDefault();
+        // const formData = new FormData();
+        // const config = {
+        //     headers: {
+        //         'content-type': 'multipart/form-data'
+        //     }
+        // };
+        // formData.append('id',id);
+        // formData.append('slide',slide);
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0]+ ': ' + pair[1]); 
+        // }
+
+        Swal.fire({
+            title: 'Are you sure?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!',
+            allowOutsideClick: false,
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                return axios.put(uAPIlocal+'/api/v1/slide',{id: id, slide: slide})
+                // .then(
+                //     () =>  Swal.fire({
+                //         title: 'Success!',
+                //         text: 'Success delete!',
+                //         icon: 'success',
+                //         allowOutsideClick: false,
+                //     }).then(() => this.setState({ redirect: '/admin/setting' }))
+                // )
+                .catch(function (error) {
+                    console.log(error);
+                    Swal.fire('Oops...', 'Something went wrong!', 'error');
+                });
+            }
+        }).then((result) => {
+            if (result.value) {
+                // Swal.fire('Success!', '','success').then(() => this.setState({ redirect: '/admin/online-store' }));
+                // let self = this;
+                Swal.fire({
+                    title: 'Success!',
+                    icon: 'success',
+                    allowOutsideClick: false,
+                }).then(() => 
+                    this.setState({ redirect: '/admin/online-store' })
+                    
+                )
+            }
+        })
+    }
+
     componentDidMount() {
         // console.log(this.props);
         // this.$el = $(this.el)
@@ -214,6 +276,8 @@ class Datatables extends Component {
         //     }
         // } );
 
+        
+
         $('#onlinestorelist').DataTable( {
             order: [[ 0, "desc" ]],
             ajax: uAPIlocal+"/api/v1/dt/produk",
@@ -224,6 +288,7 @@ class Datatables extends Component {
                 {title:"Deskripsi"},
                 {title:"Harga"},
                 {title:"Stok"},
+                {title:"Slide Show"},
                 {title:"Aksi"},
             ],
             columnDefs: [
@@ -254,6 +319,18 @@ class Datatables extends Component {
                             </BrowserRouter>, td),
                 },
                 {
+                    targets: -2,
+                    createdCell: (td, cellData, rowData, row, col) =>
+                        ReactDOM.render(
+                            <BrowserRouter>
+                            {/* {console.log('cellData: '+cellData)}
+                            {console.log('rowData: '+rowData)}
+                            {console.log('row: '+row)}
+                            {console.log('col: '+col)} */}
+                            {this.Slide(rowData[7], rowData[6])}
+                            </BrowserRouter>, td),
+                },
+                {
                     targets: -1,
                     createdCell: (td, cellData, rowData, row, col) =>
                         ReactDOM.render(
@@ -262,11 +339,12 @@ class Datatables extends Component {
                             {console.log('rowData: '+rowData)}
                             {console.log('row: '+row)}
                             {console.log('col: '+col)} */}
-                            <button type="button"  className="btn btn-primary btn-sm" onClick={() => this.editProduk(rowData[6])}> <FontAwesomeIcon icon={faEdit}/> Edit</button> <button type="button"  className="btn btn-danger btn-sm" onClick={() => this.deleteProduk(rowData[6], rowData[2])}> <FontAwesomeIcon icon={faTrash}/> Delete</button>
+                            <button type="button"  className="btn btn-primary btn-sm" onClick={() => this.editProduk(rowData[7])}> <FontAwesomeIcon icon={faEdit}/> Edit</button> <button type="button"  className="btn btn-danger btn-sm" onClick={() => this.deleteProduk(rowData[7], rowData[2])}> <FontAwesomeIcon icon={faTrash}/> Delete</button>
                             </BrowserRouter>, td),
                 },
             ]   
-        } );
+            
+        });
 
         $('#banklist').DataTable( {
             order: [[ 0, "desc" ]],

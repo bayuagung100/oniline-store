@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "datatables.net-bs4": "^1.10.21",
     "jquery": "^3.5.1",
+    "magnific-popup": "^1.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-helmet": "^6.1.0",
@@ -43,5 +44,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }

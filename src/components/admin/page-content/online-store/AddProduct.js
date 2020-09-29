@@ -4,7 +4,7 @@ import { Redirect, useHistory, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faArrowLeft, faPlus, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import $ from 'jquery';
+// import $ from 'jquery';
 // import '../../../lib/select2.css';
 // import '../../../lib/ekko-lightbox.css';
 // import 'select2';
@@ -12,7 +12,7 @@ import $ from 'jquery';
 // ES6 Modules or TypeScript
 import Swal from 'sweetalert2'
 
-const uAPI = 'https://api-online-store-v1.herokuapp.com';
+// const uAPI = 'https://api-online-store-v1.herokuapp.com';
 const uAPIlocal = 'http://localhost:8080';
 
 function BtnBack() {
@@ -53,6 +53,7 @@ class AddProduct extends Component {
                 foto8: {icon: true,preview: '',raw: '',},
                 berat: '',
                 kondisi: 'new',
+                slide: 'N',
             },
             kategoriList:[],
             warnaList:[],
@@ -811,6 +812,7 @@ class AddProduct extends Component {
         formData.append('foto8',this.state.addProduk.foto8.raw);
         formData.append('berat',this.state.addProduk.berat);
         formData.append('kondisi',this.state.addProduk.kondisi);
+        formData.append('slide',this.state.addProduk.slide);
 
         // for (var pair of formData.entries()) {
         //     console.log(pair[0]+ ', ' + pair[1]); 
@@ -1648,6 +1650,16 @@ class AddProduct extends Component {
                                             <select className="form-control select2" name="kondisi" value={this.state.addProduk.kondisi} onChange={this.addProdukChange} required>
                                                 <option value="new">Baru</option>
                                                 <option value="used">Pernah Dipakai</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label">Slide</label>
+                                        <div className="col-sm-4">
+                                            <select className="form-control select2" name="slide" value={this.state.addProduk.slide} onChange={this.addProdukChange} required>
+                                                <option value="N">No</option>
+                                                <option value="Y">Yes</option>
                                             </select>
                                         </div>
                                     </div>

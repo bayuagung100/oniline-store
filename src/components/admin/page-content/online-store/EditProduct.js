@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import Select from 'react-select';
-import { Redirect, useHistory, Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faArrowLeft, faPlus, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import $ from 'jquery';
+// import $ from 'jquery';
 // import '../../../lib/select2.css';
 // import 'select2';
 
@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 import Loader from 'react-loader-spinner';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
-const uAPI = 'https://api-online-store-v1.herokuapp.com';
+// const uAPI = 'https://api-online-store-v1.herokuapp.com';
 const uAPIlocal = 'http://localhost:8080';
 
 
@@ -48,6 +48,7 @@ class EditProduct extends Component {
                 foto8: {icon: true,preview: '',raw: '',},
                 berat: '',
                 kondisi: '',
+                slide: '',
             },
             kategoriList:[],
             warnaList:[],
@@ -421,6 +422,7 @@ class EditProduct extends Component {
                     },
                     berat: results.berat,
                     kondisi: results.kondisi,
+                    slide: results.slide,
                 },
                 loading: false
             },()=>console.log(this.state.dataProduk));
@@ -1015,6 +1017,7 @@ class EditProduct extends Component {
         // formData.append('foto8',this.state.dataProduk.foto8.raw);
         formData.append('berat',this.state.dataProduk.berat);
         formData.append('kondisi',this.state.dataProduk.kondisi);
+        formData.append('slide',this.state.dataProduk.slide);
 
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ': ' + pair[1]); 
@@ -1438,6 +1441,16 @@ class EditProduct extends Component {
                                                 <select className="form-control select2" name="kondisi" value={this.state.dataProduk.kondisi} onChange={this.ProdukChange} required>
                                                     <option value="new">Baru</option>
                                                     <option value="used">Pernah Dipakai</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="form-group row">
+                                            <label className="col-sm-2 col-form-label">Slide</label>
+                                            <div className="col-sm-4">
+                                                <select className="form-control select2" name="slide" value={this.state.dataProduk.slide} onChange={this.ProdukChange} required>
+                                                    <option value="N">No</option>
+                                                    <option value="Y">Yes</option>
                                                 </select>
                                             </div>
                                         </div>

@@ -1291,7 +1291,9 @@
     font-size: 25px;
     color: #fff;
     position: absolute;
-    top: 0;
+    z-index: 100;
+    top: calc((100% - 60px) / 2);
+    /* top: 0; */
     width: 40px;
     height: 40px;
     background-color: rgba(0, 0, 0, 0.5);
@@ -1333,6 +1335,7 @@
 
 .slick3-dots li img {
     width: 100%;
+    max-height: 66px;
 }
 
 .slick3-dot-overlay {
@@ -1342,7 +1345,7 @@
     top: 0;
     left: 0;
     cursor: pointer;
-    border: 2px solid transparent;
+    outline: 4px solid transparent;
     -webkit-transition: all 0.4s;
     -o-transition: all 0.4s;
     -moz-transition: all 0.4s;
@@ -1350,18 +1353,25 @@
 }
 
 .slick3-dot-overlay:hover {
-    border-color: #ccc;
+    outline-color: #ccc;
 }
 
 .slick3-dots .slick-active .slick3-dot-overlay {
-    border-color: #ccc;
+    outline-color: #ccc;
+}
+
+.himage{
+    display: none;
+}
+.hbtn{
+    display: none;
 }
 
 
 /*//////////////////////////////////////////////////////////////////
 [ RS Magnific-Popup ]*/
 
-.mfp-bg {
+/* .mfp-bg {
     z-index: 10000;
     background-color: #000;
     opacity: 0.9;
@@ -1369,9 +1379,9 @@
 
 .mfp-wrap {
     z-index: 10000;
-}
+} */
 
-.mfp-arrow:after,
+/* .mfp-arrow:after,
 .mfp-arrow:before {
     display: none;
 }
@@ -1381,21 +1391,21 @@
     -o-transition: all 0.4s;
     -moz-transition: all 0.4s;
     transition: all 0.4s;
-}
+} */
 
-button.mfp-arrow-right {
-    /* background-image: url(../images/icons/icon-next.png); */
+/* button.mfp-arrow-right {
+    background-image: url(../images/icons/icon-next.png);
     background-position: center center;
     background-repeat: no-repeat;
 }
 
 button.mfp-arrow-left {
-    /* background-image: url(../images/icons/icon-prev.png); */
+    background-image: url(../images/icons/icon-prev.png);
     background-position: center center;
     background-repeat: no-repeat;
-}
+} */
 
-button.mfp-close {
+/* button.mfp-close {
     width: 75px !important;
     height: 58px !important;
     line-height: 44px;
@@ -1403,7 +1413,7 @@ button.mfp-close {
     right: 0;
     top: 0;
     color: transparent !important;
-    /* background-image: url(../images/icons/icon-close.png); */
+    background-image: url(../images/icons/icon-close.png);
     background-position: center center;
     background-repeat: no-repeat;
     cursor: pointer !important;
@@ -1411,55 +1421,55 @@ button.mfp-close {
     -o-transition: all 0.4s;
     -moz-transition: all 0.4s;
     transition: all 0.4s;
-}
+} */
 
 
 /* overlay at start */
 
-.mfp-fade.mfp-bg {
+/* .mfp-fade.mfp-bg {
     opacity: 0;
     -webkit-transition: all 0.3s ease-out;
     -moz-transition: all 0.3s ease-out;
     transition: all 0.3s ease-out;
-}
+} */
 
 
 /* overlay animate in */
 
-.mfp-fade.mfp-bg.mfp-ready {
+/* .mfp-fade.mfp-bg.mfp-ready {
     opacity: 0.9;
-}
+} */
 
 
 /* overlay animate out */
 
-.mfp-fade.mfp-bg.mfp-removing {
+/* .mfp-fade.mfp-bg.mfp-removing {
     opacity: 0;
-}
+} */
 
 
 /* content at start */
 
-.mfp-fade.mfp-wrap .mfp-content {
+/* .mfp-fade.mfp-wrap .mfp-content {
     opacity: 0;
     -webkit-transition: all 0.3s ease-out;
     -moz-transition: all 0.3s ease-out;
     transition: all 0.3s ease-out;
-}
+} */
 
 
 /* content animate it */
 
-.mfp-fade.mfp-wrap.mfp-ready .mfp-content {
+/* .mfp-fade.mfp-wrap.mfp-ready .mfp-content {
     opacity: 1;
-}
+} */
 
 
 /* content animate out */
 
-.mfp-fade.mfp-wrap.mfp-removing .mfp-content {
+/* .mfp-fade.mfp-wrap.mfp-removing .mfp-content {
     opacity: 0;
-}
+} */
 
 
 /*//////////////////////////////////////////////////////////////////
@@ -3183,7 +3193,7 @@ input.num-product::-webkit-inner-spin-button {
     -o-transition: transform 0.9s ease;
     -moz-transition: transform 0.9s ease;
     transition: transform 0.9s ease;
-    max-height: 300px;
+    max-height: 260px;
 }
 
 .hov-img0:hover img {
@@ -3541,6 +3551,14 @@ input.num-product::-webkit-inner-spin-button {
 [ MD ]*/
 
 @media (max-width: 767px) {
+    .hov-img0 img {
+        width: 100%;
+        -webkit-transition: transform 0.9s ease;
+        -o-transition: transform 0.9s ease;
+        -moz-transition: transform 0.9s ease;
+        transition: transform 0.9s ease;
+        max-height: 200px;
+    }
     .m-0-md {
         margin: 0;
     }
@@ -3651,6 +3669,14 @@ input.num-product::-webkit-inner-spin-button {
 [ SM ]*/
 
 @media (max-width: 575px) {
+    .hov-img0 img {
+        width: 100%;
+        -webkit-transition: transform 0.9s ease;
+        -o-transition: transform 0.9s ease;
+        -moz-transition: transform 0.9s ease;
+        transition: transform 0.9s ease;
+        max-height: 250px;
+    }
     .m-0-sm {
         margin: 0;
     }
