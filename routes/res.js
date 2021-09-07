@@ -11,6 +11,17 @@ exports.ok = function (values, res, status="200") {
     res.json(data);
     res.end();
 };
+exports.isotope = function (filters, layout, res, status="200") {
+
+    var data = {
+        'status': status,
+        'filters': filters,
+        'layout': layout
+    };
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json(data);
+    res.end();
+};
 
 exports.produk = function (message, res, status="200") {
 
