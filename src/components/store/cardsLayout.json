@@ -1,0 +1,19 @@
+[
+    {
+      "id": "kat",
+      "filter": ["kat"]
+    },
+    {
+      "id": "kat2",
+      "filter": ["kat2"]
+    },
+    {
+      "id": "kat3",
+      "filter": ["kat3"]
+    },
+    {
+      "id": "editkat",
+      "filter": ["editkat"]
+    }
+    
+  ]

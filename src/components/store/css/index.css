@@ -1688,16 +1688,28 @@ button.mfp-arrow-left {
     background-color: #f7f7f7;
 }
 
-input.num-product {
+/* input.num-product {
     -moz-appearance: textfield;
     appearance: none;
     -webkit-appearance: none;
-}
+} */
 
-input.num-product::-webkit-outer-spin-button,
+/* Firefox */
+input.num-product {
+    -moz-appearance: textfield;
+  }
+
+/* input.num-product::-webkit-outer-spin-button,
 input.num-product::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+} */
+
+/* Chrome, Safari, Edge, Opera */
+input.num-product::-webkit-outer-spin-button,
+input.num-product::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 
@@ -3889,7 +3901,7 @@ input.num-product::-webkit-inner-spin-button {
 
 .disabled {
     opacity: 0.6;
-    cursor: not-allowed;
+    cursor: not-allowed !important;
 }
 
 [type="radio"]:checked,
